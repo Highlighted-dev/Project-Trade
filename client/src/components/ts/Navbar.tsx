@@ -9,13 +9,21 @@ const Navbar: FC = () => {
    
     const btnClick: MouseEventHandler = () =>{
         const sidebar  = document.querySelector('.sidebar');
+        const navbar  = document.querySelector('.navbar');
         sidebar?.classList.toggle('active');
+        navbar?.classList.toggle('active');
     }
     return (
+        <div className='navbar'>
+        <div className='topbar'>
+            <AiOutlineSearch className='searchIcon'/>
+            <input type="text" className='searchBox' placeholder='Search...'></input>
+            <img src={process.env.PUBLIC_URL+"/images/Avatar.png"} alt='image' height="40px" width="40px"/>
+        </div>
         <div className='sidebar'>
             <div className='logo_content'>
                 <div className='logo'>
-                    <AiFillBank  style={{fontSize: '1.7rem',marginRight: '10px'}} />
+                    <AiFillBank  style={{fontSize: '1.6rem',marginRight: '6px'}} />
                     <div className='logo-name'>ProjectTrade</div>
                 </div>
             <AiOutlineMenu className='menu' onClick={btnClick}/>
@@ -71,6 +79,7 @@ const Navbar: FC = () => {
                 <span className='tooltip'>Settings</span>
                 </li>
             </ul>
+        </div>
         </div>
     )
     
