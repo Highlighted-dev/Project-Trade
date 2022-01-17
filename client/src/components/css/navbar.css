@@ -6,9 +6,8 @@
     top:0;
     left:0;
     padding:4px 12px;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
+    transition: all ease 400ms;
+
 }
 .sidebar.active{
     width:220px;
@@ -60,9 +59,7 @@
     display: flex;
     color: white;
     align-items: center;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
+    transition: all ease 200ms;
     border-radius: 12px;
 }
 .sidebar ul li a:hover{
@@ -90,9 +87,7 @@
     line-height: 35px;
     display: flex;
     justify-content: center;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 250ms;
+    transition: all ease 250ms;
     opacity:0;
     pointer-events: none;
 }
@@ -125,9 +120,7 @@
 .navbar.active .topbar{
     width:calc(100%-220px);
     left:220px;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
+    transition: all ease 400ms;
 }
 .topbar .searchBox{
     position: absolute;
@@ -143,7 +136,12 @@
     color:#fff;
     padding-left:40px;
     font-size: 18px;
+    transition: all ease 400ms;
 }
+.navbar.active .topbar .searchBox{
+    left:16%;
+}
+
 .topbar .searchBox::placeholder{
     opacity: 0.6;
 }
@@ -154,6 +152,10 @@
     font-size: 22px;
     left:calc(25% + 10px);
     transform: translateY(35%);
+    transition: all ease 400ms;
+}
+.navbar.active .topbar .searchIcon{
+    left:calc(16% + 10px);
 }
 .topbar img{
     background-color: #fff;
@@ -162,4 +164,9 @@
     position: absolute;
     right:calc(5% + 50px);
     cursor: pointer;
+    transition: all ease 400ms;
+}
+.navbar.active .topbar img{
+    right:calc(10% + 110px);
+    
 }
