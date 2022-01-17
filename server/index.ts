@@ -1,15 +1,15 @@
-import express from 'express';
-import mongoose from 'mongoose';
+import express, { Application, Response, Request } from 'express';
+import mongoose, { Connection } from 'mongoose';
 
-const app = express();
-const url = 'mongodb://127.0.0.1:27017';
+const app: Application = express();
+app.get('/', (req: Request, res: Response ) =>{
+    res.json({message: "json_file"})   
+});
 
-mongoose.connect(url)
 
-const db = mongoose.connection
-db.once('open', _ => {
-    console.log('Database connected: ',url)
-})
-db.on('error',err => {
-    console.log('Connection falied: ',err)
-})
+const url: string = 'mongodb://127.0.0.1:27017';
+const port: number = 5000
+
+mongoose.connect(url).then(() => app.listen(port, () => console.log('Database connected: ',url))).catch((error) => console.log(error.message))
+
+const db: Connection = mongoose.connection
