@@ -1,11 +1,11 @@
 import express, { Application, Response, Request } from 'express';
 import mongoose, { Connection } from 'mongoose';
+import amazonScraperRoutes from './routes/amazonScraper';
 
-const app: Application = express();
-app.get('/', (req: Request, res: Response ) =>{
-    res.json({message: "json_file"})   
-});
+const app: Application = express(); 
 
+//as=amazonScraper
+app.use('/as', amazonScraperRoutes);
 
 const url: string = 'mongodb://127.0.0.1:27017';
 const port: number = 5000
