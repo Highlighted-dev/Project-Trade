@@ -28,15 +28,15 @@ class AmazonproductspiderSpider(scrapy.Spider):
             items['product_image'] = ''.join(prod_image[i]).strip()
             yield items
     
-    def closed(self, reason):
-        #Send file.json to database when finished scraping
-        path = globalvariables.pathToJson
-        assert os.path.isfile(path)
-        myclient = pymongo.MongoClient(globalvariables.mongoUrl)
-        mydb = myclient[globalvariables.mongoDatabase]
-        mycol = mydb[globalvariables.mongoColumn]
-        with open(path) as f:
-            file_data = json.load(f)
-        mycol.insert_many(file_data)
+    # def closed(self, reason):
+    #     #Send file.json to database when finished scraping
+    #     path = globalvariables.pathToJson
+    #     assert os.path.isfile(path)
+    #     myclient = pymongo.MongoClient(globalvariables.mongoUrl)
+    #     mydb = myclient[globalvariables.mongoDatabase]
+    #     mycol = mydb[globalvariables.mongoColumn]
+    #     with open(path) as f:
+    #         file_data = json.load(f)
+    #     mycol.insert_many(file_data)
 
         
