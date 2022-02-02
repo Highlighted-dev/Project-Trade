@@ -7,8 +7,8 @@ import scrapy
 
 
 class AmazonscraperItem(scrapy.Item):
+  #_id=proudct_id | Name changed because mongodb was assigning default values for _id
+  _id = scrapy.Field()
   product_name = scrapy.Field()
   product_sale_price = scrapy.Field()
-  product_category = scrapy.Field()
-  product_original_price = scrapy.Field()
-  product_availability = scrapy.Field()
+  product_image = scrapy.Field()
