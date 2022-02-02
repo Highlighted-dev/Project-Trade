@@ -1,15 +1,15 @@
 import express, { Application, Response, Request } from 'express';
 import mongoose, { Connection } from 'mongoose';
-import amazonScraperRoutes from './routes/amazonScraper';
-
+import amazonProductDataRoute from './routes/amazonProductDataRoute'
 const app: Application = express(); 
-
+var router = express.Router()
 //as=amazonScraper
-app.use('/as', amazonScraperRoutes);
 
-const url: string = 'mongodb://127.0.0.1:27017';
+
+
+const url: string = 'mongodb://localhost:27017/ProjectTrade';
 const port: number = 5000
 
 mongoose.connect(url).then(() => app.listen(port, () => console.log('Database connected: ',url,' | Its alive on http://localhost:'+port))).catch((error) => console.log(error.message))
 
-const db: Connection = mongoose.connection
+app.use('/as',amazonProductDataRoute)
