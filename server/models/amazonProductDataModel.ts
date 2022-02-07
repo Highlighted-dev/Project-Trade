@@ -1,11 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Model, Schema } from 'mongoose';
 
-const amazonProudctDataSchema = new Schema({
+const amazonProudctDataSchema: Schema = new Schema({
     _id: String,
     product_name: String,
     product_sale_price: String,
     product_image: String,
 
 },{collection: 'amazonProductData'});
-var amazonProductData  =  mongoose.model('amazonProductData', amazonProudctDataSchema);
+var amazonProductData: Model<String, {}, {}, {}>  =  mongoose.model('amazonProductData', amazonProudctDataSchema);
 export default amazonProductData;
