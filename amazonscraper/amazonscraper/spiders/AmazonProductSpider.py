@@ -33,7 +33,6 @@ class AmazonproductspiderSpider(scrapy.Spider):
             yield items
         #Get current amazon (ex. amazon.de)
         current_amazon = str(response.request.url).split("/-",1)[0]
-        print(current_amazon)
         #Get next page URL
         next_page=current_amazon+"".join(response.xpath('//div[@class="a-section a-text-center s-pagination-container"]//a[@class="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator"]/@href').extract())
         if str(next_page[-2:len(next_page)]) != globalvariables.maxPagesPerCategoryString:
