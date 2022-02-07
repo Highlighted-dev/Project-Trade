@@ -7,6 +7,7 @@ start_urls = [
         #'https://www.amazon.de/s?rh=n%3A236861011&s=review-count-rank',
     ]
 allowed_domains = ['amazon.de','amazon.fr']
+maxPagesPerCategoryString = "10" #Up to 99
 pathToJson =('C:/Programowanie/Projekty/Project-Trade/amazonscraper/file.json')
 
 #MongoDb related stuff
