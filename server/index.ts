@@ -2,7 +2,6 @@ import express, { Application, Response, Request } from 'express';
 import mongoose, { Connection } from 'mongoose';
 import amazonProductDataRoute from './routes/amazonProductDataRoute'
 const app: Application = express(); 
-var router = express.Router()
 //as=amazonScraper
 
 
@@ -12,4 +11,4 @@ const port: number = 5000
 
 mongoose.connect(url).then(() => app.listen(port, () => console.log('Database connected: ',url,' | Its alive on http://localhost:'+port))).catch((error) => console.log(error.message))
 
-app.use('/as',amazonProductDataRoute)
+app.use('/api',amazonProductDataRoute)
