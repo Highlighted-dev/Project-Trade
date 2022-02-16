@@ -1,5 +1,1 @@
-Make a windows script that will run multiple scrapers
-Example: 
-cd C:\Programowanie\Projekty\Project-Trade\amazonscraper
-scrapy crawl AmazonProductSpider -o file.json
-scrapy crawl AmazonProductSpider2 -o file.json
+Aktualnie produkt moze sie powtorzyc, jezeli jest byl na stronie numer x oraz numer y. Napraw to
