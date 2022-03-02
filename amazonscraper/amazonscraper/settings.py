@@ -50,9 +50,14 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'amazonscraper.middlewares.AmazonscraperDownloaderMiddleware': 543,
-#}
+# DOWNLOADER_MIDDLEWARES = {
+#     'amazonscraper.middlewares.AmazonscraperDownloaderMiddleware': 543,
+# }
+# ROTATING_PROXY_LIST = [
+#     'proxy1.com:8000',
+#     'proxy2.com:8031',
+#     # ...
+# ]
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
