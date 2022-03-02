@@ -45,12 +45,11 @@ class AmazonproductspiderSpider(scrapy.Spider):
 
     def closed(self, reason):
         #Send file.json to database when finished scraping
-        path = pathToJson
-        assert os.path.isfile(path)
+        assert os.path.isfile(pathToJson)
         myclient = pymongo.MongoClient(globalvariables.mongoUrl)
         mydb = myclient[globalvariables.mongoDatabase]
         mycol = mydb[globalvariables.mongoColumn]
-        with open(path) as f:
+        with open(pathToJson) as f:
             file_data = json.load(f)
         #TODO change mongodb so it will skip same items. Right now if any item from json is in database "except" will show
         try:
