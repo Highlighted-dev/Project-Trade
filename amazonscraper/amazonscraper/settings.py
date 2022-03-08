@@ -48,16 +48,22 @@ ROBOTSTXT_OBEY = False
 #    'amazonscraper.middlewares.AmazonscraperSpiderMiddleware': 543,
 #}
 
-# Enable or disable downloader middlewares
-# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#     'amazonscraper.middlewares.AmazonscraperDownloaderMiddleware': 543,
-# }
-# ROTATING_PROXY_LIST = [
-#     'proxy1.com:8000',
-#     'proxy2.com:8031',
-#     # ...
-# ]
+ROTATING_PROXY_LIST = [
+    'localhost:8081',
+    'localhost:8082',
+    'localhost:8083',
+    'localhost:8084',
+    'localhost:8085',
+    'localhost:8086',
+    'localhost:8087',
+    'localhost:8088',
+    'localhost:8089',
+    'localhost:8090',
+]
+DOWNLOADER_MIDDLEWARES = {
+    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    'rotating_proxies.middlewares.BanDetectionMiddleware': 610,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
