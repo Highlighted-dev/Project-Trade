@@ -1,4 +1,4 @@
-#CURRENT STATE - PAUSED
+# CURRENT STATE - PAUSED
 Thinking about how to crack amazon security for scraping... 
 # Project-Trade
 Trading website
