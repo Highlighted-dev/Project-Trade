@@ -1,0 +1,14 @@
+html {
+  overflow-x: hidden;
+}
+html::-webkit-scrollbar {
+  width: 10px;
+}
+html::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+html::-webkit-scrollbar-thumb {
+  background-color: #0d0c16;
+  min-height: 60px;
+}
