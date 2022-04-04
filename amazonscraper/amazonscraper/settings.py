@@ -1,4 +1,20 @@
-# Scrapy settings for amazonscraper project
+import urllib.request
+import os
+
+#TODO add proxies
+# def getProxies():
+#     #proxyscrape.com
+#     proxyscrape = urllib.request.urlretrieve("https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=DE&ssl=no&anonymity=elite&simplified=true","./amazonscraper/proxy1.txt")
+#     proxy1 = open('./amazonscraper/proxy1.txt', 'r')
+#     Lines = proxy1.readlines()
+#     allProxiesArray = []
+#     for line in Lines:
+#         allProxiesArray.append(line[:len(line)-1])
+#     proxy1.close()
+#     os.remove('./amazonscraper/proxy1.txt')
+#     print(allProxiesArray)
+#     return allProxiesArray
+# # Scrapy settings for amazonscraper project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -6,7 +22,6 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
 BOT_NAME = 'amazonscraper'
 
 SPIDER_MODULES = ['amazonscraper.spiders']
@@ -47,23 +62,11 @@ ROBOTSTXT_OBEY = False
 #SPIDER_MIDDLEWARES = {
 #    'amazonscraper.middlewares.AmazonscraperSpiderMiddleware': 543,
 #}
-
-ROTATING_PROXY_LIST = [
-    'localhost:8081',
-    'localhost:8082',
-    'localhost:8083',
-    'localhost:8084',
-    'localhost:8085',
-    'localhost:8086',
-    'localhost:8087',
-    'localhost:8088',
-    'localhost:8089',
-    'localhost:8090',
-]
-DOWNLOADER_MIDDLEWARES = {
-    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-    'rotating_proxies.middlewares.BanDetectionMiddleware': 610,
-}
+# ROTATING_PROXY_LIST = getProxies()
+# DOWNLOADER_MIDDLEWARES = {
+#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+#     'rotating_proxies.middlewares.BanDetectionMiddleware': 610,
+# }
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
