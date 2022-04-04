@@ -5,16 +5,16 @@ from amazonscraper.items import AmazonscraperItem
 import os
 import pymongo
 import json
-from .. import globalvariables
+from .. import GlobalVariables
 class AmazonproductspiderSpider(scrapy.Spider):
     def __init__(self, consoleNumber, maxConsoleNumber):
-        self.start_urls = globalvariables.start_urls[int(consoleNumber)*int(len(globalvariables.start_urls)/int(maxConsoleNumber)):(int(consoleNumber)+1)*int(len(globalvariables.start_urls)/int(maxConsoleNumber))]
+        self.start_urls = GlobalVariables.start_urls[int(consoleNumber)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber)):(int(consoleNumber)+1)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber))]
         global pathToJson
         pathToJson = f'C:/Programowanie/Projekty/Project-Trade/amazonscraper/file{consoleNumber}.json'
         if os.path.exists(f"file{consoleNumber}.json"):
                 os.remove(f"file{consoleNumber}.json")
     name = 'AmazonProductSpider'
-    allowed_domains = globalvariables.allowed_domains
+    allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
         try:
             items = AmazonscraperItem()
@@ -24,7 +24,7 @@ class AmazonproductspiderSpider(scrapy.Spider):
             sale_price = response.xpath('//div[@class="a-section a-spacing-none a-spacing-top-small s-price-instructions-style"]//span[@class="a-price-whole"]/text()').extract()
             prod_image = response.xpath('//div[@class="a-section aok-relative s-image-square-aspect"]//img[@class="s-image"]/@src').extract()
 
-            for i in range(globalvariables.itemsPerPage):
+            for i in range(GlobalVariables.itemsPerPage):
                 #Storing all data into items
                 items['_id'] = ''.join(prod_id[i]).strip()
                 items['product_name'] = ''.join(title[i]).strip()
@@ -40,21 +40,24 @@ class AmazonproductspiderSpider(scrapy.Spider):
         current_amazon = str(response.request.url).split("/-",1)[0]
         #Get next page URL
         next_page=current_amazon+"".join(response.xpath('//div[@class="a-section a-text-center s-pagination-container"]//a[@class="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator"]/@href').extract())
-        if str(next_page[-2:len(next_page)]) != globalvariables.maxPagesPerCategoryString and int(globalvariables.maxPagesPerCategoryString) > 1:
+        #If the page number equals maxPagesPerCategoryString, we don't want to go to the next page.
+        if str(next_page[-2:len(next_page)]) != GlobalVariables.maxPagesPerCategoryString and str(next_page[-2:len(next_page)]) != "_"+GlobalVariables.maxPagesPerCategoryString:
             yield scrapy.Request(next_page, callback=self.parse)
 
     def closed(self, reason):
         #Send file.json to database when finished scraping
         assert os.path.isfile(pathToJson)
-        myclient = pymongo.MongoClient(globalvariables.mongoUrl)
-        mydb = myclient[globalvariables.mongoDatabase]
-        mycol = mydb[globalvariables.mongoColumn]
+        myclient = pymongo.MongoClient(GlobalVariables.mongoUrl)
+        mydb = myclient[GlobalVariables.mongoDatabase]
+        mycol = mydb[GlobalVariables.mongoColumn]
         with open(pathToJson) as f:
             file_data = json.load(f)
-        #TODO change mongodb so it will skip same items. Right now if any item from json is in database "except" will show
         try:
-            mycol.insert_many(file_data)
-        except:
-            print("Some items from file.json are already in database.")
+            for obj in file_data:
+                mycol.replace_one({"_id":obj["_id"]},obj,upsert=True)
+            print("All products inserted to database successfully.")        
+        except Exception as e:
+            print("An error has occurred when trying to add products to database\n")
+            print(e)
 
         
