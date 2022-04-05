@@ -136,7 +136,7 @@
   font-size: 18px;
   transition: all ease 400ms;
 }
-.topbar .searchResults {
+.topbar .searchBar .searchResults {
   opacity: 0;
   position: absolute;
   height: 70%;
@@ -156,6 +156,9 @@
 }
 .topbar .searchBar.active .searchResults {
   opacity: 1;
+}
+.topbar .searchBar li {
+  list-style: none;
 }
 .navbar.active .topbar .searchBox {
   left: 16%;

@@ -29,13 +29,9 @@ const Navbar: FC = () => {
       const requestOptions = {
         method: 'POST',
       };
-      try {
-        fetch('/api/as/name/' + searchWord, requestOptions).then(async response =>
-          setData(await response.json()),
-        );
-      } catch {
-        setData(['{}']);
-      }
+      fetch('/api/as/name/' + searchWord, requestOptions)
+        .then(async response => setData(await response.json()))
+        .catch(() => setData(['{}']));
 
       setIsFetching(false);
     }
@@ -52,18 +48,9 @@ const Navbar: FC = () => {
     searchbar?.classList.toggle('active');
   };
 
-  //Perform search every time user inputs new letter
+  //Perform search every time user input changes
   const search: ChangeEventHandler = () => {
     setIsFetching(true);
-    // var allAlphabetLetters = Array.from('abcdefghijklmnopqrstuvwxyz');
-    // if (allAlphabetLetters.includes(keyboardEvent.key.toLowerCase()) || keyboardEvent.key == ' ') {
-    //   var s = document.getElementsByClassName('searchBox').value;
-    //   setSearchWord(searchWord + keyboardEvent.key.toLowerCase());
-    //   setIsFetching(true);
-    // } else if (keyboardEvent.key == 'Backspace') {
-    //   setSearchWord(searchWord.slice(0, -1));
-    //   setIsFetching(true);
-    // }
   };
   return (
     <div className="navbar">
