@@ -1,4 +1,10 @@
-import React, { MouseEventHandler } from 'react';
+import React, {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 import { FC } from 'react';
 import {
   AiFillBank,
@@ -14,23 +20,80 @@ import { BiCog } from 'react-icons/bi';
 import '../css/navbar.css';
 
 const Navbar: FC = () => {
-  const btnClick: MouseEventHandler = () => {
+  const [data, setData] = useState<any[]>([]);
+  const [searchWord, setSearchWord] = useState<string>('');
+  const [isFetching, setIsFetching] = React.useState(false);
+
+  useEffect(() => {
+    if (isFetching) {
+      const requestOptions = {
+        method: 'POST',
+      };
+      try {
+        fetch('/api/as/name/' + searchWord, requestOptions).then(async response =>
+          setData(await response.json()),
+        );
+      } catch {
+        setData(['{}']);
+      }
+
+      setIsFetching(false);
+    }
+  }, [searchWord]);
+
+  const toggleMenu: MouseEventHandler = () => {
     const sidebar = document.querySelector('.sidebar');
     const navbar = document.querySelector('.navbar');
     sidebar?.classList.toggle('active');
     navbar?.classList.toggle('active');
   };
+  const toggleSearchBar: MouseEventHandler = () => {
+    const searchbar = document.querySelector('.searchBar');
+    searchbar?.classList.toggle('active');
+  };
+
+  //Perform search every time user inputs new letter
+  const search: ChangeEventHandler = () => {
+    setIsFetching(true);
+    // var allAlphabetLetters = Array.from('abcdefghijklmnopqrstuvwxyz');
+    // if (allAlphabetLetters.includes(keyboardEvent.key.toLowerCase()) || keyboardEvent.key == ' ') {
+    //   var s = document.getElementsByClassName('searchBox').value;
+    //   setSearchWord(searchWord + keyboardEvent.key.toLowerCase());
+    //   setIsFetching(true);
+    // } else if (keyboardEvent.key == 'Backspace') {
+    //   setSearchWord(searchWord.slice(0, -1));
+    //   setIsFetching(true);
+    // }
+  };
   return (
     <div className="navbar">
       <div className="topbar">
-        <AiOutlineSearch className="searchIcon" />
-        <input type="text" className="searchBox" placeholder="Search..."></input>
-        <img
-          src={process.env.PUBLIC_URL + '/images/Avatar.png'}
-          alt="image"
-          height="40px"
-          width="40px"
-        />
+        <div className="searchBar" onClick={toggleSearchBar}>
+          <AiOutlineSearch className="searchIcon" />
+          <input
+            type="text"
+            className="searchBox"
+            placeholder="Search..."
+            onChange={e => {
+              setSearchWord(e.target.value);
+              search(e);
+            }}
+            value={searchWord}
+          ></input>
+          <div className="searchResults">
+            {data.map(product => (
+              <li>{product.product_name}</li>
+            ))}
+          </div>
+        </div>
+        <div className="Avatar">
+          <img
+            src={process.env.PUBLIC_URL + '/images/Avatar.png'}
+            alt="image"
+            height="40px"
+            width="40px"
+          />
+        </div>
       </div>
       <div className="sidebar">
         <div className="logo_content">
@@ -38,7 +101,7 @@ const Navbar: FC = () => {
             <AiFillBank style={{ fontSize: '1.6rem', marginRight: '6px' }} />
             <div className="logo-name">ProjectTrade</div>
           </div>
-          <AiOutlineMenu className="menu" onClick={btnClick} />
+          <AiOutlineMenu className="menu" onClick={toggleMenu} />
         </div>
         <ul>
           <li>
