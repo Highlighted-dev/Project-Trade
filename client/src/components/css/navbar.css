@@ -137,6 +137,7 @@
   transition: all ease 400ms;
 }
 .topbar .searchBar .searchResults {
+  padding: 5px;
   opacity: 0;
   position: absolute;
   height: 70%;
@@ -149,16 +150,24 @@
   border: none;
   background: #25223b;
   color: #fff;
-  padding-left: 40px;
   font-size: 18px;
   transition: all ease 400ms;
   height: 250px;
+  overflow: hidden;
 }
 .topbar .searchBar.active .searchResults {
   opacity: 1;
 }
 .topbar .searchBar li {
+  cursor: pointer;
+  color: rgb(214, 214, 214);
   list-style: none;
+  transition: all ease 400ms;
+}
+.topbar .searchBar li:hover {
+  transition: all ease 400ms;
+  background-color: #502eb6;
+  border-radius: 8px;
 }
 .navbar.active .topbar .searchBox {
   left: 16%;
