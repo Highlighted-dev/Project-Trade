@@ -18,6 +18,7 @@ import {
 import { BsChatDots, BsGrid } from 'react-icons/bs';
 import { BiCog } from 'react-icons/bi';
 import '../css/navbar.css';
+import { Link } from 'react-router-dom';
 
 const Navbar: FC = () => {
   const [data, setData] = useState<any[]>([]);
@@ -26,12 +27,17 @@ const Navbar: FC = () => {
 
   useEffect(() => {
     if (isFetching) {
+      const searchbar = document.querySelector('.searchBar');
       const requestOptions = {
         method: 'POST',
       };
+      //Get product data with "x" name from api
       fetch('/api/as/name/' + searchWord, requestOptions)
         .then(async response => setData(await response.json()))
-        .catch(() => setData(['{}']));
+        .catch(() => {
+          //Delete all data if there is nothing found in database and hide searchbox
+          setData(['{}']), searchbar?.classList.remove('active');
+        });
 
       setIsFetching(false);
     }
@@ -43,19 +49,17 @@ const Navbar: FC = () => {
     sidebar?.classList.toggle('active');
     navbar?.classList.toggle('active');
   };
-  const toggleSearchBar: MouseEventHandler = () => {
-    const searchbar = document.querySelector('.searchBar');
-    searchbar?.classList.toggle('active');
-  };
 
   //Perform search every time user input changes
   const search: ChangeEventHandler = () => {
+    const searchbar = document.querySelector('.searchBar');
+    searchbar?.classList.add('active');
     setIsFetching(true);
   };
   return (
     <div className="navbar">
       <div className="topbar">
-        <div className="searchBar" onClick={toggleSearchBar}>
+        <div className="searchBar">
           <AiOutlineSearch className="searchIcon" />
           <input
             type="text"
@@ -69,7 +73,9 @@ const Navbar: FC = () => {
           ></input>
           <div className="searchResults">
             {data.map(product => (
-              <li>{product.product_name}</li>
+              <Link to={'/Product/' + product._id}>
+                <li key={product._id}>{product.product_name}</li>
+              </Link>
             ))}
           </div>
         </div>
@@ -92,12 +98,12 @@ const Navbar: FC = () => {
         </div>
         <ul>
           <li>
-            <a href="">
+            <Link to="/">
               <div className="icon">
                 <BsGrid />
               </div>
               <span className="links_name">Dashboard</span>
-            </a>
+            </Link>
             <span className="tooltip">Dashboard</span>
           </li>
           <li>
