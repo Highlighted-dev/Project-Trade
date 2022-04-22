@@ -153,7 +153,21 @@
   font-size: 18px;
   transition: all ease 400ms;
   height: 250px;
-  overflow: hidden;
+  overflow-y: scroll;
+}
+.topbar .searchBar .searchResults::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 12px;
+}
+.topbar .searchBar .searchResults::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.topbar .searchBar .searchResults::-webkit-scrollbar-thumb {
+  background-color: #0d0c16;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  min-height: 30px;
 }
 .topbar .searchBar.active .searchResults {
   opacity: 1;
