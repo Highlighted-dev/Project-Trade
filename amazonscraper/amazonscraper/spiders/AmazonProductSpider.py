@@ -1,12 +1,11 @@
-from array import array
-from asyncio.windows_events import NULL
 import scrapy
+from sqlalchemy import null
 from amazonscraper.items import AmazonscraperItem
 import os
 import pymongo
 import json
 from .. import GlobalVariables
-class AmazonproductspiderSpider(scrapy.Spider):
+class AmazonProductSpider(scrapy.Spider):
     def __init__(self, consoleNumber, maxConsoleNumber):
         self.start_urls = GlobalVariables.start_urls[int(consoleNumber)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber)):(int(consoleNumber)+1)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber))]
         global pathToJson
@@ -31,7 +30,7 @@ class AmazonproductspiderSpider(scrapy.Spider):
                 try:
                     items['product_sale_price'] = ''.join(sale_price[i]).strip()
                 except:
-                    items['product_sale_price'] = NULL
+                    items['product_sale_price'] = null
                 items['product_image'] = ''.join(prod_image[i]).strip()
                 yield items
         except Exception as e:
