@@ -2,6 +2,8 @@ import scrapy
 from .. import GlobalVariables
 import os
 from amazonscraper.items import AmazonScraperOneItem
+from amazoncaptcha import AmazonCaptcha
+import logging
 class AmazonOneProductSpider(scrapy.Spider):
     def __init__(self, product_id):
         self.start_urls = ["https://www.amazon.de/-/en/dp/"+product_id]
@@ -10,7 +12,7 @@ class AmazonOneProductSpider(scrapy.Spider):
     def parse(self, response):
         try:
             if self.checkForCaptcha(response):
-                print("Solving captcha...")
+                yield from self.solveCaptcha(response, self.parse)
             else:
                 items = AmazonScraperOneItem()
                 #Getting data from amazon
@@ -26,7 +28,20 @@ class AmazonOneProductSpider(scrapy.Spider):
         captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
 
         if captcha_url:
-            self.logger.info('PAGE {} GOT BY CAPTCHA!'.format(response.request.url))
+            logging.log(logging.INFO, 'PAGE {} GOT BY CAPTCHA!'.format(response.request.url))
             return True
         else:
             return False
+    def solveCaptcha(self, response, origin_method):
+        logging.log(logging.INFO, "Trying to solve captcha...")
+        try:
+            captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
+            captcha = AmazonCaptcha.fromlink(captcha_url)
+            captcha_solution = captcha.solve()
+            logging.log(logging.INFO, "Captcha solved!")
+            yield scrapy.FormRequest.from_response(response,
+                                        formdata={'field-keywords': captcha_solution},
+                                        callback=origin_method)
+        except Exception as e:
+            print("Something went wrong while solving captcha\n",e)
+            return None
