@@ -1,5 +1,4 @@
 import scrapy
-from sqlalchemy import null
 from amazonscraper.items import AmazonscraperItem
 import os
 import pymongo
@@ -30,7 +29,7 @@ class AmazonProductSpider(scrapy.Spider):
                 try:
                     items['product_sale_price'] = ''.join(sale_price[i]).strip()
                 except:
-                    items['product_sale_price'] = null
+                    items['product_sale_price'] = None
                 items['product_image'] = ''.join(prod_image[i]).strip()
                 yield items
         except Exception as e:
