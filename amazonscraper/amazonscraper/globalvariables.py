@@ -19,3 +19,6 @@ itemsPerPage = 24
 mongoUrl = 'localhost:27017'
 mongoDatabase = 'ProjectTrade'
 mongoColumn = 'amazonProductData'
+mongo_column_images = 'amazonProductImages'
+mongo_column_details = 'amazonProductDetails'
+mongo_column_technical_details = 'amazonProductTechnicalDetails'
