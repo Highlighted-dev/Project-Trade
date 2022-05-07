@@ -1,3 +1,4 @@
+import logging
 import scrapy
 from amazonscraper.items import AmazonscraperItem
 import os
@@ -31,9 +32,11 @@ class AmazonProductSpider(scrapy.Spider):
                 except:
                     items['product_sale_price'] = None
                 items['product_image'] = ''.join(prod_image[i]).strip()
+                items['mongo_db_column_name'] = 'None'
                 yield items
         except Exception as e:
-            print("Something went wrong when extracting items\n",e)
+            logging.error("Something went wrong when extracting items\n")
+            logging.error(e)
         #Get current amazon (ex. amazon.de)
         current_amazon = str(response.request.url).split("/-",1)[0]
         #Get next page URL
@@ -53,9 +56,9 @@ class AmazonProductSpider(scrapy.Spider):
         try:
             for obj in file_data:
                 mycol.replace_one({"_id":obj["_id"]},obj,upsert=True)
-            print("All products inserted to database successfully.")        
+            logging.info("All products inserted to database successfully.")        
         except Exception as e:
-            print("An error has occurred when trying to add products to database\n")
-            print(e)
+            logging.error("An error has occurred when trying to add products to database\n")
+            logging.error(e)
 
         
