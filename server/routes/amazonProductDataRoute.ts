@@ -20,4 +20,27 @@ router.post('/as/name/:name', async (req: Request, res: Response) => {
     })
   );
 });
+router.get('/as/detailed/id/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  /**
+   * TODO: Run this only when theres no items with that id in database
+   * */
+  const { exec } = require('child_process');
+  exec(
+    'cd ../amazonscraper & scrapy crawl AmazonOneProductSpider -a prod_id="B08DLC9HBG"',
+    (error: Error, stdout: any, stderr: any) => {
+      if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+      } else {
+        console.log(`stdout: ${stdout}`);
+      }
+    }
+  );
+});
 export default router;
