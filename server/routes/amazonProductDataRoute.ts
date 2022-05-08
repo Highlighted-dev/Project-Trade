@@ -28,7 +28,9 @@ router.get('/as/detailed/id/:id', async (req: Request, res: Response) => {
    * */
   const { exec } = require('child_process');
   exec(
-    'cd ../amazonscraper & scrapy crawl AmazonOneProductSpider -a prod_id="B08DLC9HBG"',
+    'cd ../amazonscraper & scrapy crawl AmazonOneProductSpider -a prod_id="' +
+      id +
+      '"',
     (error: Error, stdout: any, stderr: any) => {
       if (error) {
         console.log(`error: ${error.message}`);
