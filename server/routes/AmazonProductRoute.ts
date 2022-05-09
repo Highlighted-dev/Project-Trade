@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import AmazonProductData from '../models/AmazonProductDataModel';
+import amazonProductDetails from '../models/AmazonProductDetailsModel';
 const router: Router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
@@ -21,8 +22,10 @@ router.get('/name/:name', async (req: Request, res: Response) => {
 });
 router.get('/detailed/id/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  var amazon_product_detail = await AmazonProductData.find({
-    product_name: { $regex: '^' + name, $options: 'i' },
-  });
+  res.json(
+    await amazonProductDetails.find({
+      product_id: { $regex: '^' + id, $options: 'i' },
+    })
+  );
 });
 export default router;
