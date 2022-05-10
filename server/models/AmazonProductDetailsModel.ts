@@ -1,6 +1,12 @@
 import mongoose, { Model, Schema } from 'mongoose';
 
-const amazonProductDetailsSchema: Schema = new Schema(
+interface IProductDetails {
+  product_id: string;
+  product_detail: string;
+  product_detail_name: string;
+}
+
+const amazonProductDetailsSchema = new Schema<IProductDetails>(
   {
     product_id: String,
     product_detail: String,
@@ -8,7 +14,7 @@ const amazonProductDetailsSchema: Schema = new Schema(
   },
   { collection: 'amazonProductDetails' }
 );
-var amazonProductDetails: Model<String, {}, {}, {}> = mongoose.model(
+var amazonProductDetails: Model<IProductDetails> = mongoose.model(
   'amazonProductDetails',
   amazonProductDetailsSchema
 );
