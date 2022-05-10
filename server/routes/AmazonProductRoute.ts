@@ -1,6 +1,9 @@
 import express, { Request, Response, Router } from 'express';
 import AmazonProductData from '../models/AmazonProductDataModel';
-import amazonProductDetails from '../models/AmazonProductDetailsModel';
+import AmazonProductDetails from '../models/AmazonProductDetailsModel';
+import AmazonProductImages from '../models/AmazonProductImagesModel';
+import AmazonProductTechnicalDetails from '../models/AmazonProductTechnicalDetailsModel';
+
 const router: Router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
@@ -20,11 +23,27 @@ router.get('/name/:name', async (req: Request, res: Response) => {
     })
   );
 });
-router.get('/detailed/id/:id', async (req: Request, res: Response) => {
+router.get('/details/id/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   res.json(
-    await amazonProductDetails.find({
-      product_id: { $regex: '^' + id, $options: 'i' },
+    await AmazonProductDetails.find({
+      product_id: id,
+    })
+  );
+});
+router.get('/images/id/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  res.json(
+    await AmazonProductImages.find({
+      product_id: id,
+    })
+  );
+});
+router.get('/technicalDetails/id/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  res.json(
+    await AmazonProductTechnicalDetails.find({
+      product_id: id,
     })
   );
 });
