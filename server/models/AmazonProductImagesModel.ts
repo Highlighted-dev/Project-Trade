@@ -13,7 +13,7 @@ const amazonProductImagesSchema = new Schema<IProductImages>(
   { collection: 'amazonProductImages' }
 );
 var amazonProductImages: Model<IProductImages> = mongoose.model(
-  'amazonProductDetails',
+  'amazonProductImages',
   amazonProductImagesSchema
 );
 export default amazonProductImages;
