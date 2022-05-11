@@ -1,10 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  KeyboardEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 import { FC } from 'react';
 import {
   AiFillBank,
@@ -29,10 +23,10 @@ const Navbar: FC = () => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');
       const requestOptions = {
-        method: 'POST',
+        method: 'GET',
       };
       //Get product data with "x" name from api
-      fetch('/api/as/name/' + searchWord, requestOptions)
+      fetch('/api/ap/name/' + searchWord, requestOptions)
         .then(async response => setData(await response.json()))
         .catch(() => {
           //Delete all data if there is nothing found in database and hide searchbox
