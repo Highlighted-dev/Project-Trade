@@ -23,7 +23,12 @@ mongoose
   )
   .catch(error => console.log(error.message));
 app.use(
-  session({ secret: 'amazonsecret', resave: true, saveUninitialized: true })
+  session({
+    secret: 'amazonsecret',
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  })
 ); //TODO Change secret key
 app.use('/api/ap', AmazonProductRoute);
 app.use('/api/as', AmazonScraperRoute);
