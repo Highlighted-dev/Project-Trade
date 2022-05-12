@@ -1,8 +1,9 @@
 import express, { Request, Response, Router } from 'express';
 import * as stream from 'stream';
+import session from 'express-session';
 const router: Router = express.Router();
 
-router.post('/id/:id', async (req: Request, res: Response) => {
+router.get('/id/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   /**
    * TODO: Run this only when theres no items with that id in database
@@ -18,7 +19,8 @@ router.post('/id/:id', async (req: Request, res: Response) => {
         res.sendStatus(500);
       } else {
         console.log(stderr);
-        res.status(200).send(stdout);
+        console.log(stdout);
+        res.redirect(req.session.url || '/');
       }
     }
   );
