@@ -2,6 +2,8 @@ import express, { Application, Response, Request } from 'express';
 import mongoose, { Connection } from 'mongoose';
 import AmazonProductRoute from './routes/AmazonProductRoute';
 import AmazonScraperRoute from './routes/AmazonScraperRoute';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 const app: Application = express();
 //as=amazonScraper
 
@@ -20,6 +22,8 @@ mongoose
     )
   )
   .catch(error => console.log(error.message));
-
+app.use(
+  session({ secret: 'amazonsecret', resave: true, saveUninitialized: true })
+); //TODO Change secret key
 app.use('/api/ap', AmazonProductRoute);
 app.use('/api/as', AmazonScraperRoute);
