@@ -23,7 +23,7 @@ class AmazonProductSpider(scrapy.Spider):
             sale_price = response.xpath('//div[@class="a-section a-spacing-none a-spacing-top-small s-price-instructions-style"]//span[@class="a-price-whole"]/text()').extract()
             prod_image = response.xpath('//div[@class="a-section aok-relative s-image-square-aspect"]//img[@class="s-image"]/@src').extract()
 
-            for i in range(GlobalVariables.itemsPerPage):
+            for i in range(GlobalVariables.items_per_page):
                 #Storing all data into items
                 items['_id'] = ''.join(prod_id[i]).strip()
                 items['product_name'] = ''.join(title[i]).strip()
@@ -42,7 +42,7 @@ class AmazonProductSpider(scrapy.Spider):
         #Get next page URL
         next_page=current_amazon+"".join(response.xpath('//div[@class="a-section a-text-center s-pagination-container"]//a[@class="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator"]/@href').extract())
         #If the page number equals maxPagesPerCategoryString, we don't want to go to the next page.
-        if str(next_page[-2:len(next_page)]) != GlobalVariables.maxPagesPerCategoryString and str(next_page[-2:len(next_page)]) != "_"+GlobalVariables.maxPagesPerCategoryString:
+        if str(next_page[-2:len(next_page)]) != GlobalVariables.max_pages_per_category_string and str(next_page[-2:len(next_page)]) != "_"+GlobalVariables.max_pages_per_category_string:
             yield scrapy.Request(next_page, callback=self.parse)
 
     def closed(self, reason):
