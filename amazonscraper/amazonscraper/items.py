@@ -27,6 +27,10 @@ class AmazonItemTechnicalDetails(scrapy.Item):
   product_id = scrapy.Field()
   product_technical_detail_name = scrapy.Field()
   product_technical_detail = scrapy.Field()
+class AmazonItemAbout(scrapy.Item):
+  mongo_db_column_name = scrapy.Field()
+  product_id = scrapy.Field()
+  product_about = scrapy.Field()
 
 
 
