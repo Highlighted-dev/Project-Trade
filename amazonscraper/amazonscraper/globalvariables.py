@@ -11,8 +11,8 @@ start_urls = [
         'https://www.amazon.de/s?rh=n%3A571860&s=review-count-rank&language=en',
     ]
 allowed_domains = ['amazon.de','amazon.fr']
-maxPagesPerCategoryString = "10" #Up to 99
-itemsPerPage = 24
+max_pages_per_category_string = "10" #Up to 99
+items_per_page = 24
 
 
 #MongoDb related variables
@@ -22,3 +22,4 @@ mongoColumn = 'amazonProductData'
 mongo_column_images = 'amazonProductImages'
 mongo_column_details = 'amazonProductDetails'
 mongo_column_technical_details = 'amazonProductTechnicalDetails'
+mongo_column_about = 'amazonProductAbout'
