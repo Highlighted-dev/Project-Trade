@@ -41,13 +41,22 @@ class AmazonOneProductSpider(scrapy.Spider):
                     images['product_image'] = image
                     images['mongo_db_column_name'] = GlobalVariables.mongo_column_images
                     yield images
-                for pdn,pd in zip(product_details_name,product_details):
-                    #pd = productl_detail | pdn = product_detail_name
-                    details['product_id'] = product_id
-                    details['product_detail_name'] = pdn
-                    details['product_detail'] = pd
-                    details['mongo_db_column_name'] = GlobalVariables.mongo_column_details
-                    yield details
+                #Sometimes there aren't any product details
+                if len(product_details) < 1:
+                    product_abouts = response.xpath('//div[@id="feature-bullets"]//ul[@class="a-unordered-list a-vertical a-spacing-mini"]//li[not(@id) and not(@class)]//span[@class="a-list-item"]/text()').extract()
+                    for about in product_abouts:
+                        abouts['product_id'] = product_id
+                        abouts['product_about'] = about
+                        abouts['mongo_db_column_name'] = GlobalVariables.mongo_column_about
+                        yield abouts
+                else:
+                    for pdn,pd in zip(product_details_name,product_details):
+                        #pd = productl_detail | pdn = product_detail_name
+                        details['product_id'] = product_id
+                        details['product_detail_name'] = pdn
+                        details['product_detail'] = pd
+                        details['mongo_db_column_name'] = GlobalVariables.mongo_column_details
+                        yield details
 
                 #Sometimes there aren't any technical details
                 if len(product_technical_details) < 1:
