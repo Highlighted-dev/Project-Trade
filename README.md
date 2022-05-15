@@ -1,6 +1,6 @@
-# CURRENT STATE - PAUSED
-Thinking about how to crack amazon security for scraping... 
+# CURRENT STATE - Working on the project
+
 # Project-Trade
 Trading website
 # Technolgies Used
-MERN stack + Redux, Typescript and TailwindsCss
+MERN stack + Redux and Typescript
