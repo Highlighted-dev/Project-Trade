@@ -32,28 +32,29 @@ const ProductWebsiteTemplate = () => {
         });
       setIsFetching(false);
     }
-  });
+  }, [productId]);
+
   return (
     <div>
       <h2>{productId}</h2>
       <br />
       <ul>
         {details.map(product => (
-          <li key={product.product_id}>
+          <li key={product._id}>
             {product.product_detail_name}: {product.product_detail}
           </li>
         ))}
       </ul>
       <ul>
         {images.map(product => (
-          <li key={product.product_id}>
+          <li key={product._id}>
             image: <img src={product.product_image} />
           </li>
         ))}
       </ul>
       <ul>
         {technicalDetails.map(product => (
-          <li key={product.product_id}>
+          <li key={product._id}>
             {product.product_technical_detail_name}: {product.product_technical_detail}
           </li>
         ))}
