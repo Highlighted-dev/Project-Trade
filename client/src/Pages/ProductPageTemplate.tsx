@@ -3,35 +3,33 @@ import { useParams } from 'react-router-dom';
 
 const ProductWebsiteTemplate = () => {
   const { productId } = useParams();
-  const [isFetching, setIsFetching] = useState(true);
+  const [changingProductId, setChangingProductId] = useState(productId);
   const [details, setDetails] = useState<any[]>([]);
   const [images, setImages] = useState<any[]>([]);
   const [technicalDetails, setTechnicalDetails] = useState<any[]>([]);
   useEffect(() => {
-    if (isFetching) {
-      const searchbar = document.querySelector('.searchBar');
-      const requestOptions = {
-        method: 'GET',
-      };
-      //Get product data with "x" name from api
-      //TODO Change this to one big request?
-      fetch('/api/ap/details/id/' + productId, requestOptions)
-        .then(async response => setDetails(await response.json()))
-        .catch(e => {
-          console.log(e);
-        });
-      fetch('/api/ap/images/id/' + productId, requestOptions)
-        .then(async response => setImages(await response.json()))
-        .catch(e => {
-          console.log(e);
-        });
-      fetch('/api/ap/technicalDetails/id/' + productId, requestOptions)
-        .then(async response => setTechnicalDetails(await response.json()))
-        .catch(e => {
-          console.log(e);
-        });
-      setIsFetching(false);
-    }
+    setChangingProductId(productId);
+    const searchbar = document.querySelector('.searchBar');
+    const requestOptions = {
+      method: 'GET',
+    };
+    //Get product data with "x" name from api
+    //TODO Change this to one big request?
+    fetch('/api/ap/details/id/' + productId, requestOptions)
+      .then(async response => setDetails(await response.json()))
+      .catch(e => {
+        console.log(e);
+      });
+    fetch('/api/ap/images/id/' + productId, requestOptions)
+      .then(async response => setImages(await response.json()))
+      .catch(e => {
+        console.log(e);
+      });
+    fetch('/api/ap/technicalDetails/id/' + productId, requestOptions)
+      .then(async response => setTechnicalDetails(await response.json()))
+      .catch(e => {
+        console.log(e);
+      });
   }, [productId]);
 
   return (
@@ -46,11 +44,15 @@ const ProductWebsiteTemplate = () => {
         ))}
       </ul>
       <ul>
-        {images.map(product => (
-          <li key={product._id}>
-            image: <img src={product.product_image} />
-          </li>
-        ))}
+        {images.length > 0 ? (
+          images.map(product => (
+            <li key={product._id}>
+              image: <img src={product.product_image} />
+            </li>
+          ))
+        ) : (
+          <li>XD</li>
+        )}
       </ul>
       <ul>
         {technicalDetails.map(product => (
