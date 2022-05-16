@@ -3,7 +3,6 @@ import mongoose, { Connection } from 'mongoose';
 import AmazonProductRoute from './routes/AmazonProductRoute';
 import AmazonScraperRoute from './routes/AmazonScraperRoute';
 import session from 'express-session';
-import cookieParser from 'cookie-parser';
 const app: Application = express();
 //as=amazonScraper
 
