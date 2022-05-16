@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/mongodb": "^4.0.7",
     "express": "^4.17.2",
     "express-session": "^1.17.3",
     "json-loader": "^0.5.7",
