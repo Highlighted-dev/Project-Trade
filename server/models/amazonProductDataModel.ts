@@ -1,7 +1,8 @@
+import { ObjectId } from 'mongodb';
 import mongoose, { Model, Schema } from 'mongoose';
 
 interface IProductData {
-  _id: string;
+  _id: ObjectId;
   product_name: string;
   product_sale_price: string;
   product_image: string;

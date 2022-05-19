@@ -1,6 +1,8 @@
+import { ObjectId } from 'mongodb';
 import mongoose, { Model, Schema } from 'mongoose';
 
 interface IProductImages {
+  _id: ObjectId;
   product_id: string;
   product_image: string;
 }
