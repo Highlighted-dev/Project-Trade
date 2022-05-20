@@ -66,9 +66,9 @@ const Navbar: FC = () => {
             value={searchWord}
           ></input>
           <div className="searchResults">
-            {data.map(product => (
-              <Link to={'/Product/' + product._id}>
-                <li key={product._id}>{product.product_name}</li>
+            {data.map((product, key) => (
+              <Link to={'/Product/' + product._id} key={key}>
+                <li key={key}>{product.product_name}</li>
               </Link>
             ))}
           </div>
