@@ -14,7 +14,6 @@ declare module 'express-session' {
   }
 }
 const router: Router = express.Router();
-var try_to_scrape_data: boolean = true;
 router.get('/', async (req: Request, res: Response) => {
   res.json(await AmazonProductData.find());
 });
@@ -32,6 +31,10 @@ router.get('/name/:name', async (req: Request, res: Response) => {
     })
   );
 });
+//Check for product data
+router.get('/checkProduct/id/:id', async (req: Request, res: Response) =>
+  isProductDataAlreadyInDatabase(req, res)
+);
 //Get details by id
 router.get('/details/id/:id', async (req: Request, res: Response) =>
   getAmazonDetailedData(req, res, AmazonProductDetails)
@@ -61,15 +64,30 @@ const getAmazonDetailedData = async (
   //If json is not empty that means program found data
   if (amazon_product_detailed_data.length > 3) {
     res.status(200).json(amazon_product_detailed_data);
-  } else if (try_to_scrape_data) {
+  } else {
+    //Program didn't find any data, but it's okay becouse sometimes there isn't this type of data on Amazon
+    res.status(204).send();
+  }
+};
+
+//On Amazon, every product has at least 1 image. So If there are no images it means that there isn't any data about the product in database.
+const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const amazon_product_detailed_data = await AmazonProductImages.find({
+    product_id: id,
+  });
+  console.log('test');
+  //If json is not empty that means program found data
+  if (amazon_product_detailed_data.length > 3) {
+    res.status(200).send();
+  }
+  //In case if amazon scraper didn't find any items
+  else if (req.session.url == req.originalUrl) {
+    res.status(404).send();
+  } else {
     //Store current url in express sessions
     req.session.url = req.originalUrl;
-    //Go to amazon scraper endpoint
     res.redirect('/api/as/id/' + id);
-    try_to_scrape_data = false;
-  } else {
-    try_to_scrape_data = true;
-    res.status(404).json('[]');
   }
 };
 export default router;
