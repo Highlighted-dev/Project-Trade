@@ -30,14 +30,6 @@ const ProductWebsiteTemplate = () => {
       .catch(e => {
         console.log(e);
       });
-    fetch('/api/ap/about/id/' + productId, requestOptions)
-      .then(async response => await response.json())
-      .then(data => {
-        setAbout(data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
   };
   useEffect(() => {
     setChangingProductId(productId);
@@ -54,18 +46,22 @@ const ProductWebsiteTemplate = () => {
           return Promise.reject();
         }
       })
+      //Get product data with "x" name from api
       .then(data => {
-        console.log(data);
+        fetchProductData(requestOptions, '/api/ap/images/id/', setImages);
+      })
+      .then(data => {
+        fetchProductData(requestOptions, '/api/ap/technicalDetails/id/', setTechnicalDetails);
+      })
+      .then(data => {
+        fetchProductData(requestOptions, '/api/ap/details/id/', setDetails);
+      })
+      .then(data => {
+        fetchProductData(requestOptions, '/api/ap/about/id/', setAbout);
       })
       .catch(e => {
         console.log(e);
       });
-
-    //Get product data with "x" name from api
-    fetchProductData(requestOptions, '/api/ap/images/id/', setImages);
-    fetchProductData(requestOptions, '/api/ap/technicalDetails/id/', setTechnicalDetails);
-    fetchProductData(requestOptions, '/api/ap/details/id/', setDetails);
-    fetchProductData(requestOptions, '/api/ap/about/id/', setAbout);
   }, [productId]);
 
   return (
