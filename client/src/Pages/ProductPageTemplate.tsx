@@ -91,7 +91,7 @@ const ProductWebsiteTemplate = () => {
         )}
       </ul>
       <ul>
-        {details.length < 3 ? (
+        {technicalDetails.length < 3 ? (
           <li>loading data...</li>
         ) : (
           technicalDetails.map(product => (
