@@ -76,7 +76,6 @@ const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
   const amazon_product_detailed_data = await AmazonProductImages.find({
     product_id: id,
   });
-  console.log('test');
   //If json is not empty that means program found data
   if (amazon_product_detailed_data.length > 3) {
     res.status(200).send();
