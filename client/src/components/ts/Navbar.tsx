@@ -25,13 +25,18 @@ const Navbar: FC = () => {
       const requestOptions = {
         method: 'GET',
       };
-      //Get product data with "x" name from api
-      fetch('/api/ap/name/' + searchWord, requestOptions)
-        .then(async response => setData(await response.json()))
-        .catch(() => {
-          //Delete all data if there is nothing found in database and hide searchbox
-          setData(['{}']), searchbar?.classList.remove('active');
-        });
+      //Fetch request is only made if searchWord is not empty string
+      if (searchWord != '') {
+        //Get product data with "x" name from api
+        fetch('/api/ap/name/' + searchWord, requestOptions)
+          .then(async response => setData(await response.json()))
+          .catch(() => {
+            //Delete all data if there is nothing found in database and hide searchbox
+            setData(['{}']), searchbar?.classList.remove('active');
+          });
+      } else {
+        setData(['{}']), searchbar?.classList.remove('active');
+      }
 
       setIsFetching(false);
     }
