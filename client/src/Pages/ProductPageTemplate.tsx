@@ -28,7 +28,7 @@ const ProductWebsiteTemplate = () => {
         else setProductData([]);
       })
       .catch(e => {
-        console.log(e);
+        console.error(e);
       });
   };
   useEffect(() => {
@@ -69,15 +69,13 @@ const ProductWebsiteTemplate = () => {
       <h2>{productId}</h2>
       <br />
       <ul>
-        {details.length < 3 ? (
-          <li>loading data...</li>
-        ) : (
-          details.map(product => (
-            <li key={product._id}>
-              {product.product_detail_name}: {product.product_detail}
-            </li>
-          ))
-        )}
+        {details.length < 3
+          ? false
+          : details.map(product => (
+              <li key={product._id}>
+                {product.product_detail_name}: {product.product_detail}
+              </li>
+            ))}
       </ul>
       <ul>
         {images.length < 3 ? (
@@ -91,15 +89,19 @@ const ProductWebsiteTemplate = () => {
         )}
       </ul>
       <ul>
-        {technicalDetails.length < 3 ? (
-          <li>loading data...</li>
-        ) : (
-          technicalDetails.map(product => (
-            <li key={product._id}>
-              {product.product_technical_detail_name}: {product.product_technical_detail}
-            </li>
-          ))
-        )}
+        {technicalDetails.length < 3
+          ? false
+          : technicalDetails.map(product => (
+              <li key={product._id}>
+                {product.product_technical_detail_name}: {product.product_technical_detail}
+              </li>
+            ))}
+      </ul>
+      <br />
+      <ul>
+        {about.length < 3
+          ? false
+          : about.map(product => <li key={product._id}>{product.product_about}</li>)}
       </ul>
     </div>
   );
