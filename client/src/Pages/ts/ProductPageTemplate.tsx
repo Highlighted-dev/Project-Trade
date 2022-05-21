@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
+import '../css/ProductPageTemplate.css';
 const ProductWebsiteTemplate = () => {
   const { productId } = useParams();
   const [changingProductId, setChangingProductId] = useState(productId);
@@ -68,41 +68,43 @@ const ProductWebsiteTemplate = () => {
     <div>
       <h2>{productId}</h2>
       <br />
-      <ul>
-        {details.length < 3
-          ? false
-          : details.map(product => (
+      <div id="main">
+        <ul>
+          {details.length < 3
+            ? false
+            : details.map(product => (
+                <li key={product._id}>
+                  {product.product_detail_name}: {product.product_detail}
+                </li>
+              ))}
+        </ul>
+        <ul>
+          {images.length < 3 ? (
+            <li>loading data...</li>
+          ) : (
+            images.map(product => (
               <li key={product._id}>
-                {product.product_detail_name}: {product.product_detail}
+                image: <img src={product.product_image} />
               </li>
-            ))}
-      </ul>
-      <ul>
-        {images.length < 3 ? (
-          <li>loading data...</li>
-        ) : (
-          images.map(product => (
-            <li key={product._id}>
-              image: <img src={product.product_image} />
-            </li>
-          ))
-        )}
-      </ul>
-      <ul>
-        {technicalDetails.length < 3
-          ? false
-          : technicalDetails.map(product => (
-              <li key={product._id}>
-                {product.product_technical_detail_name}: {product.product_technical_detail}
-              </li>
-            ))}
-      </ul>
-      <br />
-      <ul>
-        {about.length < 3
-          ? false
-          : about.map(product => <li key={product._id}>{product.product_about}</li>)}
-      </ul>
+            ))
+          )}
+        </ul>
+        <ul>
+          {technicalDetails.length < 3
+            ? false
+            : technicalDetails.map(product => (
+                <li key={product._id}>
+                  {product.product_technical_detail_name}: {product.product_technical_detail}
+                </li>
+              ))}
+        </ul>
+        <br />
+        <ul>
+          {about.length < 3
+            ? false
+            : about.map(product => <li key={product._id}>{product.product_about}</li>)}
+        </ul>
+      </div>
     </div>
   );
 };
