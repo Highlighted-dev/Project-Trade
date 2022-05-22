@@ -156,6 +156,7 @@
   transition: all ease 400ms;
   height: 250px;
   overflow-y: scroll;
+  z-index: 99;
 }
 .topbar .searchBar .searchResults::-webkit-scrollbar {
   width: 10px;
