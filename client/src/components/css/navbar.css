@@ -7,6 +7,7 @@
   left: 0;
   padding: 4px 12px;
   transition: all ease 400ms;
+  z-index: 10;
 }
 .sidebar.active {
   width: 220px;
@@ -99,6 +100,7 @@
 }
 .sidebar.active .links_name {
   opacity: 1;
+
   pointer-events: auto;
 }
 .sidebar ul li:hover .tooltip {
@@ -154,7 +156,6 @@
   transition: all ease 400ms;
   height: 250px;
   overflow-y: scroll;
-  z-index: 10;
 }
 .topbar .searchBar .searchResults::-webkit-scrollbar {
   width: 10px;
