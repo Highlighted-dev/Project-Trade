@@ -69,6 +69,20 @@ const ProductWebsiteTemplate = () => {
       <h2>{productId}</h2>
       <br />
       <div id="main">
+        <div id="images">
+          <ul>
+            {images.length < 3 ? (
+              <li>loading data...</li>
+            ) : (
+              images.map(product => (
+                <li key={product._id}>
+                  <img src={product.product_image} width={80} />
+                </li>
+              ))
+            )}
+          </ul>
+          <br />
+        </div>
         <ul>
           {details.length < 3
             ? false
@@ -77,17 +91,6 @@ const ProductWebsiteTemplate = () => {
                   {product.product_detail_name}: {product.product_detail}
                 </li>
               ))}
-        </ul>
-        <ul>
-          {images.length < 3 ? (
-            <li>loading data...</li>
-          ) : (
-            images.map(product => (
-              <li key={product._id}>
-                image: <img src={product.product_image} />
-              </li>
-            ))
-          )}
         </ul>
         <ul>
           {technicalDetails.length < 3
