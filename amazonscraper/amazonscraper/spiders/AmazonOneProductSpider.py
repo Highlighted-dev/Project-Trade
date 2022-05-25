@@ -5,8 +5,7 @@ from amazonscraper.items import AmazonItemImages, AmazonItemDetails, AmazonItemT
 from amazoncaptcha import AmazonCaptcha
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
-import pymongo
-import json
+import re
 class AmazonOneProductSpider(scrapy.Spider):
     def __init__(self, prod_id):
         global product_id
@@ -27,15 +26,22 @@ class AmazonOneProductSpider(scrapy.Spider):
                 details = AmazonItemDetails()
                 technical_details = AmazonItemTechnicalDetails()
                 abouts = AmazonItemAbout()
-                #Getting data from amazon
 
+                #Getting data from amazon
                 #product_name = response.xpath('//div[@id="titleSection"]//span[@id="productTitle"]/text()').extract()
                 product_images = response.xpath('//div[@id="altImages"]//li[@class="a-spacing-small item imageThumbnail a-declarative"]//span[@class="a-button-text"]//img/@src').extract()
+                # product_big_images = str(response.xpath('//ul[@class="a-unordered-list a-nostyle a-horizontal list maintain-height"]//li[@class="image item itemNo0 maintain-height selected"]//div[@id="imgTagWrapperId"]//img/@data-a-dynamic-image').extract())
+                # test = response.xpath('//script/text()').re(".*'colorImages'.*")
                 product_details_name = response.xpath('//div[@id="productOverview_feature_div"]//table[@class="a-normal a-spacing-micro"]//td[@class="a-span3"]//span/text()').extract()                
                 product_details = response.xpath('//div[@id="productOverview_feature_div"]//table[@class="a-normal a-spacing-micro"]//td[@class="a-span9"]//span/text()').extract()  
                 product_technical_details_name = response.xpath('//div[@id="prodDetails"]//table[@id="productDetails_techSpec_section_1"]//th/text()').extract()
                 product_technical_details = response.xpath('//div[@id="prodDetails"]//table[@id="productDetails_techSpec_section_1"]//td/text()').extract()
-                
+                # logging.info(product_big_images)
+
+                # #Formatting string with regular expression. "(.*?)" means "anything"
+                # format_product_big_images_string  = re.findall(r'"(.*?)"', product_big_images)
+                # for x in format_product_big_images_string:
+                #     logging.info(x)
                 for image in product_images:
                     images['product_id'] = product_id
                     images['product_image'] = image
@@ -95,7 +101,7 @@ class AmazonOneProductSpider(scrapy.Spider):
             captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
-            logging.log(logging.INFO, "Captcha solved!")
+            logging.info("Captcha solved!")
             yield SplashFormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
                                         callback=origin_method)
