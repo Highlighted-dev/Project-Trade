@@ -3,4 +3,4 @@
 # Project-Trade
 Trading website
 # Technolgies Used
-MERN stack + Redux and Typescript
+MERN stack + Redux, Typescript and Scrapy(Python)
