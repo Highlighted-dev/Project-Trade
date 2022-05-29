@@ -17,6 +17,7 @@ class AmazonGetAllImages(scrapy.Spider):
     allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
         try:
+            images = AmazonItemImages()
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
             else:
@@ -31,11 +32,12 @@ class AmazonGetAllImages(scrapy.Spider):
                 # format_product_big_images_string  = re.findall(r'"(.*?)"', product_big_images)
                 # for x in format_product_big_images_string:
                 #     logging.info(x)
-                # for image in product_images:
-                #     images['product_id'] = product_id
-                #     images['product_image'] = image
-                #     images['mongo_db_column_name'] = GlobalVariables.mongo_column_images
-                #     yield images
+                for image in product_images:
+                    images['product_id'] = product_id
+                    images['product_image_thumb'] = image
+                    #images['product_image_thumb'] = x
+                    images['mongo_db_column_name'] = GlobalVariables.mongo_column_images
+                    yield images
         except Exception as e:
             logging.error("Something went wrong while extracting items\n")
             logging.error(e)
