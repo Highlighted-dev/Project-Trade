@@ -16,8 +16,8 @@ class AmazonscraperItem(scrapy.Item):
 class AmazonItemImages(scrapy.Item):
   mongo_db_column_name = scrapy.Field()
   product_id = scrapy.Field()
-  product_image = scrapy.Field()
-  product_big_image = scrapy.Field()
+  product_image_thumb = scrapy.Field()
+  product_image_highres = scrapy.Field()
 class AmazonItemDetails(scrapy.Item):
   mongo_db_column_name = scrapy.Field()
   product_id = scrapy.Field()
