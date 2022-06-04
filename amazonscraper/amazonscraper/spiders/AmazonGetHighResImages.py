@@ -1,11 +1,10 @@
 import scrapy
 from .. import GlobalVariables
-from amazonscraper.items import AmazonItemImages, AmazonItemDetails, AmazonItemTechnicalDetails, AmazonItemAbout
 from amazoncaptcha import AmazonCaptcha
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
-
-class AmazonGetAllImages(scrapy.Spider):
+import re
+class AmazonGetHighResImages(scrapy.Spider):
     def __init__(self, prod_id):
         global product_id
         product_id = prod_id
@@ -13,31 +12,26 @@ class AmazonGetAllImages(scrapy.Spider):
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
-    name = 'AmazonGetAllImages'
+    name = 'AmazonGetHighResImages'
     allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
         try:
-            images = AmazonItemImages()
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
             else:
 
-                #Getting data from amazon
-                #product_name = response.xpath('//div[@id="titleSection"]//span[@id="productTitle"]/text()').extract()
-                product_images = response.xpath('//div[@id="altImages"]//li[@class="a-spacing-small item imageThumbnail a-declarative"]//span[@class="a-button-text"]//img/@src').extract()
-                product_big_images = response.xpath('//script/text()').re(".*'colorImages'.*")
-                logging.info(product_big_images)
-
-                #Formatting string with regular expression. "(.*?)" means "anything"
-                # format_product_big_images_string  = re.findall(r'"(.*?)"', product_big_images)
+                #Getting data from amazon  
+                product_highres_images = str(response.xpath('//script/text()').re(".*'colorImages'.*"))
+                #Format string product_highres_images with regular expression
+                #Example input:  { \'initial\': [{"hiRes":"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg","thumb":"https://m.media-amazon.com/images/I/41yJ1Hn4ZGL._AC_US40_.jpg","large":"https://m.media-amazon.com/images/I/41yJ1Hn4ZGL._AC_.jpg","main":{"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SY355_.jpg":[355,355],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SY450_.jpg":[450,450],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX425_.jpg":[425,425],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX466_.jpg":[466,466],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX522_.jpg":[522,522],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX569_.jpg":[569,569],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX679_.jpg":[679,679]},"variant":"MAIN","lowRes":null,"shoppableScene":null}]}
+                #Example output: https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg
+                format_product_big_images_string  = re.findall(r'"hiRes":"(.*?)"', product_highres_images)
+                for x in format_product_big_images_string:
+                    logging.info(x)
+    
                 # for x in format_product_big_images_string:
                 #     logging.info(x)
-                for image in product_images:
-                    images['product_id'] = product_id
-                    images['product_image_thumb'] = image
-                    #images['product_image_thumb'] = x
-                    images['mongo_db_column_name'] = GlobalVariables.mongo_column_images
-                    yield images
+
         except Exception as e:
             logging.error("Something went wrong while extracting items\n")
             logging.error(e)
