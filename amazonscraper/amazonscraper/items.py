@@ -13,11 +13,14 @@ class AmazonscraperItem(scrapy.Item):
   product_sale_price = scrapy.Field()
   product_image = scrapy.Field()
   mongo_db_column_name = scrapy.Field()
-class AmazonItemImages(scrapy.Item):
+class AmazonItemThumbImages(scrapy.Item):
   mongo_db_column_name = scrapy.Field()
   product_id = scrapy.Field()
-  product_image_thumb = scrapy.Field()
-  product_image_highres = scrapy.Field()
+  product_thumb_image = scrapy.Field()
+class AmazonItemHighResImages(scrapy.Item):
+  mongo_db_column_name = scrapy.Field()
+  product_id = scrapy.Field()
+  product_highres_image = scrapy.Field()
 class AmazonItemDetails(scrapy.Item):
   mongo_db_column_name = scrapy.Field()
   product_id = scrapy.Field()
