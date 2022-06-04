@@ -19,9 +19,9 @@ class AmazonscraperPipeline:
         mongo_db_column_name = self.db[item['mongo_db_column_name']]
         try:
             match item['mongo_db_column_name']:
-                case 'amazonProductImages':
+                case 'amazonProductThumbImages':
                     del item['mongo_db_column_name']
-                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_image":item["product_image"]},item,upsert=True)
+                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_thumb_image":item["product_thumb_image"]},item,upsert=True)
                 case 'amazonProductDetails':
                     del item['mongo_db_column_name']
                     mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_detail_name":item["product_detail_name"]},item,upsert=True)
