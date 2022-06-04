@@ -4,6 +4,7 @@ import AmazonProductDetails from '../models/AmazonProductDetailsModel';
 import AmazonProductThumbImages from '../models/AmazonProductThumbImagesModel';
 import AmazonProductTechnicalDetails from '../models/AmazonProductTechnicalDetailsModel';
 import AmazonProductAbout from '../models/AmazonProductAboutModel';
+import AmazonProductHighResImages from '../models/AmazonProductHighResImagesModel';
 import session from 'express-session';
 import { Model } from 'mongoose';
 
@@ -49,6 +50,9 @@ router.get('/technicalDetails/id/:id', (req: Request, res: Response) =>
 );
 router.get('/about/id/:id', (req: Request, res: Response) =>
   getAmazonDetailedData(req, res, AmazonProductAbout)
+);
+router.get('/highResImages/id/:id', (req: Request, res: Response) =>
+  getAmazonDetailedData(req, res, AmazonProductHighResImages)
 );
 
 const getAmazonDetailedData = async (
