@@ -52,7 +52,7 @@ router.get('/about/id/:id', (req: Request, res: Response) =>
   getAmazonDetailedData(req, res, AmazonProductAbout)
 );
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
-  getAmazonDetailedData(req, res, AmazonProductHighResImages)
+  getAmazonHighResImages(req, res)
 );
 
 const getAmazonDetailedData = async (
@@ -91,6 +91,24 @@ const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
     //Store current url in express sessions
     req.session.url = req.originalUrl;
     res.redirect('/api/as/id/' + id);
+  }
+};
+
+const getAmazonHighResImages = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const amazon_product_highres_images = await AmazonProductHighResImages.find({
+    product_id: id,
+  });
+  if (amazon_product_highres_images.length > 3) {
+    res.status(200).send(amazon_product_highres_images);
+  }
+  //In case if amazon scraper didn't find any items
+  else if (req.session.url == req.originalUrl) {
+    res.status(404).send();
+  } else {
+    //Store current url in express sessions
+    req.session.url = req.originalUrl;
+    res.redirect('/api/as/highRes/id/' + id);
   }
 };
 export default router;
