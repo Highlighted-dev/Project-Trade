@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import AmazonProductData from '../models/AmazonProductDataModel';
 import AmazonProductDetails from '../models/AmazonProductDetailsModel';
-import AmazonProductImages from '../models/AmazonProductImagesModel';
+import AmazonProductThumbImages from '../models/AmazonProductThumbImagesModel';
 import AmazonProductTechnicalDetails from '../models/AmazonProductTechnicalDetailsModel';
 import AmazonProductAbout from '../models/AmazonProductAboutModel';
 import session from 'express-session';
@@ -41,7 +41,7 @@ router.get('/details/id/:id', async (req: Request, res: Response) =>
 );
 //Get images by id
 router.get('/images/id/:id', (req: Request, res: Response) =>
-  getAmazonDetailedData(req, res, AmazonProductImages)
+  getAmazonDetailedData(req, res, AmazonProductThumbImages)
 );
 //Get technical details by id
 router.get('/technicalDetails/id/:id', (req: Request, res: Response) =>
@@ -73,7 +73,7 @@ const getAmazonDetailedData = async (
 //On Amazon, every product has at least 1 image. So If there are no images it means that there isn't any data about the product in database.
 const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const amazon_product_detailed_data = await AmazonProductImages.find({
+  const amazon_product_detailed_data = await AmazonProductThumbImages.find({
     product_id: id,
   });
   //If json is not empty that means program found data

@@ -76,7 +76,7 @@ const ProductWebsiteTemplate = () => {
             ) : (
               images.map(product => (
                 <li key={product._id}>
-                  <img src={product.product_image} width={80} />
+                  <img src={product.product_thumb_image} />
                 </li>
               ))
             )}
