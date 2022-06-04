@@ -7,13 +7,15 @@ const ProductWebsiteTemplate = () => {
   const [details, setDetails] = useState<any[]>([]);
   const [images, setImages] = useState<any[]>([]);
   const [technicalDetails, setTechnicalDetails] = useState<any[]>([]);
-  const [about, setAbout] = useState<any[]>([]);
+  const [abouts, setAbouts] = useState<any[]>([]);
+  const [highResImages, setHighResImages] = useState<any[]>([]);
 
   const clearStates = () => {
     setImages([]);
     setDetails([]);
     setTechnicalDetails([]);
-    setAbout([]);
+    setAbouts([]);
+    setHighResImages([]);
   };
   const fetchProductData = (
     requestOptions: RequestInit,
@@ -57,7 +59,10 @@ const ProductWebsiteTemplate = () => {
         fetchProductData(requestOptions, '/api/ap/details/id/', setDetails);
       })
       .then(data => {
-        fetchProductData(requestOptions, '/api/ap/about/id/', setAbout);
+        fetchProductData(requestOptions, '/api/ap/about/id/', setAbouts);
+      })
+      .then(data => {
+        fetchProductData(requestOptions, '/api/ap/highResImages/id/', setHighResImages);
       })
       .catch(e => {
         console.log(e);
@@ -103,9 +108,19 @@ const ProductWebsiteTemplate = () => {
         </ul>
         <br />
         <ul>
-          {about.length < 3
+          {abouts.length < 3
             ? false
-            : about.map(product => <li key={product._id}>{product.product_about}</li>)}
+            : abouts.map(product => <li key={product._id}>{product.product_about}</li>)}
+        </ul>
+        <ul>
+          {highResImages.length < 3
+            ? false
+            : highResImages.map(product => (
+                <li key={product._id}>
+                  {' '}
+                  <img src={product.product_highres_image} />
+                </li>
+              ))}
         </ul>
       </div>
     </div>
