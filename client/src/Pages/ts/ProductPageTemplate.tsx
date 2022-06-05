@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/ProductPageTemplate.css';
 const ProductWebsiteTemplate = () => {
@@ -33,6 +33,13 @@ const ProductWebsiteTemplate = () => {
         console.error(e);
       });
   };
+  const toggleSelectedImage: MouseEventHandler = image => {
+    //If there is any image that has class '.selected', remove that class from it.
+    const selectedImage = document.querySelector('.selected');
+    if (selectedImage) selectedImage?.classList.remove('selected');
+
+    (image.target as HTMLTextAreaElement).classList.toggle('selected');
+  };
   useEffect(() => {
     setChangingProductId(productId);
     clearStates();
@@ -49,19 +56,19 @@ const ProductWebsiteTemplate = () => {
         }
       })
       //Get product data with "x" name from api
-      .then(data => {
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/images/id/', setImages);
       })
-      .then(data => {
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/technicalDetails/id/', setTechnicalDetails);
       })
-      .then(data => {
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/details/id/', setDetails);
       })
-      .then(data => {
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/about/id/', setAbouts);
       })
-      .then(data => {
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/highResImages/id/', setHighResImages);
       })
       .catch(e => {
@@ -79,9 +86,14 @@ const ProductWebsiteTemplate = () => {
             {images.length < 3 ? (
               <li>loading data...</li>
             ) : (
-              images.map(product => (
-                <li key={product._id}>
-                  <img src={product.product_thumb_image} />
+              images.map((product, key) => (
+                <li key={key}>
+                  <img
+                    src={product.product_thumb_image}
+                    width={60}
+                    onClick={toggleSelectedImage}
+                    className={key > 0 ? '' : 'selected'}
+                  />
                 </li>
               ))
             )}
