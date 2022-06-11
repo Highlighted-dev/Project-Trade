@@ -5,10 +5,23 @@
 #images {
   display: block;
   float: left;
+  height: 600px;
+  overflow-y: auto;
+  background-color: aliceblue;
 }
 #images img {
   padding: 10px;
 }
 #images img.selected {
   border: 1px solid #25223b;
+}
+#highresImages {
+  width: 600px;
+  float: left;
+}
+#highresImages img {
+  display: none;
+}
+#highresImages img.highresSelected {
+  display: flex;
 }
