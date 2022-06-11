@@ -25,9 +25,9 @@ class AmazonGetHighResImages(scrapy.Spider):
                 #Getting data from amazon  
                 product_highres_images = str(response.xpath('//script/text()').re(".*'colorImages'.*"))
                 #Format string product_highres_images with regular expression
-                #Example input:  { \'initial\': [{"hiRes":"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg","thumb":"https://m.media-amazon.com/images/I/41yJ1Hn4ZGL._AC_US40_.jpg","large":"https://m.media-amazon.com/images/I/41yJ1Hn4ZGL._AC_.jpg","main":{"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SY355_.jpg":[355,355],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SY450_.jpg":[450,450],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX425_.jpg":[425,425],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX466_.jpg":[466,466],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX522_.jpg":[522,522],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX569_.jpg":[569,569],"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SX679_.jpg":[679,679]},"variant":"MAIN","lowRes":null,"shoppableScene":null}]}
-                #Example output: https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg
-                format_product_highres_images_string  = re.findall(r'"hiRes":"(.*?)"', product_highres_images)
+                #Example input:  { \'initial\': [{"hiRes":"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg", ...]} | { \'initial\': [{"hiRes":null, ...]}
+                #Example output: https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg | null
+                format_product_highres_images_string  = re.findall(r'"hiRes":"(.*?)"', product_highres_images) + re.findall(r'"hiRes":(null?)',product_highres_images)
                 for highres_image in format_product_highres_images_string:
                     images['product_id'] = product_id
                     images['product_highres_image'] = highres_image
