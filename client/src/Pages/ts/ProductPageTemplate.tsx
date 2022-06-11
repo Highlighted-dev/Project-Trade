@@ -25,7 +25,7 @@ const ProductWebsiteTemplate = () => {
     fetch(url + productId, requestOptions)
       .then(async response => await response.json())
       .then(data => {
-        //If json is not empty
+        //If json is not empty set data, else set empty array
         if (data.length > 2) setProductData(data);
         else setProductData([]);
       })
@@ -36,9 +36,18 @@ const ProductWebsiteTemplate = () => {
   const toggleSelectedImage: MouseEventHandler = image => {
     //If there is any image that has class '.selected', remove that class from it.
     const selectedImage = document.querySelector('.selected');
-    if (selectedImage) selectedImage?.classList.remove('selected');
+    if (selectedImage) selectedImage?.classList.toggle('selected');
 
+    //If there is any image that has class '.highresSelected', remove that class from it.
+    const selectedHighresImage = document.querySelector('.highresSelected');
+    if (selectedHighresImage) selectedHighresImage?.classList.toggle('highresSelected');
+
+    //Toggle clicked image selected class
     (image.target as HTMLTextAreaElement).classList.toggle('selected');
+
+    //Get current image but in high resolution and toggle class "highresSelected" to show it
+    const highResImage = 'highres' + (image.target as HTMLTextAreaElement).id;
+    document.getElementById(highResImage)?.classList.toggle('highresSelected');
   };
   useEffect(() => {
     setChangingProductId(productId);
@@ -55,7 +64,6 @@ const ProductWebsiteTemplate = () => {
           return Promise.reject();
         }
       })
-      //Get product data with "x" name from api
       .then(() => {
         fetchProductData(requestOptions, '/api/ap/images/id/', setImages);
       })
@@ -75,7 +83,6 @@ const ProductWebsiteTemplate = () => {
         console.log(e);
       });
   }, [productId]);
-
   return (
     <div>
       <h2>{productId}</h2>
@@ -92,11 +99,32 @@ const ProductWebsiteTemplate = () => {
                     src={product.product_thumb_image}
                     width={60}
                     onClick={toggleSelectedImage}
+                    //First image will have 'selected' class
                     className={key > 0 ? '' : 'selected'}
+                    //ID is used for determining what highres image should react render
+                    id={'img' + key}
                   />
                 </li>
               ))
             )}
+          </ul>
+        </div>
+        <div id="highresImages">
+          <ul>
+            {highResImages.length < 3
+              ? false
+              : highResImages.map((product, key) => (
+                  <li key={key}>
+                    {' '}
+                    <img
+                      //TODO sometimes image link can be null. Handle it
+                      src={product.product_highres_image}
+                      id={'highresimg' + key}
+                      //Only first image will be visible to user.
+                      className={key > 0 ? '' : 'highresSelected'}
+                    />
+                  </li>
+                ))}
           </ul>
           <br />
         </div>
@@ -123,16 +151,6 @@ const ProductWebsiteTemplate = () => {
           {abouts.length < 3
             ? false
             : abouts.map(product => <li key={product._id}>{product.product_about}</li>)}
-        </ul>
-        <ul>
-          {highResImages.length < 3
-            ? false
-            : highResImages.map(product => (
-                <li key={product._id}>
-                  {' '}
-                  <img src={product.product_highres_image} />
-                </li>
-              ))}
         </ul>
       </div>
     </div>
