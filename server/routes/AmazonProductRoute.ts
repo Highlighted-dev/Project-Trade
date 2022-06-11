@@ -70,7 +70,7 @@ const getAmazonDetailedData = async (
     res.status(200).json(amazon_product_detailed_data);
   } else {
     //Program didn't find any data, but it's okay becouse sometimes there isn't this type of data on Amazon
-    res.status(204).send();
+    res.status(200).json([{}]);
   }
 };
 
