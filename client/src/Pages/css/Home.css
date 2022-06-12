@@ -1,0 +1,14 @@
+#home {
+  padding: 8px;
+  position: absolute;
+  width: calc(100%-72px);
+  left: 72px;
+  background-color: #25223b;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+.navbar.active ~ #home {
+  width: calc(100%-220px);
+  left: 220px;
+}
