@@ -27,10 +27,14 @@ class AmazonGetHighResImages(scrapy.Spider):
                 #Format string product_highres_images with regular expression
                 #Example input:  { \'initial\': [{"hiRes":"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg", ...]} | { \'initial\': [{"hiRes":null, ...]}
                 #Example output: https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg | null
-                format_product_highres_images_string  = re.findall(r'"hiRes":"(.*?)"', product_highres_images) + re.findall(r'"hiRes":(null?)',product_highres_images)
-                for highres_image in format_product_highres_images_string:
+                format_product_highres_images  = re.findall(r'"hiRes":(".*?"|null)', product_highres_images)
+                for highres_image in format_product_highres_images:
                     images['product_id'] = product_id
-                    images['product_highres_image'] = highres_image
+                    #If image link isn't null that means it has 2 quotes - delete them
+                    if highres_image != 'null':
+                        images['product_highres_image'] = highres_image[1:-1]
+                    else:
+                        images['product_highres_image'] = highres_image
                     images['mongo_db_column_name'] = GlobalVariables.mongo_column_highres_images
                     yield images
 
