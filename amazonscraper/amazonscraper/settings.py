@@ -2,22 +2,9 @@ import urllib.request
 import os
 
 #TODO add proxies
-# def getProxies():
-#     #proxyscrape.com
-#     proxyscrape = urllib.request.urlretrieve("https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=DE&ssl=no&anonymity=elite&simplified=true","./amazonscraper/proxy1.txt")
-#     proxy1 = open('./amazonscraper/proxy1.txt', 'r')
-#     Lines = proxy1.readlines()
-#     allProxiesArray = []
-#     for line in Lines:
-#         allProxiesArray.append(line[:len(line)-1])
-#     proxy1.close()
-#     os.remove('./amazonscraper/proxy1.txt')
-#     print(allProxiesArray)
-#     return allProxiesArray
 
 SPIDER_MODULES = ['amazonscraper.spiders']
 NEWSPIDER_MODULE = 'amazonscraper.spiders'
-
 #Splash settings
 SPLASH_URL = 'http://localhost:8050'
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
