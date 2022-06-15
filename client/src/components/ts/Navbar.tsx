@@ -70,13 +70,15 @@ const Navbar: FC = () => {
             }}
             value={searchWord}
           ></input>
-          <div className="searchResults">
-            {data.map((product, key) => (
-              <Link to={'/Product/' + product._id} key={key}>
-                <li key={key}>{product.product_name}</li>
-              </Link>
-            ))}
-          </div>
+          {searchWord.length > 0 ? (
+            <div className="searchResults">
+              {data.map((product, key) => (
+                <Link to={'/Product/' + product.product_id} key={key}>
+                  <li key={key}>{product.product_name}</li>
+                </Link>
+              ))}
+            </div>
+          ) : null}
         </div>
         <div className="Avatar">
           <img
