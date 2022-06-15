@@ -1,12 +1,15 @@
 #home {
   padding: 8px;
-  position: absolute;
+  position: relative;
+  display: flex;
   width: calc(100%-72px);
+  height: 100%;
   left: 72px;
   background-color: #25223b;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
+  color: #fff;
 }
 .navbar.active ~ #home {
   width: calc(100%-220px);
