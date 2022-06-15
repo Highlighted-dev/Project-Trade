@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProductWebsiteTemplate from './Pages/ts/ProductPageTemplate';
 import Home from './Pages/ts/Home';
 const App: FC = () => (
-  <div className="App">
+  <div id="App">
     <BrowserRouter>
       <Navbar />
       <div id="home">
