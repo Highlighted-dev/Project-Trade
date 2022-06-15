@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import './index.css';
 import './App.css';
 import Navbar from './components/ts/Navbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -9,7 +8,7 @@ const App: FC = () => (
   <div className="App">
     <BrowserRouter>
       <Navbar />
-      <div className="home">
+      <div id="home">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Product/:productId" element={<ProductWebsiteTemplate />} />
