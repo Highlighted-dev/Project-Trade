@@ -28,7 +28,7 @@ class AmazonProductSpider(scrapy.Spider):
             prod_image = response.xpath('//div[@class="a-section aok-relative s-image-square-aspect"]//img[@class="s-image"]/@src').extract()      
             for i in range(GlobalVariables.items_per_page):
                 #Storing all data into items
-                items['_id'] = ''.join(prod_id[i]).strip()
+                items['product_id'] = ''.join(prod_id[i]).strip()
                 items['product_name'] = ''.join(title[i]).strip()
                 try:
                     items['product_sale_price'] = ''.join(sale_price[i]).strip()
@@ -60,7 +60,7 @@ class AmazonProductSpider(scrapy.Spider):
         #Try inserting files to mongoDB
         try:
             for obj in file_data:
-                mycol.replace_one({"_id":obj["_id"]},obj,upsert=True)
+                mycol.replace_one({"product_id":obj["product_id"]},obj,upsert=True)
             logging.info("All products inserted to database successfully.")        
         except Exception as e:
             logging.error("An error has occurred when trying to add products to database\n")
