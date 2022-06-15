@@ -1,27 +1,83 @@
-#main {
-  width: 100%;
-  height: 100%;
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quicksand:wght@600&display=swap');
+
+#productInformations {
+  width: 95%;
+  height: 60%;
+  color: white;
 }
-#images {
+#productInformations #images {
   display: block;
   float: left;
-  height: 600px;
+  height: 100%;
   overflow-y: auto;
-  background-color: aliceblue;
+  background-color: #0d0c16;
 }
-#images img {
+#productInformations #images img {
   padding: 10px;
 }
-#images img.selected {
-  border: 1px solid #25223b;
+#productInformations #images img.selected {
+  border: 1px solid #fff;
 }
-#highresImages {
-  width: 600px;
+
+#productInformations #highresImages {
   float: left;
+  width: 520px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
 }
-#highresImages img {
+#productInformations #highresImages img {
   display: none;
 }
-#highresImages img.highresSelected {
+#productInformations #highresImages img.highresSelected {
   display: flex;
+  max-width: 500px;
+  max-height: 500px;
+}
+
+#productInformations #productData {
+  float: left;
+  width: 30%;
+  height: 100%;
+  border: 1px solid #0d0c16;
+  text-align: center;
+}
+#productData #productBasicInformations {
+  display: inline-block;
+  width: 94%;
+}
+#productData #productBasicInformations h1,
+h3 {
+  font-family: 'Oswald', sans-serif;
+  font-size: large;
+}
+#productData #productBasicInformations #reviews {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+#productData #productBasicInformations #reviews h4 {
+  padding-left: 6px;
+}
+#productData #productDetails {
+  width: 94%;
+  display: inline-block;
+  text-align: left;
+}
+#productData #productDetails h2 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: large;
+  padding-bottom: 5px;
+}
+#productData #productDetails ol {
+  list-style-type: disc;
+  list-style-position: inside;
+  padding: 2px 2px 2px 20px;
+}
+#productData #productDetails li span {
+  position: relative;
+  left: -10px;
 }
