@@ -3,6 +3,7 @@ import mongoose, { Model, Schema } from 'mongoose';
 
 interface IProductData {
   _id: ObjectId;
+  product_id: string;
   product_name: string;
   product_sale_price: string;
   product_image: string;
@@ -11,6 +12,7 @@ interface IProductData {
 const amazonProductDataSchema = new Schema<IProductData>(
   {
     _id: String,
+    product_id: String,
     product_name: String,
     product_sale_price: String,
     product_image: String,
