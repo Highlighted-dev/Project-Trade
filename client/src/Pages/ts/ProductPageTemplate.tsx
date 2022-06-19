@@ -53,6 +53,10 @@ const ProductWebsiteTemplate = () => {
     const highResImage = 'highres' + (image.target as HTMLTextAreaElement).id;
     document.getElementById(highResImage)?.classList.toggle('highresSelected');
   };
+  const hideContent = (className: string) => {
+    const content = document.querySelector(`.${className}`);
+    content?.classList.toggle('active');
+  };
 
   useEffect(() => {
     setChangingProductId(productId);
@@ -105,7 +109,7 @@ const ProductWebsiteTemplate = () => {
                 <li key={key}>
                   <img
                     src={product.product_thumb_image}
-                    width={60}
+                    width={70}
                     onClick={toggleSelectedImage}
                     //First image will have 'selected' class
                     className={key > 0 ? '' : 'selected'}
@@ -158,38 +162,67 @@ const ProductWebsiteTemplate = () => {
                 ))
               : false
           }
-          <div id="productDetails">
-            <h2>THE DETAILS</h2>
-            {details.length > 1
-              ? details.map(product => (
-                  <ol>
+          {details.length > 1 ? (
+            <div className="productDetails">
+              <div className="productDetailsHeaderAndButton">
+                <h2>THE DETAILS</h2>
+                <button onClick={() => hideContent('productDetailsContent')}>-</button>
+              </div>
+              <div className="productDetailsContent">
+                <ol>
+                  {details.map(product => (
                     <li key={product._id}>
                       <span>
                         {product.product_detail_name}: {product.product_detail}
                       </span>
                     </li>
-                  </ol>
-                ))
-              : false}
-          </div>
-          <ul>
-            {technicalDetails.length > 1
-              ? technicalDetails.map(product => (
-                  <table>
-                    <tr>
-                      <th>{product.product_technical_detail_name}: </th>
-                      <td>{product.product_technical_detail}</td>
-                    </tr>
-                  </table>
-                ))
-              : false}
-          </ul>
-          <br />
-          <ul>
-            {abouts.length > 1
-              ? abouts.map(product => <li key={product._id}>{product.product_about}</li>)
-              : false}
-          </ul>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          ) : (
+            false
+          )}
+
+          {technicalDetails.length > 1 ? (
+            <div className="productTechnicalDetails">
+              <div className="productTechnicalDetailsHeaderAndButton">
+                <h2>THE DETAILS</h2>
+                <button onClick={() => hideContent('productTechnicalDetailsContent')}>-</button>
+              </div>
+              <div className="productTechnicalDetailsContent">
+                <ol>
+                  {technicalDetails.map(product => (
+                    <li key={product._id}>
+                      <span>
+                        {product.product_technical_detail_name}: {product.product_technical_detail}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          ) : (
+            false
+          )}
+
+          {abouts.length > 1 ? (
+            <div className="productAbout">
+              <div className="productAboutHeaderAndButton">
+                <h2>ABOUT</h2>
+                <button onClick={() => hideContent('productAboutContent')}>-</button>
+              </div>
+              <div className="productAboutContent">
+                <ol>
+                  {abouts.map(product => (
+                    <li key={product._id}>{product.product_about}</li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          ) : (
+            false
+          )}
         </div>
       </div>
     </>

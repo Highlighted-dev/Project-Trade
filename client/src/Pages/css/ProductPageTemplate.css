@@ -62,22 +62,47 @@ h3 {
 #productData #productBasicInformations #reviews h4 {
   padding-left: 6px;
 }
-#productData #productDetails {
+
+#productData .productDetails,
+#productData .productAbout,
+#productData .productTechnicalDetails {
   width: 94%;
   display: inline-block;
   text-align: left;
 }
-#productData #productDetails h2 {
+#productData .productDetails .productDetailsHeaderAndButton,
+#productData .productAbout .productAboutHeaderAndButton,
+#productData .productTechnicalDetails .productTechnicalDetailsHeaderAndButton {
   font-family: 'Quicksand', sans-serif;
   font-size: large;
   padding-bottom: 5px;
+  display: flex;
 }
-#productData #productDetails ol {
+#productData .productDetails .productDetailsHeaderAndButton button,
+#productData .productTechnicalDetails .productTechnicalDetailsHeaderAndButton button,
+#productData .productAbout .productAboutHeaderAndButton button {
+  margin-left: auto;
+}
+#productData .productDetails .productDetailsContent,
+#productData .productAbout .productAboutContent,
+#productData .productTechnicalDetails .productTechnicalDetailsContent {
+  display: none;
+}
+#productData .productDetails .productDetailsContent.active,
+#productData .productAbout .productAboutContent.active,
+#productData .productTechnicalDetails .productTechnicalDetailsContent.active {
+  display: block;
+}
+#productData .productDetails .productDetailsContent ol,
+#productData .productAbout .productAboutContent ol,
+#productData .productTechnicalDetails .productTechnicalDetailsContent ol {
   list-style-type: disc;
   list-style-position: inside;
   padding: 2px 2px 2px 20px;
 }
-#productData #productDetails li span {
+#productData .productDetails .productDetailsContent li span,
+#productData .productAbout .productAboutContent li span,
+#productData .productTechnicalDetails .productTechnicalDetailsContent li span {
   position: relative;
   left: -10px;
 }
