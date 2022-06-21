@@ -154,11 +154,11 @@ const ProductWebsiteTemplate = () => {
                   <div id="productBasicInformations">
                     <h1>{product.product_name}</h1>
                     <div id="reviews">
-                      <AiOutlineStar />
-                      <AiOutlineStar />
-                      <AiOutlineStar />
-                      <AiOutlineStar />
-                      <AiOutlineStar />
+                      <AiOutlineStar className="icons" />
+                      <AiOutlineStar className="icons" />
+                      <AiOutlineStar className="icons" />
+                      <AiOutlineStar className="icons" />
+                      <AiOutlineStar className="icons" />
                       <h4>100 Reviews</h4>
                     </div>
                     <h3>
