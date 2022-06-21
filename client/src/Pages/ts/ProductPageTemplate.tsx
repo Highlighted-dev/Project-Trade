@@ -54,8 +54,18 @@ const ProductWebsiteTemplate = () => {
     document.getElementById(highResImage)?.classList.toggle('highresSelected');
   };
   const hideContent = (className: string) => {
+    const expanded = document.querySelector('.expand');
+    /*
+    This is used to toggle off item when another one is about to toggle on
+    If there is an item with "expand" class AND if "className" string ISN'T in "expanded" string
+    Example: expanded = "productDetailsContent expanded" classname = "productDetailsContent" | true
+    Example: expanded = "productAboutContent expanded" and classname = "productDetailsContent"| false
+    */
+    if (expanded)
+      if (!expanded?.className.includes(className)) expanded?.classList.toggle('expand');
+
     const content = document.querySelector(`.${className}`);
-    content?.classList.toggle('active');
+    content?.classList.toggle('expand');
   };
 
   useEffect(() => {
@@ -98,8 +108,6 @@ const ProductWebsiteTemplate = () => {
   return (
     <>
       <div id="productInformations">
-        <h2>{productId}</h2>
-        <br />
         <div id="images">
           <ul>
             {images.length < 3 ? (
@@ -111,9 +119,9 @@ const ProductWebsiteTemplate = () => {
                     src={product.product_thumb_image}
                     width={70}
                     onClick={toggleSelectedImage}
-                    //First image will have 'selected' class
+                    //First image will have 'selected' class (visible to user)
                     className={key > 0 ? '' : 'selected'}
-                    //ID is used for determining what highres image should react render
+                    //ID is used for determining what highres image should be rendered
                     id={'img' + key}
                   />
                 </li>
@@ -129,7 +137,7 @@ const ProductWebsiteTemplate = () => {
                     <img
                       src={product.product_highres_image}
                       id={'highresimg' + key}
-                      //Only first image will be visible to user.
+                      //First image will have 'selected' class (visible to user)
                       className={key > 0 ? '' : 'highresSelected'}
                     />
                   </li>
@@ -215,7 +223,9 @@ const ProductWebsiteTemplate = () => {
               <div className="productAboutContent">
                 <ol>
                   {abouts.map(product => (
-                    <li key={product._id}>{product.product_about}</li>
+                    <li key={product._id}>
+                      <span>{product.product_about}</span>
+                    </li>
                   ))}
                 </ol>
               </div>
