@@ -8,9 +8,12 @@ import {
   AiOutlineBarChart,
   AiOutlineShoppingCart,
   AiOutlineHeart,
+  AiOutlineEdit,
 } from 'react-icons/ai';
 import { BsChatDots, BsGrid } from 'react-icons/bs';
-import { BiCog } from 'react-icons/bi';
+import { BiCog, BiLogOutCircle } from 'react-icons/bi';
+import { CgProfile } from 'react-icons/cg';
+import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
 
@@ -49,6 +52,11 @@ const Navbar: FC = () => {
     navbar?.classList.toggle('active');
   };
 
+  const toggleUserPanel = (className: string) => {
+    const avatar = document.querySelector(`.${className}`);
+    avatar?.classList.toggle('active');
+  };
+
   //Perform search every time user input changes
   const search: ChangeEventHandler = () => {
     const searchbar = document.querySelector('.searchBar');
@@ -80,13 +88,41 @@ const Navbar: FC = () => {
             </div>
           ) : null}
         </div>
-        <div className="Avatar">
-          <img
-            src={process.env.PUBLIC_URL + '/images/Avatar.png'}
-            alt="image"
-            height="40px"
-            width="40px"
-          />
+        <div id="user">
+          <div className="avatar">
+            <img
+              src={process.env.PUBLIC_URL + '/images/Avatar.png'}
+              alt="image"
+              height="40px"
+              width="40px"
+              onClick={() => toggleUserPanel('userMenu')}
+            />
+          </div>
+          <div className="userMenu">
+            <h3>
+              Bartosz Korz
+              <br />
+              <span>Admin</span>
+            </h3>
+            <ul>
+              <li>
+                <CgProfile className="icons" />
+                <Link to="/">My Profile</Link>
+              </li>
+              <li>
+                <AiOutlineEdit className="icons" />
+                <Link to="/">Edit Profile</Link>
+              </li>
+              <li>
+                <FiSettings className="icons" />
+                <Link to="/">Settings</Link>
+              </li>
+              <li>
+                <BiLogOutCircle className="icons" />
+                <Link to="/">Logout</Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div className="sidebar">
@@ -108,12 +144,12 @@ const Navbar: FC = () => {
             <span className="tooltip">Dashboard</span>
           </li>
           <li>
-            <a href="">
+            <Link to="/User">
               <div className="icon">
                 <AiOutlineUser />
               </div>
               <span className="links_name">User</span>
-            </a>
+            </Link>
             <span className="tooltip">User</span>
           </li>
           <li>

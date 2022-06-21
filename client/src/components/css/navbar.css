@@ -132,7 +132,7 @@
   border-radius: 12px;
   outline: none;
   border: none;
-  background: #25223b;
+  background-color: #25223b;
   color: #fff;
   padding-left: 40px;
   font-size: 18px;
@@ -150,7 +150,7 @@
   border-radius: 12px;
   outline: none;
   border: none;
-  background: #25223b;
+  background-color: #25223b;
   color: #fff;
   font-size: 18px;
   transition: all ease 400ms;
@@ -205,15 +205,99 @@
 .navbar.active .topbar .searchIcon {
   left: calc(16% + 10px);
 }
-.topbar img {
+
+/*User menu styles */
+
+.topbar #user {
+  position: fixed;
+  right: calc(50px);
+  z-index: 1;
+}
+.topbar .avatar {
   background-color: #fff;
-  padding: 2px;
-  border-radius: 16px;
-  position: absolute;
-  right: calc(5% + 50px);
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
+  overflow: hidden;
   transition: all ease 400ms;
 }
-.navbar.active .topbar img {
-  right: calc(10% + 110px);
+.topbar .avatar img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.navbar.active .topbar .avatar img {
+  right: calc(5% + 200px);
+}
+.topbar .userMenu {
+  position: absolute;
+  top: 70px;
+  right: -10px;
+  padding: 8px 16px;
+  background: #fff;
+  width: 180px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  transition: 0.5s ease;
+  visibility: hidden;
+  opacity: 0;
+}
+.topbar .userMenu.active {
+  visibility: visible;
+  opacity: 1;
+}
+.topbar .userMenu::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  transform: rotate(45deg);
+}
+.topbar .userMenu h3 {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  padding: 16 0px;
+  font-weight: 500;
+  font-size: 18px;
+  color: #0d0c16;
+  line-height: 1.2em;
+}
+.topbar .userMenu h3 span {
+  font-size: 14px;
+  color: #cecece;
+  font-weight: 400;
+}
+.topbar .userMenu ul li {
+  list-style: none;
+  padding: 8px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+}
+.topbar .userMenu .icons {
+  max-width: 20px;
+  margin-right: 10px;
+  opacity: 0.7;
+  transition: 0.2s ease-in-out;
+}
+.topbar .userMenu ul li:hover .icons {
+  opacity: 1;
+}
+.topbar .userMenu ul li a {
+  display: inline-block;
+  color: #555;
+  font-weight: 500;
+  transition: 0.2s;
+}
+.topbar .userMenu ul li a:hover {
+  color: #25223b;
 }
