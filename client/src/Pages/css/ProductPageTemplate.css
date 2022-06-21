@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quicksand:wght@600&display=swap');
 
 #productInformations {
-  width: 95%;
+  width: 52%;
   height: 60%;
   color: white;
 }
@@ -9,6 +9,7 @@
   display: block;
   float: left;
   height: 100%;
+  width: 7%;
   overflow-y: auto;
   background-color: #0d0c16;
 }
@@ -21,7 +22,7 @@
 
 #productInformations #highresImages {
   float: left;
-  width: 520px;
+  width: 50%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -29,17 +30,21 @@
   background-color: white;
 }
 #productInformations #highresImages img {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  height: 0;
+  overflow: hidden;
 }
 #productInformations #highresImages img.highresSelected {
-  display: flex;
-  max-width: 500px;
-  max-height: 500px;
+  opacity: 1;
+  height: auto;
+  max-width: 460px;
+  max-height: 460px;
 }
 
 #productInformations #productData {
   float: left;
-  width: 30%;
+  width: 40%;
   height: 100%;
   border: 1px solid #0d0c16;
   text-align: center;
@@ -86,12 +91,19 @@ h3 {
 #productData .productDetails .productDetailsContent,
 #productData .productAbout .productAboutContent,
 #productData .productTechnicalDetails .productTechnicalDetailsContent {
-  display: none;
+  opacity: 0;
+  transition: opacity 0.5s linear;
+  height: 0;
+  overflow: hidden;
 }
-#productData .productDetails .productDetailsContent.active,
-#productData .productAbout .productAboutContent.active,
-#productData .productTechnicalDetails .productTechnicalDetailsContent.active {
-  display: block;
+#productData .productDetails .productDetailsContent.expand,
+#productData .productAbout .productAboutContent.expand,
+#productData .productTechnicalDetails .productTechnicalDetailsContent.expand {
+  height: auto;
+  opacity: 1;
+  max-height: 30vh;
+  overflow: auto;
+  word-wrap: break-word;
 }
 #productData .productDetails .productDetailsContent ol,
 #productData .productAbout .productAboutContent ol,
