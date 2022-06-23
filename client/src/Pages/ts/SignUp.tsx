@@ -1,6 +1,6 @@
 import { MutableRefObject, useRef, useState } from 'react';
 import { useAuth } from '../../FirebaseAuthentication/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/SignUp.css';
 
 const SignUp = () => {
@@ -10,6 +10,7 @@ const SignUp = () => {
   const { signUp, currentUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
   const handleSignUp = async () => {
     setError(null);
     //If emailRef and passordRef aren't null
@@ -20,6 +21,7 @@ const SignUp = () => {
         try {
           setLoading(true);
           await signUp(emailRef.current.value, passwordRef.current.value);
+          navigate('/');
         } catch {
           setError('Failed to create an account');
         }

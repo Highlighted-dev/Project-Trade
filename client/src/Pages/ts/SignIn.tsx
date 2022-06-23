@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../FirebaseAuthentication/AuthContext';
 import '../css/SignUp.css';
 
@@ -9,6 +9,7 @@ const SignIn = () => {
   const { signIn, currentUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
   const handleSignIn = async () => {
     setError(null);
     //If emailRef and passordRef aren't null
@@ -16,6 +17,7 @@ const SignIn = () => {
       try {
         setLoading(true);
         await signIn(emailRef.current.value, passwordRef.current.value);
+        navigate('/');
       } catch {
         setError('Failed to sign in');
       }
@@ -27,7 +29,6 @@ const SignIn = () => {
       {currentUser.email}
       <h2>Sign in</h2>
       {error}
-
       <input ref={emailRef} type="email" placeholder="email" />
       <br />
       <input ref={passwordRef} type="password" placeholder="password" />
