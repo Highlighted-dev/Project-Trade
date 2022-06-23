@@ -4,18 +4,27 @@ import Navbar from './components/ts/Navbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProductWebsiteTemplate from './Pages/ts/ProductPageTemplate';
 import Home from './Pages/ts/Home';
+import User from './Pages/ts/User';
+import SignUp from './Pages/ts/SignUp';
+import { AuthProvider } from './FirebaseAuthentication/AuthContext';
+import SignIn from './Pages/ts/SignIn';
 const App: FC = () => (
-  <div id="App">
+  <AuthProvider>
     <BrowserRouter>
-      <Navbar />
-      <div id="home">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Product/:productId" element={<ProductWebsiteTemplate />} />
-        </Routes>
+      <div id="App">
+        <Navbar />
+        <div id="home">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/User" element={<User />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/SignIn" element={<SignIn />} />
+            <Route path="/Product/:productId" element={<ProductWebsiteTemplate />} />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
-  </div>
+  </AuthProvider>
 );
 
 export default App;
