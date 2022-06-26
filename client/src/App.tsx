@@ -8,6 +8,7 @@ import User from './Pages/ts/User';
 import SignUp from './Pages/ts/SignUp';
 import { AuthProvider } from './FirebaseAuthentication/AuthContext';
 import SignIn from './Pages/ts/SignIn';
+import PrivateRoute from './PrivateRoute';
 const App: FC = () => (
   <AuthProvider>
     <BrowserRouter>
@@ -15,11 +16,32 @@ const App: FC = () => (
         <Navbar />
         <div id="home">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/User" element={<User />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/User"
+              element={
+                <PrivateRoute>
+                  <User />
+                </PrivateRoute>
+              }
+            />
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/SignIn" element={<SignIn />} />
-            <Route path="/Product/:productId" element={<ProductWebsiteTemplate />} />
+            <Route
+              path="/Product/:productId"
+              element={
+                <PrivateRoute>
+                  <ProductWebsiteTemplate />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </div>
       </div>
