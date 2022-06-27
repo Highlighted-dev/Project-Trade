@@ -17,6 +17,9 @@ export const AuthProvider = ({ children }: any) => {
   const signIn = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
+  const logout = () => {
+    return auth.signOut();
+  };
 
   //If user signed up/logged in: set this user here.
   useEffect(() => {
@@ -31,6 +34,7 @@ export const AuthProvider = ({ children }: any) => {
     currentUser,
     signUp,
     signIn,
+    logout,
   };
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
