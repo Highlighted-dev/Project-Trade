@@ -16,12 +16,12 @@ import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
-
+import { useAuth } from '../../FirebaseAuthentication/AuthContext';
 const Navbar: FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-
+  const { currentUser } = useAuth();
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');
@@ -100,14 +100,14 @@ const Navbar: FC = () => {
           </div>
           <div className="userMenu">
             <h3>
-              Bartosz Korz
+              {currentUser ? currentUser.email : 'User'}
               <br />
               <span>Admin</span>
             </h3>
             <ul>
               <li>
                 <CgProfile className="icons" />
-                <Link to="/">My Profile</Link>
+                <Link to="/User">My Profile</Link>
               </li>
               <li>
                 <AiOutlineEdit className="icons" />
