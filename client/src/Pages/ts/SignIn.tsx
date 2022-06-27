@@ -1,7 +1,7 @@
 import React, { MutableRefObject, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../FirebaseAuthentication/AuthContext';
-import '../css/SignUp.css';
+import '../css/SignPages.css';
 
 const SignIn = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -25,19 +25,32 @@ const SignIn = () => {
     setLoading(false);
   };
   return (
-    <div id="SignUp">
-      {currentUser.email}
-      <h2>Sign in</h2>
+    <div id="SignPage">
+      <h1>Sign in</h1>
       {error}
-      <input ref={emailRef} type="email" placeholder="email" />
-      <br />
-      <input ref={passwordRef} type="password" placeholder="password" />
-      <br />
-      <button onClick={handleSignIn} disabled={loading}>
-        Submit
-      </button>
-      <br />
-      <Link to="/SignUp"> Create account</Link>
+      <div id="SignPageForm">
+        <div className="inputField">
+          <input ref={emailRef} type="text" required />
+          <span></span>
+          <label>Email</label>
+        </div>
+        <div className="inputField">
+          <input ref={passwordRef} type="password" required />
+          <span></span>
+          <label>Password</label>
+        </div>
+        {
+          //TODO Add forgot password method
+        }
+        <div id="forgotPassword">Forgot password?</div>
+        <button onClick={handleSignIn} disabled={loading}>
+          Sign in
+        </button>
+        <br />
+        <div id="createAccount">
+          <Link to="/SignUp"> Create account</Link>
+        </div>
+      </div>
     </div>
   );
 };
