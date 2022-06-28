@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../FirebaseAuthentication/AuthContext';
-
+import '../css/User.css';
 const User = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -14,10 +14,12 @@ const User = () => {
     }
   };
   return (
-    <>
-      <label>Email: {currentUser && currentUser.email}</label>
-      <button onClick={handleLogout}> Logout</button>
-    </>
+    <div id="userPanel">
+      <h1>Email: {currentUser && currentUser.email}</h1>
+      <div id="userInformations">
+        <button onClick={handleLogout}> Logout</button>
+      </div>
+    </div>
   );
 };
 
