@@ -5,5 +5,5 @@ import { useAuth } from '../FirebaseAuthentication/AuthContext';
 export default function PrivateRoute({ children }: any) {
   const { currentUser } = useAuth();
 
-  return currentUser ? <Navigate to="/Dashboard" /> : children;
+  return currentUser ? <Navigate to="/" /> : children;
 }
