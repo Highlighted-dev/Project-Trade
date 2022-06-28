@@ -8,7 +8,9 @@ import User from './Pages/ts/User';
 import SignUp from './Pages/ts/SignUp';
 import { AuthProvider } from './FirebaseAuthentication/AuthContext';
 import SignIn from './Pages/ts/SignIn';
-import PrivateRoute from './PrivateRoute';
+import SignedUserRoute from './RouteSettings/SignedUserRoute';
+import NotSignedUserRoute from './RouteSettings/NotSignedUserRoute';
+import NotFound from './Pages/ts/NotFound';
 const App: FC = () => (
   <AuthProvider>
     <BrowserRouter>
@@ -16,30 +18,45 @@ const App: FC = () => (
         <Navbar />
         <div id="home">
           <Routes>
+            <Route path="*" element={<NotFound />}></Route>
             <Route
               path="/"
               element={
-                <PrivateRoute>
+                <SignedUserRoute>
                   <Home />
-                </PrivateRoute>
+                </SignedUserRoute>
               }
             />
             <Route
               path="/User"
               element={
-                <PrivateRoute>
+                <SignedUserRoute>
                   <User />
-                </PrivateRoute>
+                </SignedUserRoute>
               }
             />
-            <Route path="/SignUp" element={<SignUp />} />
-            <Route path="/SignIn" element={<SignIn />} />
+            <Route
+              path="/SignUp"
+              element={
+                <NotSignedUserRoute>
+                  <SignUp />
+                </NotSignedUserRoute>
+              }
+            />
+            <Route
+              path="/SignIn"
+              element={
+                <NotSignedUserRoute>
+                  <SignIn />
+                </NotSignedUserRoute>
+              }
+            />
             <Route
               path="/Product/:productId"
               element={
-                <PrivateRoute>
+                <SignedUserRoute>
                   <ProductWebsiteTemplate />
-                </PrivateRoute>
+                </SignedUserRoute>
               }
             />
           </Routes>
