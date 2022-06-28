@@ -10,7 +10,7 @@ import {
   AiOutlineHeart,
   AiOutlineEdit,
 } from 'react-icons/ai';
-import { BsChatDots, BsGrid } from 'react-icons/bs';
+import { BsGrid } from 'react-icons/bs';
 import { BiCog, BiLogOutCircle } from 'react-icons/bi';
 import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
@@ -151,15 +151,6 @@ const Navbar: FC = () => {
               <span className="links_name">User</span>
             </Link>
             <span className="tooltip">User</span>
-          </li>
-          <li>
-            <a href="">
-              <div className="icon">
-                <BsChatDots />
-              </div>
-              <span className="links_name">Messages</span>
-            </a>
-            <span className="tooltip">Messages</span>
           </li>
           <li>
             <a href="">
