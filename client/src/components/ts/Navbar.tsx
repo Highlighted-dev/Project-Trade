@@ -21,7 +21,7 @@ const Navbar: FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');
@@ -104,24 +104,40 @@ const Navbar: FC = () => {
               <br />
               <span>Admin</span>
             </h3>
-            <ul>
-              <li>
-                <CgProfile className="icons" />
-                <Link to="/User">My Profile</Link>
-              </li>
-              <li>
-                <AiOutlineEdit className="icons" />
-                <Link to="/">Edit Profile</Link>
-              </li>
-              <li>
-                <FiSettings className="icons" />
-                <Link to="/">Settings</Link>
-              </li>
-              <li>
-                <BiLogOutCircle className="icons" />
-                <Link to="/">Logout</Link>
-              </li>
-            </ul>
+            {currentUser ? (
+              <ul>
+                <li>
+                  <CgProfile className="icons" />
+                  <Link to="/User">My Profile</Link>
+                </li>
+                <li>
+                  <AiOutlineEdit className="icons" />
+                  <Link to="/">Edit Profile</Link>
+                </li>
+                <li>
+                  <FiSettings className="icons" />
+                  <Link to="/">Settings</Link>
+                </li>
+                <li>
+                  <BiLogOutCircle className="icons" />
+                  <a onClick={logout}>Logout</a>
+                </li>
+              </ul>
+            ) : (
+              <ul>
+                <li>
+                  <Link to="/SignIn">
+                    <button>Sign In</button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/SignUp">
+                    {' '}
+                    <button>Sign Up</button>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </div>
