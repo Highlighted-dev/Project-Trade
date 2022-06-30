@@ -1,12 +1,10 @@
 import unittest
 from responses import fake_response_from_file
 import sys
-sys.path.append("..")
+import os
+#Add parent folder to sys paths for scrapy spider import
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import amazonscraper.spiders.AmazonOneProductSpider as AmazonOneProductSpider
-
-
-
-#You need to be at "*\Project-Trade\amazonscraper\tests" to run the test properly
 class AmazonOneProductSpiderTest(unittest.TestCase):
 
     #Scrapy spider setup
@@ -29,13 +27,13 @@ class AmazonOneProductSpiderTest(unittest.TestCase):
             elif item['mongo_db_column_name'] == 'amazonProductAbout':
                 self.assertIsNotNone(item['product_about'])
             count+=1
-        #Check if product has 27 informations
+        #Check if product has {expected_length} informations
         self.assertEqual(count, expected_length)
 
     def test_parse(self):
-        results = self.spider.parse(fake_response_from_file('AmazonOneProductSpider/unittestpage1.html'))
+        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage1.html'))
         self._test_item_results(results,27)
-        results = self.spider.parse(fake_response_from_file('AmazonOneProductSpider/unittestpage2.html'))
+        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage2.html'))
         self._test_item_results(results,21)
 
 if __name__ == '__main__':
