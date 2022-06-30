@@ -6,8 +6,6 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import amazonscraper.spiders.AmazonGetHighResImages as AmazonGetHighResImages
 
-
-
 #You need to be at "*\Project-Trade\amazonscraper\tests" to run the test properly
 class AmazonGetHighResImagesrTest(unittest.TestCase):
 
