@@ -11,14 +11,15 @@
   height: 55vh;
   width: 6vh;
   overflow-y: auto;
-  background-color: #0d0c16;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 #productInformations #images img {
   padding: 10px;
   min-width: 40px;
 }
 #productInformations #images img.selected {
-  border: 1px solid #fff;
+  border: 1px solid black;
 }
 
 #productInformations #highresImages {
