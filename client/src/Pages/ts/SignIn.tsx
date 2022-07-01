@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../FirebaseAuthentication/AuthContext';
 import '../css/SignPages.css';
@@ -24,10 +24,11 @@ const SignIn = () => {
     }
     setLoading(false);
   };
+
   return (
     <div id="SignPage">
       <h1>Sign in</h1>
-      {error}
+      <div className={error ? 'bar active' : 'bar'}>{error}</div>
       <div id="SignPageForm">
         <div className="inputField">
           <input ref={emailRef} type="text" required />

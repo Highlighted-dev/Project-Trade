@@ -1,4 +1,4 @@
-import { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../FirebaseAuthentication/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/SignPages.css';
@@ -11,12 +11,13 @@ const SignUp = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+
   const handleSignUp = async () => {
     setError(null);
     //If emailRef and passordRef aren't null
     if (emailRef.current && passwordRef.current) {
       if (passwordRef.current.value != confirmPasswordRef.current.value) {
-        return setError('Password do not match');
+        return setError('Passwords do not match');
       } else {
         try {
           setLoading(true);
@@ -29,10 +30,11 @@ const SignUp = () => {
       setLoading(false);
     }
   };
+
   return (
     <div id="SignPage">
       <h1>Sign Up</h1>
-      {error}
+      <div className={error ? 'bar active' : 'bar'}>{error}</div>
       <div id="SignPageForm">
         <div className="inputField">
           <input ref={emailRef} type="text" required />
