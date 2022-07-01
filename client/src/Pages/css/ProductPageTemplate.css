@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Quicksand:wght@600&display=swap');
 
 #productInformations {
-  width: 50vw;
-  height: 50vh;
+  width: auto;
+  height: 55vh;
   color: white;
 }
 #productInformations #images {
