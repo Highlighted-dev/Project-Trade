@@ -101,3 +101,27 @@
   color: #0d0c16;
   transition: 0.5s;
 }
+.bar {
+  display: none;
+}
+.bar.active {
+  padding: 10px;
+  margin: 10px 10px -5px 10px;
+  color: #ba3939;
+  background: #ffd6d6;
+  border: 1px solid #a33a3a;
+  text-align: center;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+  display: block;
+  -webkit-animation: fadeIn 0.8s;
+  animation: fade-in 0.8s;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
