@@ -7,9 +7,8 @@ from scrapy_splash import SplashFormRequest, SplashRequest
 import re
 class AmazonGetHighResImages(scrapy.Spider):
     def __init__(self, prod_id):
-        global product_id
-        product_id = prod_id
-        self.start_urls = ["https://www.amazon.de/-/en/dp/"+product_id]
+        self.product_id = prod_id
+        self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
@@ -29,7 +28,7 @@ class AmazonGetHighResImages(scrapy.Spider):
                 #Example output: https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg | null
                 format_product_highres_images  = re.findall(r'"hiRes":(".*?"|null)', product_highres_images)
                 for highres_image in format_product_highres_images:
-                    images['product_id'] = product_id
+                    images['product_id'] = self.product_id
                     #If image link isn't null that means it has 2 quotes - delete them
                     if highres_image != 'null':
                         images['product_highres_image'] = highres_image[1:-1]
