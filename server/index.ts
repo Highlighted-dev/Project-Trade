@@ -3,7 +3,10 @@ import mongoose, { Connection } from 'mongoose';
 import AmazonProductRoute from './routes/AmazonProductRoute';
 import AmazonScraperRoute from './routes/AmazonScraperRoute';
 import session from 'express-session';
+import UserAuthenticationRoute from './routes/UserAuthenticationRoute';
+const cookieParser = require('cookie-parser');
 const app: Application = express();
+
 //as=amazonScraper
 
 const url: string = 'mongodb://localhost:27017/ProjectTrade';
@@ -21,6 +24,7 @@ mongoose
     )
   )
   .catch(error => console.log(error.message));
+app.use(cookieParser());
 app.use(
   session({
     secret: 'amazonsecret',
@@ -31,3 +35,4 @@ app.use(
 ); //TODO Change secret key
 app.use('/api/ap', AmazonProductRoute);
 app.use('/api/as', AmazonScraperRoute);
+app.use('/api/auth', UserAuthenticationRoute);

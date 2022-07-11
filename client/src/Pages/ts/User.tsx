@@ -1,13 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../FirebaseAuthentication/AuthContext';
 import '../css/User.css';
 const User = () => {
-  const { currentUser, logout } = useAuth();
+  // const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
   const handleLogout = () => {
     try {
-      logout();
+      // logout();
       navigate('/SignIn');
     } catch {
       console.log('Something went wrong when trying to logout');
@@ -15,10 +14,8 @@ const User = () => {
   };
   return (
     <div id="userPanel">
-      <h1>Email: {currentUser && currentUser.email}</h1>
-      <div id="userInformations">
-        <button onClick={handleLogout}> Logout</button>
-      </div>
+      {/* <h1>Email: {currentUser && currentUser.email}</h1> */}
+      <div id="userInformations">{/* <button onClick={handleLogout}> Logout</button> */}</div>
     </div>
   );
 };

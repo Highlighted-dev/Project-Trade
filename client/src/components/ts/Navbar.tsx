@@ -1,4 +1,10 @@
-import React, { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { FC } from 'react';
 import {
   AiFillBank,
@@ -16,12 +22,13 @@ import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../FirebaseAuthentication/AuthContext';
+import { AuthContext2 } from '../../FirebaseAuthentication/AuthContext2';
+
 const Navbar: FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-  const { currentUser, logout } = useAuth();
+  const [authState, setauthState, login, logout] = useContext(AuthContext2);
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');
@@ -100,11 +107,11 @@ const Navbar: FC = () => {
           </div>
           <div className="userMenu">
             <h3>
-              {currentUser ? currentUser.email : 'User'}
+              {authState.username ? authState.username : 'User'}
               <br />
               <span>Admin</span>
             </h3>
-            {currentUser ? (
+            {authState._id ? (
               <ul>
                 <li>
                   <CgProfile className="icons" />
@@ -126,13 +133,12 @@ const Navbar: FC = () => {
             ) : (
               <ul>
                 <li>
-                  <Link to="/SignIn">
+                  <Link to="/Login">
                     <button>Sign In</button>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/SignUp">
-                    {' '}
+                  <Link to="/Register">
                     <button>Sign Up</button>
                   </Link>
                 </li>

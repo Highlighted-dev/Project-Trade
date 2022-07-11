@@ -1,33 +1,30 @@
-import { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../FirebaseAuthentication/AuthContext';
 import '../css/SignPages.css';
+import { AuthContext2 } from '../../FirebaseAuthentication/AuthContext2';
 
-const SignIn = () => {
+const Login = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const { signIn, currentUser } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [authState, setauthState, login] = useContext(AuthContext2);
   const navigate = useNavigate();
   const handleSignIn = async () => {
     setError(null);
     //If emailRef and passordRef aren't null
     if (emailRef.current && passwordRef.current) {
-      try {
-        setLoading(true);
-        await signIn(emailRef.current.value, passwordRef.current.value);
-        navigate('/');
-      } catch {
-        setError('Failed to sign in');
-      }
+      setLoading(true);
+      const email = emailRef.current.value;
+      const password = passwordRef.current.value;
+      login(email, password);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
     <div id="SignPage">
-      <h1>Sign in</h1>
+      <h1>Login</h1>
       <div className={error ? 'bar active' : 'bar'}>{error}</div>
       <div id="SignPageForm">
         <div className="inputField">
@@ -56,4 +53,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Login;
