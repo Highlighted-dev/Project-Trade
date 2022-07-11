@@ -1,8 +1,8 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-export const AuthContext2 = createContext<any>(null);
+export const AuthContext = createContext<any>(null);
 
-export const AuthProvider2 = (props: any) => {
+export const AuthProvider = (props: any) => {
   const navigate = useNavigate();
   const [authState, setAuthState] = useState({
     _id: null,
@@ -68,10 +68,10 @@ export const AuthProvider2 = (props: any) => {
     loadData();
   }, []);
   return (
-    <AuthContext2.Provider value={[authState, setAuthState, login, logout]}>
+    <AuthContext.Provider value={[authState, setAuthState, login, logout]}>
       {props.children}
-    </AuthContext2.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export default AuthContext2;
+export default AuthContext;
