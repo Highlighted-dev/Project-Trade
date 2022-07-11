@@ -8,10 +8,10 @@ import User from './Pages/ts/User';
 import NotFound from './Pages/ts/NotFound';
 import Register from './Pages/ts/Register';
 import Login from './Pages/ts/Login';
-import { AuthProvider2 } from './FirebaseAuthentication/AuthContext2';
+import { AuthProvider } from './components/ts/AuthContext';
 const App: FC = () => (
   <BrowserRouter>
-    <AuthProvider2>
+    <AuthProvider>
       <div id="App">
         <Navbar />
         <div id="home">
@@ -25,7 +25,7 @@ const App: FC = () => (
           </Routes>
         </div>
       </div>
-    </AuthProvider2>
+    </AuthProvider>
   </BrowserRouter>
 );
 

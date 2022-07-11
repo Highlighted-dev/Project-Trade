@@ -1,14 +1,14 @@
 import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/SignPages.css';
-import { AuthContext2 } from '../../FirebaseAuthentication/AuthContext2';
+import { AuthContext } from '../../components/ts/AuthContext';
 
 const Login = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [authState, setauthState, login] = useContext(AuthContext2);
+  const [authState, setauthState, login] = useContext(AuthContext);
   const navigate = useNavigate();
   const handleSignIn = async () => {
     setError(null);

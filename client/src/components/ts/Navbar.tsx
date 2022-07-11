@@ -22,13 +22,13 @@ import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
-import { AuthContext2 } from '../../FirebaseAuthentication/AuthContext2';
+import { AuthContext } from './AuthContext';
 
 const Navbar: FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-  const [authState, setauthState, login, logout] = useContext(AuthContext2);
+  const [authState, setauthState, login, logout] = useContext(AuthContext);
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');
@@ -134,12 +134,12 @@ const Navbar: FC = () => {
               <ul>
                 <li>
                   <Link to="/Login">
-                    <button>Sign In</button>
+                    <button>Login</button>
                   </Link>
                 </li>
                 <li>
                   <Link to="/Register">
-                    <button>Sign Up</button>
+                    <button>Register</button>
                   </Link>
                 </li>
               </ul>
