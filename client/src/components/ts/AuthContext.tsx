@@ -31,10 +31,26 @@ export const AuthProvider = (props: any) => {
           username: data.user.username,
           email: data.user.email,
         });
-        console.log('Welcome back, ' + data.user.username);
         navigate('/');
       }
     });
+  };
+
+  const register = async (username: string, email: string, password: string) => {
+    const response = await fetch('/api/auth/register/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+    });
+    if (response.status == 200) {
+      login(email, password);
+    }
   };
 
   // login logs user in and sets his data to the authState.
@@ -74,11 +90,15 @@ export const AuthProvider = (props: any) => {
   useEffect(() => {
     loadData();
   }, []);
-  return (
-    <AuthContext.Provider value={[authState, setAuthState, login, logout]}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+
+  const value = {
+    authState,
+    setAuthState,
+    register,
+    login,
+    logout,
+  };
+  return <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>;
 };
 
 export default AuthContext;
