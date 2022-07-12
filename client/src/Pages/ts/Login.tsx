@@ -46,7 +46,7 @@ const Login = () => {
         </button>
         <br />
         <div id="createAccount">
-          <Link to="/SignUp"> Create account</Link>
+          <Link to="/Register"> Create account</Link>
         </div>
       </div>
     </div>
