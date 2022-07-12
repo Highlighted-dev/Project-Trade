@@ -11,7 +11,7 @@ export const AuthProvider = (props: any) => {
   });
   // isAuthenticated checks If user has a working token - If he has, he is authenticated so this function will return his data as a response.json().
   const isAuthenticated = async () => {
-    return await fetch('/api/auth/isAuth', {
+    return await fetch('/api/auth/isAuthenticated', {
       method: 'GET',
     })
       .then(res => res.json())
@@ -23,6 +23,8 @@ export const AuthProvider = (props: any) => {
       if (data.error) {
         console.log(data.error);
         navigate('/Login');
+      } else if (data.message === 'User is not logged in.') {
+        navigate('/Login');
       } else {
         setAuthState({
           _id: data.user._id,
@@ -30,6 +32,7 @@ export const AuthProvider = (props: any) => {
           email: data.user.email,
         });
         console.log('Welcome back, ' + data.user.username);
+        navigate('/');
       }
     });
   };
@@ -46,7 +49,6 @@ export const AuthProvider = (props: any) => {
         password,
       }),
     });
-    const data = await response.json();
     if (response.status == 200) {
       loadData();
     }
