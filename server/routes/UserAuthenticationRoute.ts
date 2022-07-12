@@ -63,43 +63,48 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
   }
 });
 
+// logout user by deleting cookie.
 router.get('/logout', jsonParser, async (req: Request, res: Response) => {
-  console.log('logout');
   res.cookie('token', '', { maxAge: 1 });
   res.status(200).json({ message: 'logout success' });
 });
 
-router.get('/isAuth', jsonParser, async (req: Request, res: Response) => {
-  const request_token = req.cookies.token;
-  var auth: boolean = false;
-  //If Request token is not set
-  if (!request_token) {
-    return res.status(400).json({ error: 'Please login' });
-  }
-  try {
-    //Verify token
-    if (!jwt.verify(request_token, process.env.JWT_SECRET)) {
-      return res.status(400).json({ error: 'Token is not valid' });
-    } else {
-      auth = true;
+router.get(
+  '/isAuthenticated',
+  jsonParser,
+  async (req: Request, res: Response) => {
+    const request_token = req.cookies.token;
+    var auth: boolean = false;
+    //If Request token is not set
+    if (!request_token) {
+      //We want to return status code 200, becouse it just means user did not login yet, it is not an error.
+      return res.status(200).json({ message: 'User is not logged in.' });
     }
-  } catch (err) {
-    console.log(err);
-  }
-  //If Token is valid
-  if (auth) {
-    const data = jwt.verify(
-      request_token,
-      process.env.JWT_SECRET
-    ) as IUserModel;
-    userModel.findById(data._id).exec((err, user) => {
-      if (err || !user) {
-        return res.status(400).json({ error: 'User not found' });
+    try {
+      //Verify token
+      if (!jwt.verify(request_token, process.env.JWT_SECRET)) {
+        return res.status(400).json({ error: 'Token is not valid' });
+      } else {
+        auth = true;
       }
-      //If user is found
-      const { _id, username, email } = user;
-      return res.status(200).json({ user: { _id, username, email } });
-    });
+    } catch (err) {
+      console.log(err);
+    }
+    //If Token is valid
+    if (auth) {
+      const data = jwt.verify(
+        request_token,
+        process.env.JWT_SECRET
+      ) as IUserModel;
+      userModel.findById(data._id).exec((err, user) => {
+        if (err || !user) {
+          return res.status(400).json({ error: 'User not found' });
+        }
+        //If user is found
+        const { _id, username, email } = user;
+        return res.status(200).json({ user: { _id, username, email } });
+      });
+    }
   }
-});
+);
 export default router;
