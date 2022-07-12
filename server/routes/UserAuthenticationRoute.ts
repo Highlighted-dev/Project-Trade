@@ -1,7 +1,9 @@
 import express, { Request, Response, Router } from 'express';
 import userModel from '../models/UserModel';
 import bodyParser from 'body-parser';
+import bcrypt from 'bcryptjs';
 require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
 const router: Router = express.Router();
 const jsonParser = bodyParser.json();
@@ -15,11 +17,11 @@ interface IUserModel {
 
 router.post('/register', jsonParser, async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     await userModel.create({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     });
     res.json({ status: 'ok' });
   } catch (e) {
@@ -34,9 +36,12 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
   try {
     const user = await userModel.findOne({
       email: req.body.email,
-      password: req.body.password,
     });
-    if (user) {
+    const isPasswordValid = await bcrypt.compare(
+      req.body.password,
+      user!.password
+    );
+    if (isPasswordValid && user) {
       const token = jwt.sign(
         {
           _id: user._id,
