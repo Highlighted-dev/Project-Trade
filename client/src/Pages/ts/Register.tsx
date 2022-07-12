@@ -1,5 +1,6 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import AuthContext from '../../components/ts/AuthContext';
 import '../css/SignPages.css';
 
 const SignUp = () => {
@@ -8,8 +9,8 @@ const SignUp = () => {
   const confirmPasswordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const usernameRef = useRef() as MutableRefObject<HTMLInputElement>;
   const [error, setError] = useState<string | null>(null);
+  const { register } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
   const doesPasswordMatch = () => {
     //If password and confirm password are equal
@@ -48,38 +49,25 @@ const SignUp = () => {
     setError(null);
     //If emailRef and passordRef aren't null
     if (emailRef.current && passwordRef.current) {
-      if (!doesPasswordMatch()) {
-        return setError('Passwords do not match.');
-      } else if (!doesPasswordHaveCapitalLetter()) {
+      if (!doesPasswordMatch()) return setError('Passwords do not match.');
+
+      if (!doesPasswordHaveCapitalLetter())
         return setError('Password does not have an upper case letter.');
-      } else if (!doesPasswordHaveNumber()) {
-        return setError('Password does not have a number.');
-      } else if (!isEmailValid()) {
-        return setError('Email is not valid.');
-      } else {
-        try {
-          setLoading(true);
-          const email = emailRef.current.value;
-          const username = usernameRef.current.value;
-          const password = passwordRef.current.value;
-          const response = await fetch('/api/auth/register/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              username,
-              email,
-              password,
-            }),
-          });
-          const data = await response.json();
-          console.log(data);
-          //navigate('/');
-        } catch {
-          setError('Failed to create an account');
-        }
+
+      if (!doesPasswordHaveNumber()) return setError('Password does not have a number.');
+
+      if (!isEmailValid()) return setError('Email is not valid.');
+
+      try {
+        setLoading(true);
+        const email = emailRef.current.value;
+        const username = usernameRef.current.value;
+        const password = passwordRef.current.value;
+        register(username, email, password);
+      } catch {
+        setError('Failed to create an account');
       }
+
       setLoading(false);
     }
   };

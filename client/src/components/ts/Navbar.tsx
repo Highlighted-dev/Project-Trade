@@ -28,7 +28,7 @@ const Navbar: FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-  const [authState, setauthState, login, logout] = useContext(AuthContext);
+  const { authState, logout } = useContext(AuthContext);
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');

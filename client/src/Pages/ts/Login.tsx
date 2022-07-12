@@ -8,7 +8,7 @@ const Login = () => {
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [authState, setauthState, login] = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleSignIn = async () => {
     setError(null);
