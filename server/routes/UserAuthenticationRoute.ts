@@ -85,6 +85,7 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
       req.body.password,
       user!.password
     );
+    //If password is valid and user is found, return token.
     if (isPasswordValid && user) {
       const token = jwt.sign(
         {
@@ -93,19 +94,19 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
         process.env.JWT_SECRET
       );
       const cookie = req.cookies.token;
+      //If cookie is already set, return error. If cookie is not set, set cookie.
       if (cookie == undefined) {
         res.cookie('token', token, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 168, //7 days,
         });
+        return res
+          .status(200)
+          .json({ status: 'success', message: 'login success' });
       }
       return res
-        .status(200)
-        .json({ status: 'success', message: 'login success' });
-    } else {
-      return res
         .status(400)
-        .json({ status: 'error', message: 'User not found' });
+        .json({ status: 'error', message: 'You are already logged in' });
     }
   } catch (e) {
     res.json({
