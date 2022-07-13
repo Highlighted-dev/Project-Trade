@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../components/ts/AuthContext';
 import '../css/User.css';
 const User = () => {
-  const [authState, setauthState, login, logout] = useContext(AuthContext);
+  const { authState, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogout = () => {
     try {
