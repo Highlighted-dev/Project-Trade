@@ -11,6 +11,7 @@ import Login from './Pages/ts/Login';
 import { AuthProvider } from './components/ts/AuthContext';
 import SignedUserRoute from './RouteSettings/SignedUserRoute';
 import NotSignedUserRoute from './RouteSettings/NotSignedUserRoute';
+import Favourites from './Pages/ts/Favourites';
 const App: FC = () => (
   <BrowserRouter>
     <AuthProvider>
@@ -56,6 +57,14 @@ const App: FC = () => (
                 <NotSignedUserRoute>
                   <Login />
                 </NotSignedUserRoute>
+              }
+            />
+            <Route
+              path="/Favourites"
+              element={
+                <SignedUserRoute>
+                  <Favourites />
+                </SignedUserRoute>
               }
             />
             <Route

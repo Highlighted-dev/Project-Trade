@@ -4,6 +4,7 @@ import AmazonProductRoute from './routes/AmazonProductRoute';
 import AmazonScraperRoute from './routes/AmazonScraperRoute';
 import session from 'express-session';
 import UserAuthenticationRoute from './routes/UserAuthenticationRoute';
+import UserFavouritesRoute from './routes/UserFavouritesRoute';
 const cookieParser = require('cookie-parser');
 const app: Application = express();
 
@@ -36,3 +37,4 @@ app.use(
 app.use('/api/ap', AmazonProductRoute);
 app.use('/api/as', AmazonScraperRoute);
 app.use('/api/auth', UserAuthenticationRoute);
+app.use('/api/favourites', UserFavouritesRoute);
