@@ -59,10 +59,11 @@ router.post('/check', jsonParser, async (req: Request, res: Response) => {
     });
   }
 });
-router.get('/get', async (req: Request, res: Response) => {
+router.get('/get/:user_id', async (req: Request, res: Response) => {
+  const { user_id } = req.params;
   try {
     const userFavourites = await userFavouritesModel.find({
-      user_id: req.query.user_id,
+      user_id: user_id,
     });
     return res.status(200).json({ status: 'success', data: userFavourites });
   } catch (e) {
