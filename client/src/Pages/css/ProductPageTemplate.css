@@ -50,6 +50,7 @@
   height: 55vh;
   border: 1px solid #0d0c16;
   text-align: center;
+  position: relative;
 }
 #productData #productBasicInformations {
   display: inline-block;
@@ -122,4 +123,17 @@ h3 {
 #productData .productTechnicalDetails .productTechnicalDetailsContent li span {
   position: relative;
   left: -10px;
+}
+#productData #favourites {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 4px;
+  font-size: 22px;
+  transition: 0.2s ease-in-out;
+}
+#productData #favourites:hover {
+  cursor: pointer;
+  color: #0d0c16;
+  transition: 0.2s ease-in-out;
 }

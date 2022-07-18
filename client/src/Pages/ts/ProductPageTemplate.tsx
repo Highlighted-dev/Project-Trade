@@ -1,9 +1,11 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/ProductPageTemplate.css';
-import { AiOutlineStar } from 'react-icons/ai';
+import { AiOutlineStar, AiOutlineHeart } from 'react-icons/ai';
+import AuthContext from '../../components/ts/AuthContext';
 const ProductWebsiteTemplate = () => {
   const { productId } = useParams();
+  const { authState } = useContext(AuthContext);
   const [changingProductId, setChangingProductId] = useState(productId);
   const [details, setDetails] = useState<any[]>([]);
   const [images, setImages] = useState<any[]>([]);
@@ -66,6 +68,37 @@ const ProductWebsiteTemplate = () => {
 
     const content = document.querySelector(`.${className}`);
     content?.classList.toggle('expand');
+  };
+
+  const itemCheck = async (user_id: string) => {
+    const response = await fetch('/api/favourites/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id,
+        product_id: productId,
+      }),
+    });
+    if (response.status == 200) return addOrRemoveFromFavourites(user_id, 'remove');
+    return addOrRemoveFromFavourites(user_id, 'add');
+  };
+
+  //This function is used to add or remove product from favourites
+  const addOrRemoveFromFavourites = async (user_id: string, method: string) => {
+    const response = await fetch('/api/favourites/' + method, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id,
+        product_id: productId,
+      }),
+    });
+    const responseData = await response.json();
+    console.log(responseData.message);
   };
 
   useEffect(() => {
@@ -178,8 +211,8 @@ const ProductWebsiteTemplate = () => {
               </div>
               <div className="productDetailsContent">
                 <ol>
-                  {details.map(product => (
-                    <li key={product._id}>
+                  {details.map((product, key) => (
+                    <li key={key}>
                       <span>
                         {product.product_detail_name}: {product.product_detail}
                       </span>
@@ -200,8 +233,8 @@ const ProductWebsiteTemplate = () => {
               </div>
               <div className="productTechnicalDetailsContent">
                 <ol>
-                  {technicalDetails.map(product => (
-                    <li key={product._id}>
+                  {technicalDetails.map((product, key) => (
+                    <li key={key}>
                       <span>
                         {product.product_technical_detail_name}: {product.product_technical_detail}
                       </span>
@@ -222,8 +255,8 @@ const ProductWebsiteTemplate = () => {
               </div>
               <div className="productAboutContent">
                 <ol>
-                  {abouts.map(product => (
-                    <li key={product._id}>
+                  {abouts.map((product, key) => (
+                    <li key={key}>
                       <span>{product.product_about}</span>
                     </li>
                   ))}
@@ -233,6 +266,9 @@ const ProductWebsiteTemplate = () => {
           ) : (
             false
           )}
+          <div id="favourites">
+            <AiOutlineHeart className="favImage" onClick={() => itemCheck(authState._id)} />
+          </div>
         </div>
       </div>
     </>
