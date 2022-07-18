@@ -22,16 +22,12 @@ export const AuthProvider = (props: any) => {
     isAuthenticated().then(data => {
       if (data.error) {
         console.log(data.error);
-        navigate('/Login');
-      } else if (data.message === 'User is not logged in.') {
-        navigate('/Login');
       } else {
         setAuthState({
           _id: data.user._id,
           username: data.user.username,
           email: data.user.email,
         });
-        navigate('/');
       }
     });
   };
@@ -67,6 +63,7 @@ export const AuthProvider = (props: any) => {
     });
     if (response.status == 200) {
       loadData();
+      navigate('/');
     }
   };
 
@@ -93,7 +90,6 @@ export const AuthProvider = (props: any) => {
 
   const value = {
     authState,
-    setAuthState,
     register,
     login,
     logout,
