@@ -193,12 +193,12 @@ const Navbar: FC = () => {
             <span className="tooltip">Order</span>
           </li>
           <li>
-            <a href="">
+            <Link to="/Favourites">
               <div className="icon">
                 <AiOutlineHeart />
               </div>
               <span className="links_name">Favourites</span>
-            </a>
+            </Link>
             <span className="tooltip">Favourites</span>
           </li>
           <li>
