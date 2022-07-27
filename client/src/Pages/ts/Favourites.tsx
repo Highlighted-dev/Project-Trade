@@ -16,12 +16,15 @@ const Favourites = () => {
   };
   useEffect(() => {
     getFavourites(authState._id);
-  }, []);
+  }, [
+    //authState._id  makes it re-render when authState changes. This is because authState._id changes to null when user refreshes the page.
+    authState._id,
+  ]);
   return (
     <div>
       <h1>Favourites</h1>
       <ul>
-        {favourites.length < 2 ? (
+        {favourites.length < 1 ? (
           <li>loading data...</li>
         ) : (
           favourites.map((item, key) => (
