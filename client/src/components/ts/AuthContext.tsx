@@ -4,6 +4,7 @@ export const AuthContext = createContext<any>(null);
 
 export const AuthProvider = (props: any) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
   const [authState, setAuthState] = useState({
     _id: null,
     username: null,
@@ -19,9 +20,10 @@ export const AuthProvider = (props: any) => {
   };
   // loadData loads data from api and sets it to the authState.
   const loadData = () => {
+    setLoading(true);
     isAuthenticated().then(data => {
-      if (data.error) {
-        console.log(data.error);
+      if (data.status == 'error') {
+        console.log(data.message);
       } else {
         setAuthState({
           _id: data.user._id,
@@ -30,8 +32,8 @@ export const AuthProvider = (props: any) => {
         });
       }
     });
+    setLoading(false);
   };
-
   const register = async (username: string, email: string, password: string) => {
     const response = await fetch('/api/auth/register/', {
       method: 'POST',
