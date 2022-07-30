@@ -34,6 +34,11 @@ class AmazonItemAbout(scrapy.Item):
   mongo_db_column_name = scrapy.Field()
   product_id = scrapy.Field()
   product_about = scrapy.Field()
+class AmazonItemPrice(scrapy.Item):
+  mongo_db_column_name = scrapy.Field()
+  product_id = scrapy.Field()
+  product_price = scrapy.Field()
+  product_price_date = scrapy.Field()
 
 
 

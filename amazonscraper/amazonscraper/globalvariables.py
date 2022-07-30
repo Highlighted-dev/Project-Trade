@@ -15,6 +15,10 @@ start_urls = [
         'https://www.amazon.de/s?rh=n%3A429867031&s=review-count-rank&language=en',
         'https://www.amazon.de/s?rh=n%3A429874031&s=review-count-rank&language=en',
         'https://www.amazon.de/s?rh=n%3A429870031&s=review-count-rank&language=en',
+        'https://www.amazon.de/s?rh=n%3A389968011&s=review-count-rank&language=en',
+        'https://www.amazon.de/s?rh=n%3A3517801&s=review-count-rank&language=en',
+        'https://www.amazon.de/s?rh=n%3A2864212031&s=review-count-rank&language=en'
+
     ]
 allowed_domains = ['amazon.de','amazon.fr']
 max_pages_per_category_string = "10" #Up to 99
@@ -30,3 +34,4 @@ mongo_column_details = 'amazonProductDetails'
 mongo_column_technical_details = 'amazonProductTechnicalDetails'
 mongo_column_about = 'amazonProductAbout'
 mongo_column_highres_images = 'amazonProductHighResImages'
+mongo_column_prices = 'amazonProductPrices'
