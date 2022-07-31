@@ -7,6 +7,7 @@ import AmazonProductAbout from '../models/AmazonProductAboutModel';
 import AmazonProductHighResImages from '../models/AmazonProductHighResImagesModel';
 import session from 'express-session';
 import { Model } from 'mongoose';
+import AmazonProductPrices from '../models/AmazonProductPrices';
 
 //Session variables interface for typescript
 declare module 'express-session' {
@@ -54,6 +55,10 @@ router.get('/technicalDetails/id/:id', (req: Request, res: Response) =>
 //Get product about by id
 router.get('/about/id/:id', (req: Request, res: Response) =>
   getAmazonProductData(req, res, AmazonProductAbout)
+);
+//Get product prices by id
+router.get('/prices/id/:id', (req: Request, res: Response) =>
+  getAmazonProductData(req, res, AmazonProductPrices)
 );
 //Get product high resolution images by id
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
