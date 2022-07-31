@@ -1,18 +1,27 @@
 import React, { MouseEventHandler, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/ProductPageTemplate.css';
-import { AiOutlineStar, AiOutlineHeart } from 'react-icons/ai';
+import { AiOutlineStar, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import AuthContext from '../../components/ts/AuthContext';
+var alertify = require('alertifyjs');
+import 'alertifyjs/build/css/alertify.css';
+import LineChart from '../../components/ts/LineChart';
+
 const ProductWebsiteTemplate = () => {
   const { productId } = useParams();
   const { authState } = useContext(AuthContext);
   const [changingProductId, setChangingProductId] = useState(productId);
+  const [isProudctInFavourites, setIsProudctInFavourites] = useState<boolean>(false);
   const [details, setDetails] = useState<any[]>([]);
   const [images, setImages] = useState<any[]>([]);
   const [technicalDetails, setTechnicalDetails] = useState<any[]>([]);
   const [abouts, setAbouts] = useState<any[]>([]);
   const [highResImages, setHighResImages] = useState<any[]>([]);
   const [productBasicInformations, setProductBasicInformations] = useState<any[]>([]);
+  const [prices, setPrices] = useState<any[]>([]);
+  const [chartsPriceData, setChartsPriceData] = useState<any>([]);
+  const [chartsLabels, setChartsLabels] = useState<any>([]);
+  const [chartsSetupDone, setChartsSetupDone] = useState<boolean>(false);
 
   const clearStates = () => {
     setImages([]);
@@ -21,6 +30,7 @@ const ProductWebsiteTemplate = () => {
     setAbouts([]);
     setHighResImages([]);
     setProductBasicInformations([]);
+    setChartsPriceData([]);
   };
   const fetchProductData = (
     requestOptions: RequestInit,
@@ -30,7 +40,8 @@ const ProductWebsiteTemplate = () => {
     fetch(url + productId, requestOptions)
       .then(async response => await response.json())
       .then(data => {
-        //If json is not empty set data, else set empty array
+        //If json is not empty set data, else set empty array\
+
         if (data.length > 0) setProductData(data);
         else setProductData([]);
       })
@@ -71,34 +82,57 @@ const ProductWebsiteTemplate = () => {
   };
 
   const itemCheck = async (user_id: string) => {
+    //Check if item is in favourites
     const response = await fetch('/api/favourites/check', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id,
+        user_id: user_id,
         product_id: productId,
       }),
     });
-    if (response.status == 200) return addOrRemoveFromFavourites(user_id, 'remove');
-    return addOrRemoveFromFavourites(user_id, 'add');
+    //Response 200 means that item is already in favourites
+    if (response.status == 200) return true;
+    return false;
   };
 
   //This function is used to add or remove product from favourites
-  const addOrRemoveFromFavourites = async (user_id: string, method: string) => {
-    const response = await fetch('/api/favourites/' + method, {
+  const addOrRemoveFromFavourites = async (user_id: string) => {
+    //Check if item is in favourites
+    const isInFavourites = await itemCheck(user_id);
+    const url = '/api/favourites/' + (isInFavourites ? 'remove' : 'add');
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id,
+        user_id: user_id,
         product_id: productId,
       }),
     });
     const responseData = await response.json();
-    console.log(responseData.message);
+    //Change favourite icon after adding or removing item from favourites
+    changeFavouritesIcon(user_id);
+    !isInFavourites ? alertify.success(responseData.message) : alertify.error(responseData.message);
+  };
+
+  //This function is used to change favourites icon. If item is in favourites, change icon to white filled heart, else change to white outline heart
+  const changeFavouritesIcon = async (user_id: string) => {
+    if (await itemCheck(user_id)) setIsProudctInFavourites(true);
+    else setIsProudctInFavourites(false);
+  };
+
+  const setUpPriceChart = () => {
+    if (prices.length > 0) {
+      const labels = prices.map(price => price.product_price_date);
+      setChartsLabels(labels);
+      const data = prices.map(price => price.product_price);
+      setChartsPriceData(data);
+      setChartsSetupDone(true);
+    }
   };
 
   useEffect(() => {
@@ -107,7 +141,6 @@ const ProductWebsiteTemplate = () => {
     const requestOptions = {
       method: 'GET',
     };
-
     fetch('/api/ap/checkProduct/id/' + productId, requestOptions)
       .then(async response => {
         if (response.status === 200) {
@@ -132,14 +165,23 @@ const ProductWebsiteTemplate = () => {
         fetchProductData(requestOptions, '/api/ap/id/', setProductBasicInformations);
       })
       .then(() => {
+        fetchProductData(requestOptions, '/api/ap/prices/id/', setPrices);
+      })
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/highResImages/id/', setHighResImages);
       })
       .catch(e => {
         console.log(e);
       });
   }, [productId]);
+  useEffect(() => {
+    changeFavouritesIcon(authState._id);
+  }, [authState]);
+  useEffect(() => {
+    setUpPriceChart();
+  }, [prices]);
   return (
-    <>
+    <div id="productPage">
       <div id="productInformations">
         <div id="images">
           <ul>
@@ -164,18 +206,20 @@ const ProductWebsiteTemplate = () => {
         </div>
         <div id="highresImages">
           <ul>
-            {highResImages.length > 1
-              ? highResImages.map((product, key) => (
-                  <li key={key}>
-                    <img
-                      src={product.product_highres_image}
-                      id={'highresimg' + key}
-                      //First image will have 'selected' class (visible to user)
-                      className={key > 0 ? '' : 'highresSelected'}
-                    />
-                  </li>
-                ))
-              : false}
+            {highResImages.length > 2 ? (
+              highResImages.map((product, key) => (
+                <li key={key}>
+                  <img
+                    src={product.product_highres_image}
+                    id={'highresimg' + key}
+                    //First image will have 'selected' class (visible to user)
+                    className={key > 0 ? '' : 'highresSelected'}
+                  />
+                </li>
+              ))
+            ) : (
+              <li>loading...</li>
+            )}
           </ul>
           <br />
         </div>
@@ -206,7 +250,7 @@ const ProductWebsiteTemplate = () => {
           {details.length > 1 ? (
             <div className="productDetails">
               <div className="productDetailsHeaderAndButton">
-                <h2>THE DETAILS</h2>
+                <h2>DETAILS</h2>
                 <button onClick={() => hideContent('productDetailsContent')}>-</button>
               </div>
               <div className="productDetailsContent">
@@ -228,7 +272,7 @@ const ProductWebsiteTemplate = () => {
           {technicalDetails.length > 1 ? (
             <div className="productTechnicalDetails">
               <div className="productTechnicalDetailsHeaderAndButton">
-                <h2>THE DETAILS</h2>
+                <h2>TECHNICAL DETAILS</h2>
                 <button onClick={() => hideContent('productTechnicalDetailsContent')}>-</button>
               </div>
               <div className="productTechnicalDetailsContent">
@@ -267,11 +311,30 @@ const ProductWebsiteTemplate = () => {
             false
           )}
           <div id="favourites">
-            <AiOutlineHeart className="favImage" onClick={() => itemCheck(authState._id)} />
+            {isProudctInFavourites ? (
+              <AiFillHeart
+                className="favImage"
+                onClick={() => addOrRemoveFromFavourites(authState._id)}
+              />
+            ) : (
+              <AiOutlineHeart
+                className="favImage"
+                onClick={() => addOrRemoveFromFavourites(authState._id)}
+              />
+            )}
           </div>
         </div>
       </div>
-    </>
+      <div id="productPriceDiv">
+        <div id="priceChart">
+          {prices.length > 0 && chartsSetupDone ? (
+            <LineChart data={chartsPriceData} labels={chartsLabels} />
+          ) : (
+            <h1>loading...</h1>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
