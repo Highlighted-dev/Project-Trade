@@ -52,13 +52,6 @@ const Navbar: FC = () => {
     }
   }, [searchWord]);
 
-  const toggleMenu: MouseEventHandler = () => {
-    const sidebar = document.querySelector('.sidebar');
-    const navbar = document.querySelector('.navbar');
-    sidebar?.classList.toggle('active');
-    navbar?.classList.toggle('active');
-  };
-
   const toggleUserPanel = (className: string) => {
     const avatar = document.querySelector(`.${className}`);
     avatar?.classList.toggle('active');
@@ -149,11 +142,7 @@ const Navbar: FC = () => {
       </div>
       <div className="sidebar">
         <div className="logo_content">
-          <div className="logo">
-            <AiFillBank style={{ fontSize: '1.6rem', marginRight: '6px' }} />
-            <div className="logo-name">ProjectTrade</div>
-          </div>
-          <AiOutlineMenu className="menu" onClick={toggleMenu} />
+          <AiFillBank className="menu" />
         </div>
         <ul>
           <li>
