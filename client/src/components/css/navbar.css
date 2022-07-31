@@ -111,23 +111,26 @@
 /* topbar */
 .topbar {
   height: 60px;
-  position: relative;
-  width: calc(100%-72px);
+  position: fixed;
+  top: 0;
   left: 72px;
+  transition: all ease 400ms;
+  z-index: 10;
+  width: calc(100vw + 72px);
   background-color: #0d0c16;
   padding: 12px 12px;
 }
 .navbar.active .topbar {
-  width: calc(100%-220px);
+  width: calc(100% - 220px);
   left: 220px;
   transition: all ease 400ms;
 }
 .topbar .searchBox {
   position: absolute;
   height: 70%;
-  width: 30%;
+  width: 30vw;
   transform: translateY(20%);
-  left: 25%;
+  left: calc(35vw - 10vh);
   top: 0;
   border-radius: 12px;
   outline: none;
@@ -142,10 +145,9 @@
   padding: 5px;
   opacity: 0;
   position: absolute;
-  height: 70%;
-  width: 30%;
+  width: 30vw;
+  left: calc(35vw - 10vh);
   transform: translateY(25%);
-  left: 25%;
   top: 0;
   border-radius: 12px;
   outline: none;
@@ -187,7 +189,7 @@
   border-radius: 8px;
 }
 .navbar.active .topbar .searchBox {
-  left: 16%;
+  left: calc(30vw - 12vh);
 }
 
 .topbar .searchBox::placeholder {
@@ -198,12 +200,12 @@
   color: #fff;
   z-index: 99;
   font-size: 22px;
-  left: calc(25% + 10px);
+  left: calc(35vw - 9vh);
   transform: translateY(35%);
   transition: all ease 400ms;
 }
 .navbar.active .topbar .searchIcon {
-  left: calc(16% + 10px);
+  left: calc(30vw - 11vh);
 }
 
 /*User menu styles */
