@@ -3,14 +3,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(100vw - 80px);
+  width: calc(100vw - 72px);
   height: 100vh;
-  left: 62px;
+  left: 72px;
   top: 60px;
   background-color: #25223b;
   color: #fff;
-}
-.navbar.active ~ #home {
-  width: calc(100vw - 220px);
-  left: 220px;
 }
