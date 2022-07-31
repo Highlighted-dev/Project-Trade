@@ -58,7 +58,7 @@ router.get('/about/id/:id', (req: Request, res: Response) =>
 );
 //Get product prices by id
 router.get('/prices/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductPrices)
+  getAmazonPrice(req, res)
 );
 //Get product high resolution images by id
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
@@ -110,7 +110,7 @@ const getAmazonHighResImages = async (req: Request, res: Response) => {
     product_id: id,
   });
   if (amazon_product_highres_images.length > 3) {
-    res.status(200).send(amazon_product_highres_images);
+    res.status(200).json(amazon_product_highres_images);
   }
   //In case if amazon scraper didn't find any items
   else if (req.session.url == req.originalUrl) {
@@ -119,6 +119,38 @@ const getAmazonHighResImages = async (req: Request, res: Response) => {
     //Store current url in express sessions
     req.session.url = req.originalUrl;
     res.redirect('/api/as/highRes/id/' + id);
+  }
+};
+const getAmazonPrice = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const amazon_prices = await AmazonProductPrices.find({
+    product_id: id,
+  });
+
+  //Getting current date (for checking if data is old)
+  var yourDate = new Date();
+  const offset = yourDate.getTimezoneOffset();
+  yourDate = new Date(yourDate.getTime() - offset * 60 * 1000);
+
+  //If current date is bigger than date last product price, program will update data
+  if (
+    yourDate.toISOString().split('T')[0] !==
+    amazon_prices[amazon_prices.length - 1].product_price_date
+  ) {
+    req.session.url = req.originalUrl;
+    res.redirect('/api/as/prices/id/' + id);
+  }
+  //If json is not empty that means program found data
+  else if (amazon_prices.length > 0) {
+    res.status(200).json(amazon_prices);
+  }
+  //In case if amazon scraper didn't find any items
+  else if (req.session.url == req.originalUrl) {
+    res.status(404).send();
+  } else {
+    //Store current url in express sessions
+    req.session.url = req.originalUrl;
+    res.redirect('/api/as/prices/id/' + id);
   }
 };
 export default router;
