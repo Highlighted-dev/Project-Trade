@@ -4,7 +4,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: black;
-  width: 80%;
+  width: 62vw;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
@@ -18,7 +18,7 @@
   border-bottom: 1px solid silver;
 }
 #favouritesPanel .favourite {
-  width: 100%;
+  width: 62vw;
   height: 8vh;
   display: block;
   text-align: center;
@@ -27,10 +27,12 @@
 #favouritesPanel .favourite img {
   padding: 10px;
   width: 80px;
+  min-width: 50px;
 }
 #favouritesPanel .favourite .image {
   height: 100%;
-  width: 6%;
+  width: 4vw;
+  min-width: 40px;
   float: left;
   display: flex;
   justify-content: center;
@@ -39,11 +41,22 @@
 }
 #favouritesPanel .favourite .text {
   float: left;
-  width: 94%;
+  width: 58vw;
   height: 7.9vh;
   padding: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 500;
+  font-size: 1.5vh;
+}
+@media only screen and (max-width: 1000px) {
+  #favouritesPanel .favourite .text {
+    width: 56vw;
+  }
+}
+@media only screen and (max-width: 667px) {
+  #favouritesPanel .favourite .text {
+    width: 54vw;
+  }
 }

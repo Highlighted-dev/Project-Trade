@@ -1,19 +1,16 @@
 #home {
-  padding: 8px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(100% - 72px);
-  height: calc(100% - 60px);
-  left: 72px;
+  width: calc(100vw - 80px);
+  height: 100vh;
+  left: 62px;
+  top: 60px;
   background-color: #25223b;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
   color: #fff;
 }
 .navbar.active ~ #home {
-  width: calc(100% - 220px);
+  width: calc(100vw - 220px);
   left: 220px;
 }
