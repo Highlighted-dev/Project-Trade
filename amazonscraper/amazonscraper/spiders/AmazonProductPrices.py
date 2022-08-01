@@ -19,9 +19,12 @@ class AmazonProductPrices(scrapy.Spider):
                 yield from self.solveCaptcha(response, self.parse)
             else:
                 current_price = response.xpath('//div[@id="corePrice_feature_div"]//span[@class="a-price aok-align-center"]//span[@class="a-offscreen"]/text()').extract()
+                #Sometimes the are two prices: for used item, and for new item. We only want the new item price.
+                if not current_price:
+                    current_price = response.xpath('//div[@id="corePriceDisplay_desktop_feature_div"]//span[@class="a-price aok-align-center reinventPricePriceToPayMargin priceToPay"]//span[@class="a-offscreen"]/text()').extract_first()
                 current_date = date.today()
                 prices['product_id'] = self.product_id
-                prices['product_price'] = re.sub(r"[\'\[\]]|\bname\b", '', str(current_price))  # remove " / " and " ' " from current price with regex.
+                prices['product_price'] = re.sub(r"[\'\[\]\€]|\bname\b", '', str(current_price))  # remove "/", " ' " and "€" from current price with regex.
                 prices['product_price_date'] = str(current_date)
                 prices['mongo_db_column_name'] = GlobalVariables.mongo_column_prices
                 yield prices
