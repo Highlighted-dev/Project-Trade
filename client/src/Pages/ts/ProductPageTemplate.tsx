@@ -30,7 +30,9 @@ const ProductWebsiteTemplate = () => {
     setAbouts([]);
     setHighResImages([]);
     setProductBasicInformations([]);
+    setPrices([]);
     setChartsPriceData([]);
+    setChartsLabels([]);
   };
   const fetchProductData = (
     requestOptions: RequestInit,

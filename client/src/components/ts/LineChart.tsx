@@ -53,11 +53,14 @@ const LineChart = ({ data, labels }: any) => {
       },
       legend: {
         position: 'bottom',
+        labels: {
+          color: 'rgba(37, 34, 59,0.9)',
+        },
       },
       title: {
         display: true,
         text: 'Price history',
-        color: 'rgba(0, 0, 0,0.9)',
+        color: 'rgba(37, 34, 59,0.9)',
       },
     },
   };
@@ -67,7 +70,7 @@ const LineChart = ({ data, labels }: any) => {
     if (chart) {
       const ctx = chart.ctx;
       gradient = ctx.createLinearGradient(0, 0, 0, 450);
-      gradient.addColorStop(0, 'rgba(37, 34, 59,0.8)');
+      gradient.addColorStop(0, 'rgba(37, 34, 59,0.85)');
       gradient.addColorStop(0.5, 'rgba(37, 34, 59,0.5)');
       gradient.addColorStop(1, 'rgba(37, 34, 59,0.1)');
     }
