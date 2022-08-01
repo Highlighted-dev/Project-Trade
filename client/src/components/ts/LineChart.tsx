@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
+import 'chartjs-adapter-date-fns';
 ChartJS.register(...registerables);
 
 const LineChart = ({ data, labels }: any) => {
@@ -15,14 +16,19 @@ const LineChart = ({ data, labels }: any) => {
     scales: {
       y: {
         gridLines: {
-          color: 'rgba(200, 200, 200, 0.08)',
+          color: 'rgba(200, 200, 200, 0.2)',
           lineWidth: 1,
         },
       },
       x: {
+        type: 'time',
         gridLines: {
-          color: 'rgba(200, 200, 200, 0.05)',
+          color: 'rgba(200, 200, 200, 0.15)',
           lineWidth: 1,
+        },
+        time: {
+          unit: 'day',
+          tooltipFormat: 'dd/MM/yyyy',
         },
       },
     },
@@ -37,10 +43,10 @@ const LineChart = ({ data, labels }: any) => {
     plugins: {
       tooltip: {
         enabled: true,
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        backgroundColor: 'rgba(37, 34, 59,0.9)',
         borderWidth: 1,
-        borderColor: 'rgba(178, 34, 34,0.4)',
-        titleColor: '#B22222',
+        borderColor: 'rgb(0, 0, 0)',
+        titleColor: '#fff',
         caretSize: 5,
         cornerRadius: 2,
         padding: 10,
@@ -51,6 +57,7 @@ const LineChart = ({ data, labels }: any) => {
       title: {
         display: true,
         text: 'Price history',
+        color: 'rgba(0, 0, 0,0.9)',
       },
     },
   };
@@ -60,9 +67,9 @@ const LineChart = ({ data, labels }: any) => {
     if (chart) {
       const ctx = chart.ctx;
       gradient = ctx.createLinearGradient(0, 0, 0, 450);
-      gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)');
-      gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)');
-      gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+      gradient.addColorStop(0, 'rgba(37, 34, 59,0.8)');
+      gradient.addColorStop(0.5, 'rgba(37, 34, 59,0.5)');
+      gradient.addColorStop(1, 'rgba(37, 34, 59,0.1)');
     }
     const chartData: any = {
       labels: labels,
@@ -70,19 +77,13 @@ const LineChart = ({ data, labels }: any) => {
         {
           label: 'Price',
           data: data,
-          pointBackgroundColor: 'white',
+          pointBackgroundColor: 'rgba(255, 255, 255,0.9)',
           borderWidth: 1,
-          borderColor: '#911215',
+          borderColor: 'rgb(35, 35, 35)',
           backgroundColor: gradient,
           fill: true,
         },
       ],
-      title: {
-        display: true,
-        text: 'Price',
-        fontSize: 20,
-        fontColor: '#911215',
-      },
     };
     return chartData;
   };
