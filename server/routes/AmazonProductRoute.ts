@@ -132,16 +132,16 @@ const getAmazonPrice = async (req: Request, res: Response) => {
   const offset = yourDate.getTimezoneOffset();
   yourDate = new Date(yourDate.getTime() - offset * 60 * 1000);
 
-  //If current date is bigger than date last product price, program will update data
-  if (
-    yourDate.toISOString().split('T')[0] !==
-    amazon_prices[amazon_prices.length - 1].product_price_date
-  ) {
-    req.session.url = req.originalUrl;
-    res.redirect('/api/as/prices/id/' + id);
-  }
   //If json is not empty that means program found data
-  else if (amazon_prices.length > 0) {
+  if (amazon_prices.length > 0) {
+    //If current date is bigger than date last product price, program will update data
+    if (
+      yourDate.toISOString().split('T')[0] !==
+      amazon_prices[amazon_prices.length - 1].product_price_date
+    ) {
+      req.session.url = req.originalUrl;
+      res.redirect('/api/as/prices/id/' + id);
+    }
     res.status(200).json(amazon_prices);
   }
   //In case if amazon scraper didn't find any items
