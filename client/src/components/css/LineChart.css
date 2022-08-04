@@ -1,0 +1,17 @@
+#priceChart {
+  float: left;
+  width: 43vw;
+  min-width: 400px;
+  height: 52vh;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: block;
+  position: relative;
+}
+
+#priceChart input {
+  color: rgba(37, 34, 59, 0.9);
+  border: 1px solid rgba(37, 34, 59, 0.9);
+  margin: 5px;
+}

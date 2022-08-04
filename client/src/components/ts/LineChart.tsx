@@ -2,6 +2,7 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import '../css/LineChart.css';
 ChartJS.register(...registerables);
 
 const LineChart = ({ data, labels }: any) => {
@@ -150,21 +151,24 @@ const LineChart = ({ data, labels }: any) => {
     setDates(labels);
   };
   return (
-    <>
-      <Chart ref={chartRef} type="line" data={getChartData()} options={options} />
-      <input
-        type="date"
-        id="start_date"
-        defaultValue={getCurrentDateMinusWeek()}
-        onChange={() => filterDates()}
-      />
-      <input
-        type="date"
-        id="end_date"
-        defaultValue={getCurrentDate()}
-        onChange={() => filterDates()}
-      />
-    </>
+    <div id="priceChart">
+      <div id="chart">
+        <Chart ref={chartRef} type="line" data={getChartData()} options={options} />
+
+        <input
+          type="date"
+          id="start_date"
+          defaultValue={getCurrentDateMinusWeek()}
+          onChange={() => filterDates()}
+        />
+        <input
+          type="date"
+          id="end_date"
+          defaultValue={getCurrentDate()}
+          onChange={() => filterDates()}
+        />
+      </div>
+    </div>
   );
 };
 
