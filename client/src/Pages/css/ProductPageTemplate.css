@@ -126,7 +126,7 @@ h3 {
 #productData .productTechnicalDetails .productTechnicalDetailsContent.expand {
   height: auto;
   opacity: 1;
-  max-height: 26vh;
+  max-height: calc(15vw);
   overflow: auto;
   word-wrap: break-word;
   font-size: 1.8vh;
@@ -173,23 +173,7 @@ h3 {
   justify-content: center;
   align-items: center;
   width: calc(100vw - 88px);
-  height: 60vh;
+  height: 65vh;
   text-align: center;
   background-color: #25223b;
 }
-#productPriceDiv #priceChart {
-  width: 43vw;
-  min-width: 400px;
-  height: 44vh;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.95);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-/* #productPriceDiv #priceChart canvas {
-  position: relative;
-  top: -10px;
-} */
