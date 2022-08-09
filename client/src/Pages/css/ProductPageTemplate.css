@@ -111,33 +111,35 @@ h3 {
 #productData .productDetails .productDetailsContent,
 #productData .productAbout .productAboutContent,
 #productData .productTechnicalDetails .productTechnicalDetailsContent {
-  opacity: 0;
-  transition: opacity 0.5s linear;
-  height: 0;
+  max-height: 0;
   overflow: hidden;
+  word-wrap: break-word;
+  font-size: 1.8vh;
+  line-height: 24px;
+  transition: opacity 0.5s linear, max-height 0.2s ease-in-out;
+  visibility: invisible;
+  opacity: 0;
 }
 #productData .productDetails .productDetailsContent.expand::-webkit-scrollbar,
 #productData .productAbout .productAboutContent.expand::-webkit-scrollbar,
 #productData .productTechnicalDetails .productTechnicalDetailsContent.expand::-webkit-scrollbar {
+  transition: 0.5s ease-in-out;
   background-color: rgba(37, 34, 59, 0.7);
 }
 #productData .productDetails .productDetailsContent.expand,
 #productData .productAbout .productAboutContent.expand,
 #productData .productTechnicalDetails .productTechnicalDetailsContent.expand {
-  height: auto;
   opacity: 1;
-  max-height: calc(15vw);
+  visibility: visible;
   overflow: auto;
-  word-wrap: break-word;
-  font-size: 1.8vh;
-  line-height: 24px;
+  max-height: calc(15vw);
 }
 #productData .productDetails .productDetailsContent ol,
 #productData .productAbout .productAboutContent ol,
 #productData .productTechnicalDetails .productTechnicalDetailsContent ol {
   list-style-type: disc;
   list-style-position: inside;
-  padding: 2px 2px 2px 12px;
+  padding: 0px 2px 2px 12px;
 }
 #productData .productDetails .productDetailsContent li,
 #productData .productAbout .productAboutContent li,
@@ -176,4 +178,10 @@ h3 {
   height: 65vh;
   text-align: center;
   background-color: #25223b;
+}
+
+@keyframes delay-overflow {
+  from {
+    overflow: auto;
+  }
 }
