@@ -132,8 +132,8 @@ router.get(
     if (!request_token) {
       //We want to return status code 200, becouse it just means user did not login yet, it is not an error.
       return res
-        .status(200)
-        .json({ status: 'success', message: 'User is not logged in.' });
+        .status(400)
+        .json({ status: 'error', message: 'User is not logged in.' });
     }
     try {
       //Verify token

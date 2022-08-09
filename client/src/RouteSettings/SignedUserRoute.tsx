@@ -5,6 +5,5 @@ import AuthContext from '../components/ts/AuthContext';
 //If user isn't sign in, redirect him to signIn page
 export default function PrivateRoute({ children }: any) {
   const { authState, loading } = useContext(AuthContext);
-
-  return authState._id || !loading ? children : <Navigate to="/Login" />;
+  return authState._id || loading ? children : <Navigate to="/Login" />;
 }

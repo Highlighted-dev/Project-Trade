@@ -19,20 +19,24 @@ export const AuthProvider = (props: any) => {
       .catch(err => console.log(err));
   };
   // loadData loads data from api and sets it to the authState.
-  const loadData = () => {
+  const loadData = async () => {
     setLoading(true);
-    isAuthenticated().then(data => {
-      if (data.status == 'error') {
-        console.log(data.message);
-      } else {
-        setAuthState({
-          _id: data.user._id,
-          username: data.user.username,
-          email: data.user.email,
-        });
-      }
-    });
-    setLoading(false);
+    isAuthenticated()
+      .then(data => {
+        if (data.status == 'error') {
+          console.log(data.message);
+        } else {
+          setAuthState({
+            _id: data.user._id,
+            username: data.user.username,
+            email: data.user.email,
+          });
+        }
+        return data;
+      })
+      .then(() => {
+        setLoading(false);
+      });
   };
   const register = async (username: string, email: string, password: string) => {
     const response = await fetch('/api/auth/register/', {
@@ -95,6 +99,7 @@ export const AuthProvider = (props: any) => {
     register,
     login,
     logout,
+    loading,
   };
   return <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>;
 };
