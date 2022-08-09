@@ -141,8 +141,7 @@ const getAmazonPrice = async (req: Request, res: Response) => {
     ) {
       req.session.url = req.originalUrl;
       res.redirect('/api/as/prices/id/' + id);
-    }
-    res.status(200).json(amazon_prices);
+    } else res.status(200).json(amazon_prices);
   }
   //In case if amazon scraper didn't find any items
   else if (req.session.url == req.originalUrl) {
