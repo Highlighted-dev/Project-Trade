@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
@@ -123,6 +123,7 @@ const LineChart = ({ data, labels }: any) => {
   const filterDates = () => {
     //Delcraing new array for dates
     const dates_array = [...labels];
+    //Getting current chart
     const chart = chartRef.current;
 
     //Get current start and end date from inputs
@@ -150,6 +151,9 @@ const LineChart = ({ data, labels }: any) => {
     }
     setDates(labels);
   };
+  useEffect(() => {
+    filterDates();
+  }, [labels]);
   return (
     <div id="priceChart">
       <div id="chart">
