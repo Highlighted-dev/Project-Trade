@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 #Here are all important variables that you would like to change.
 #HOW TO CREATE WORKING URL
 #1.Go to any amazon category
@@ -26,8 +29,8 @@ items_per_page = 24
 
 
 #MongoDb related variables
-mongoUrl = 'localhost:27017'
-mongoDatabase = 'ProjectTrade'
+mongoUrl = os.getenv('MONGODB_URI')
+mongoDatabase = 'project-trade'
 mongoColumn = 'amazonProductData'
 mongo_column_thumb_images = 'amazonProductThumbImages'
 mongo_column_details = 'amazonProductDetails'
