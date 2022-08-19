@@ -1,6 +1,9 @@
 import scrapy
 from .. import GlobalVariables
-from amazonscraper.items import AmazonItemThumbImages, AmazonItemDetails, AmazonItemTechnicalDetails, AmazonItemAbout
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from ..items import AmazonItemThumbImages, AmazonItemDetails, AmazonItemTechnicalDetails, AmazonItemAbout
 from amazoncaptcha import AmazonCaptcha
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest

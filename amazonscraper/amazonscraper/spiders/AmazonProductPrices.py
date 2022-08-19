@@ -2,14 +2,26 @@ import re
 import scrapy
 from .. import GlobalVariables
 from amazoncaptcha import AmazonCaptcha
-from amazonscraper.items import AmazonItemPrice
+from ..items import AmazonItemPrice
 import logging
 from scrapy_splash import SplashFormRequest
 from datetime import date
+import json
 class AmazonProductPrices(scrapy.Spider):
-    def __init__(self, prod_id):
-        self.product_id = prod_id
-        self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
+    def __init__(self, prod_id=None, prod_id_json=None):
+        if(prod_id):
+            self.product_id = prod_id
+            self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
+        elif(prod_id_json):
+            with open(prod_id_json, 'r') as f:
+                data = json.load(f)
+                for item in data:
+                    if 'prod_id' not in item:
+                        raise ValueError('No product id found in json file')
+                    self.product_id = item['prod_id']
+                    self.start_urls = self.start_urls + ["https://www.amazon.de/-/en/dp/"+self.product_id]
+                    break
+        
     name = 'AmazonProductPrices'
     allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
@@ -43,7 +55,9 @@ class AmazonProductPrices(scrapy.Spider):
     def solveCaptcha(self, response, origin_method):
         logging.info("Trying to solve captcha...")
         try:
+            # Get the captcha image url from website
             captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
+            # Solve Captcha with AmazonCaptcha
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
             logging.info("Captcha solved!")

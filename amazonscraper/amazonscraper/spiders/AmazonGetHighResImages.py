@@ -1,7 +1,7 @@
 import scrapy
 from .. import GlobalVariables
 from amazoncaptcha import AmazonCaptcha
-from amazonscraper.items import AmazonItemHighResImages
+from ..items import AmazonItemHighResImages
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
 import re
