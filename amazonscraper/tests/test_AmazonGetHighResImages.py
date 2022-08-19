@@ -1,16 +1,20 @@
 import unittest
-from responses import fake_response_from_file
 import sys
 import os
-#Add parent folder to sys paths for scrapy spider import
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import amazonscraper.spiders.AmazonGetHighResImages as AmazonGetHighResImages
+#Add parent folder to sys paths
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from tests.responses.__init__ import fake_response_from_file
+#Second import is when you won't use python -m unittest discover
+try:
+    from amazonscraper.amazonscraper.spiders.AmazonGetHighResImages import AmazonGetHighResImages
+except ImportError:
+    from amazonscraper.spiders.AmazonGetHighResImages import AmazonGetHighResImages
 
 class AmazonGetHighResImagesrTest(unittest.TestCase):
 
     #Scrapy spider setup
     def setUp(self):
-        self.spider = AmazonGetHighResImages.AmazonGetHighResImages("any")
+        self.spider = AmazonGetHighResImages("any")
 
     def _test_item_results(self, results, expected_length):
         count=0

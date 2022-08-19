@@ -1,15 +1,20 @@
 import unittest
-from responses import fake_response_from_file
 import sys
 import os
-#Add parent folder to sys paths for scrapy spider import
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import amazonscraper.spiders.AmazonOneProductSpider as AmazonOneProductSpider
+#Add parent folder to sys paths
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from tests.responses.__init__ import fake_response_from_file
+try:
+    from amazonscraper.amazonscraper.spiders.AmazonOneProductSpider import AmazonOneProductSpider
+except ImportError:
+    from amazonscraper.spiders.AmazonOneProductSpider import AmazonOneProductSpider
+
+
 class AmazonOneProductSpiderTest(unittest.TestCase):
 
     #Scrapy spider setup
     def setUp(self):
-        self.spider = AmazonOneProductSpider.AmazonOneProductSpider("any")
+        self.spider = AmazonOneProductSpider("any")
 
     def _test_item_results(self, results, expected_length):
         count=0
