@@ -1,4 +1,5 @@
 Requirements:
+pip install scrapy
 pip install pymongo
 pip install amazoncaptcha
 pip install scrapy-splash
