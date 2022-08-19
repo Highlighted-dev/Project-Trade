@@ -128,7 +128,9 @@ const ProductWebsiteTemplate = () => {
   };
 
   const setUpPriceChart = () => {
+    setChartsSetupDone(false);
     if (prices.length > 0) {
+      console.log('tst');
       const labels = prices.map(price => price.product_price_date);
       setChartsLabels(labels);
       const data = prices.map(price => price.product_price);
@@ -328,13 +330,13 @@ const ProductWebsiteTemplate = () => {
         </div>
       </div>
       <div id="productPriceDiv">
-        <div id="priceChart">
-          {prices.length > 0 && chartsSetupDone ? (
+        {prices.length > 0 && chartsSetupDone ? (
+          <>
             <LineChart data={chartsPriceData} labels={chartsLabels} />
-          ) : (
-            <h1>loading...</h1>
-          )}
-        </div>
+          </>
+        ) : (
+          <h1>loading...</h1>
+        )}
       </div>
     </div>
   );
