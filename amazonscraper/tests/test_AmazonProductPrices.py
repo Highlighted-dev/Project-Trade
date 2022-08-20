@@ -1,4 +1,5 @@
 from datetime import date
+import logging
 import unittest
 import sys
 import os
@@ -36,9 +37,13 @@ class AmazonProductPricesTest(unittest.TestCase):
         #Get results from spider
         results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage1.html'))
         self._test_item_results(results, "item1")
+        logging.info("log: Test 1 passed")  
         
         results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage2.html'))
         self._test_item_results(results, "item2")
+        logging.info("log: Test 2 passed") 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main()

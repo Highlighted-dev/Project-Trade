@@ -1,3 +1,4 @@
+import logging
 import unittest
 import sys
 import os
@@ -28,8 +29,13 @@ class AmazonGetHighResImagesrTest(unittest.TestCase):
     def test_parse(self):
         results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage1.html'))
         self._test_item_results(results,9)
+        logging.info("log: Test 1 passed")
+
         results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage2.html'))
         self._test_item_results(results,7)
+        logging.info("log: Test 2 passed") 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main()
