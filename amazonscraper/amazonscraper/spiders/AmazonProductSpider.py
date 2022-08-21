@@ -1,6 +1,6 @@
 import logging
 import scrapy
-from amazonscraper.items import AmazonscraperItem
+from ..items import AmazonscraperItem
 import os
 import pymongo
 import json

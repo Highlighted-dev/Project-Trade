@@ -1,8 +1,3 @@
-import urllib.request
-import os
-
-#TODO add proxies
-
 SPIDER_MODULES = ['amazonscraper.spiders']
 NEWSPIDER_MODULE = 'amazonscraper.spiders'
 #Splash settings
