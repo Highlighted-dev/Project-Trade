@@ -1,9 +1,12 @@
 import express, { Request, Response, Router } from 'express';
 import * as stream from 'stream';
 import session from 'express-session';
+import os from 'os';
+import bodyParser from 'body-parser';
+
 const router: Router = express.Router();
 const { exec } = require('child_process');
-const os = require('os');
+const jsonParser = bodyParser.json();
 
 const getDirectoryBasedOnSystem = () => {
   switch (os.platform()) {
@@ -17,7 +20,7 @@ const getDirectoryBasedOnSystem = () => {
 const runAProductScraper = async (
   req: Request,
   res: Response,
-  command: String
+  command: string
 ) => {
   //Execute the command in the child process
   exec(
@@ -65,6 +68,15 @@ router.get('/prices/id/:id', async (req: Request, res: Response) => {
     getDirectoryBasedOnSystem() +
     ' & scrapy crawl AmazonProductPrices -a prod_id="' +
     id +
+    '"';
+  runAProductScraper(req, res, command);
+});
+router.get('/prices/array', jsonParser, async (req: Request, res: Response) => {
+  const command =
+    'cd ' +
+    getDirectoryBasedOnSystem() +
+    ' & scrapy crawl AmazonProductPrices -a string_of_many_prod_ids="' +
+    req.session.user_favourites_product_ids +
     '"';
   runAProductScraper(req, res, command);
 });

@@ -1,9 +1,21 @@
 import bodyParser from 'body-parser';
-import express, { Request, response, Response, Router } from 'express';
+import express, {
+  application,
+  Request,
+  response,
+  Response,
+  Router,
+} from 'express';
 import userFavouritesModel from '../models/UserFavouritesModel';
 
 const router: Router = express.Router();
 const jsonParser = bodyParser.json();
+
+declare module 'express-session' {
+  export interface SessionData {
+    user_favourites_product_ids: Array<any>;
+  }
+}
 
 router.post('/add', jsonParser, async (req: Request, res: Response) => {
   try {
@@ -66,6 +78,21 @@ router.get('/get/:user_id', async (req: Request, res: Response) => {
       user_id: user_id,
     });
     return res.status(200).json({ status: 'success', data: userFavourites });
+  } catch (e) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Something went wrong when getting favourites!',
+    });
+  }
+});
+router.get('/getAll', async (req: Request, res: Response) => {
+  try {
+    // Get all product_id's in favourites without duplicates.
+    const userFavourites = await userFavouritesModel
+      .find()
+      .distinct('product_id');
+    req.session.user_favourites_product_ids = userFavourites;
+    return res.status(200).redirect(req.session.url || '/');
   } catch (e) {
     return res.status(400).json({
       status: 'error',

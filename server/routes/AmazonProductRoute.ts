@@ -64,6 +64,23 @@ router.get('/prices/id/:id', (req: Request, res: Response) =>
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
   getAmazonHighResImages(req, res)
 );
+router.get('/updatePrices', async (req: Request, res: Response) => {
+  //So here we are getting all product ids that users have in favourites and then we are updating prices for each product.
+  //First we need to get all product ids, so we redirect to /api/favourites/getALl. We also set req.session.url at /api/favourites/getALl to /api/favourites/getALl
+  //Then program will redirect to /api/as/prices/array to scrape all the prices. We also set req.session.url at /api/as/prices/array to /api/ap/updatePrices (this api call url)
+  //And then finally program will end
+  if (!req.session.url) {
+    req.session.url = req.originalUrl;
+    res.redirect('/api/favourites/getAll');
+  } else if (req.session.url == req.originalUrl) {
+    return res
+      .status(200)
+      .json({ status: 'success', message: 'Updated prices!' });
+  } else {
+    req.session.url = req.originalUrl;
+    res.redirect('/api/as/prices/array');
+  }
+});
 
 const getAmazonProductData = async (
   //Request variable, Response variable, name of the model, if program should search for another data
@@ -134,7 +151,7 @@ const getAmazonPrice = async (req: Request, res: Response) => {
 
   //If json is not empty that means program found data
   if (amazon_prices.length > 0) {
-    //If current date is bigger than date last product price, program will update data
+    //If current date is bigger than date last product price, program will update prices
     if (
       yourDate.toISOString().split('T')[0] !==
       amazon_prices[amazon_prices.length - 1].product_price_date
@@ -142,10 +159,6 @@ const getAmazonPrice = async (req: Request, res: Response) => {
       req.session.url = req.originalUrl;
       res.redirect('/api/as/prices/id/' + id);
     } else res.status(200).json(amazon_prices);
-  }
-  //In case if amazon scraper didn't find any items
-  else if (req.session.url == req.originalUrl) {
-    res.status(404).send();
   } else {
     //Store current url in express sessions
     req.session.url = req.originalUrl;
