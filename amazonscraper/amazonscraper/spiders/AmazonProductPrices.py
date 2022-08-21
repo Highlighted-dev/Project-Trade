@@ -6,24 +6,30 @@ from ..items import AmazonItemPrice
 import logging
 from scrapy_splash import SplashFormRequest
 from datetime import date
-import json
+
 class AmazonProductPrices(scrapy.Spider):
-    def __init__(self, prod_id=None, prod_id_json=None):
+    def __init__(self, prod_id=None, string_of_many_prod_ids=None):
+        self.start_urls = []
+        #If we want to scrape only one product, we can this by passing the product id as an argument.
         if(prod_id):
             self.product_id = prod_id
             self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
-        elif(prod_id_json):
-            with open(prod_id_json, 'r') as f:
-                data = json.load(f)
-                for item in data:
-                    if 'prod_id' not in item:
-                        raise ValueError('No product id found in json file')
-                    self.product_id = item['prod_id']
-                    self.start_urls = self.start_urls + ["https://www.amazon.de/-/en/dp/"+self.product_id]
-                    break
-        
+        # If we want to scrape many products at once, we need to pass a string of many product ids.
+        elif(string_of_many_prod_ids):
+            #Split the string of many product ids into a list of product ids.
+            #Example string_of_many_prod_ids: "B074QQQQQQ,B074QQQQQQ,B074QQQQQQ"
+            #Product_id_array after split: ["B074QQQQQQ", "B074QQQQQQ", "B074QQQQQQ"]
+            prod_id_array = string_of_many_prod_ids.split(',')
+            if prod_id_array:
+                for prod_id in prod_id_array:
+                    self.product_id = prod_id
+                    self.start_urls.append("https://www.amazon.de/-/en/dp/"+self.product_id)
+            else:
+                raise ValueError("No product ids found in array")
+        else:
+            raise ValueError('No product id found')
+                    
     name = 'AmazonProductPrices'
-    allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
         prices = AmazonItemPrice()
         try:
