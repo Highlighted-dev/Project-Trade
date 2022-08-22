@@ -91,8 +91,7 @@ router.get('/getAll', async (req: Request, res: Response) => {
     const userFavourites = await userFavouritesModel
       .find()
       .distinct('product_id');
-    req.session.user_favourites_product_ids = userFavourites;
-    return res.status(200).redirect(req.session.url || '/');
+    return res.status(200).json({ status: 'success', data: userFavourites });
   } catch (e) {
     return res.status(400).json({
       status: 'error',

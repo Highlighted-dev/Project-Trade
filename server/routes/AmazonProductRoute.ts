@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Request, response, Response, Router } from 'express';
 import AmazonProductData from '../models/AmazonProductDataModel';
 import AmazonProductDetails from '../models/AmazonProductDetailsModel';
 import AmazonProductThumbImages from '../models/AmazonProductThumbImagesModel';
@@ -8,6 +8,7 @@ import AmazonProductHighResImages from '../models/AmazonProductHighResImagesMode
 import session from 'express-session';
 import { Model } from 'mongoose';
 import AmazonProductPrices from '../models/AmazonProductPrices';
+import axios from 'axios';
 
 //Session variables interface for typescript
 declare module 'express-session' {
@@ -65,21 +66,19 @@ router.get('/highResImages/id/:id', (req: Request, res: Response) =>
   getAmazonHighResImages(req, res)
 );
 router.get('/updatePrices', async (req: Request, res: Response) => {
-  //So here we are getting all product ids that users have in favourites and then we are updating prices for each product.
-  //First we need to get all product ids, so we redirect to /api/favourites/getALl. We also set req.session.url at /api/favourites/getALl to /api/favourites/getALl
-  //Then program will redirect to /api/as/prices/array to scrape all the prices. We also set req.session.url at /api/as/prices/array to /api/ap/updatePrices (this api call url)
-  //And then finally program will end
-  if (!req.session.url) {
-    req.session.url = req.originalUrl;
-    res.redirect('/api/favourites/getAll');
-  } else if (req.session.url == req.originalUrl) {
-    return res
-      .status(200)
-      .json({ status: 'success', message: 'Updated prices!' });
-  } else {
-    req.session.url = req.originalUrl;
-    res.redirect('/api/as/prices/array');
-  }
+  //Get all product ids from /api/favourites/getAll
+  getRequestWithAxios(
+    req,
+    res,
+    'http://localhost:5000/api/favourites/getAll'
+  ).then(responseData => {
+    //Run amazon scraper to update price for every product id found in /api/favourites/getAll
+    getRequestWithAxios(req, res, 'http://localhost:5000/api/as/prices/array', {
+      array: responseData,
+    }).then(() => {
+      res.status(200).json({ status: 'success', message: 'Prices updated' });
+    });
+  });
 });
 
 const getAmazonProductData = async (
@@ -164,5 +163,32 @@ const getAmazonPrice = async (req: Request, res: Response) => {
     req.session.url = req.originalUrl;
     res.redirect('/api/as/prices/id/' + id);
   }
+};
+
+//Axios get request for api calling directly from server.
+const getRequestWithAxios = async (
+  req: Request,
+  res: Response,
+  url: string,
+  params: any = null
+) => {
+  const axiosResponse = axios
+    //If params are not null, program will send params to url
+    .get(url, params ? { params } : {})
+    .then(response => response.data)
+    .then(responseData => {
+      //If program found data, program will return it further
+      if (responseData.data) {
+        return responseData.data;
+      }
+      //If program didn't find any data, program will return response with status 404
+      return res
+        .status(404)
+        .json({ status: 'error', message: 'No data found!' });
+    })
+    .catch(err => {
+      return res.status(404).json({ status: 'error', message: err });
+    });
+  return axiosResponse;
 };
 export default router;

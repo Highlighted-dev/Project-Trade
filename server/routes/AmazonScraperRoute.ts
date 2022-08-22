@@ -72,12 +72,28 @@ router.get('/prices/id/:id', async (req: Request, res: Response) => {
   runAProductScraper(req, res, command);
 });
 router.get('/prices/array', jsonParser, async (req: Request, res: Response) => {
+  const { array } = req.query;
   const command =
     'cd ' +
     getDirectoryBasedOnSystem() +
     ' & scrapy crawl AmazonProductPrices -a string_of_many_prod_ids="' +
-    req.session.user_favourites_product_ids +
+    array +
     '"';
-  runAProductScraper(req, res, command);
+  exec(
+    command,
+    function (error: Error, stderr: stream.Readable, stdout: stream.Readable) {
+      if (error) {
+        console.log(error);
+        res.sendStatus(500);
+      } else {
+        console.log(stderr);
+        console.log(stdout);
+        res.status(200).json({
+          status: 'success',
+          data: stdout,
+        });
+      }
+    }
+  );
 });
 export default router;
