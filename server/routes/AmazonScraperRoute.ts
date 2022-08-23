@@ -28,11 +28,13 @@ const runAProductScraper = async (
     function (error: Error, stderr: stream.Readable, stdout: stream.Readable) {
       if (error) {
         console.log(error);
-        res.sendStatus(500);
+        res.status(500).json({
+          status: 'error',
+          message: "Couldn't scrap the files",
+          logs: error.message,
+        });
       } else {
-        console.log(stderr);
-        console.log(stdout);
-        res.redirect(req.session.url || '/');
+        res.status(200).json({ status: 'success', logs: stdout });
       }
     }
   );
@@ -79,21 +81,6 @@ router.get('/prices/array', jsonParser, async (req: Request, res: Response) => {
     ' & scrapy crawl AmazonProductPrices -a string_of_many_prod_ids="' +
     array +
     '"';
-  exec(
-    command,
-    function (error: Error, stderr: stream.Readable, stdout: stream.Readable) {
-      if (error) {
-        console.log(error);
-        res.sendStatus(500);
-      } else {
-        console.log(stderr);
-        console.log(stdout);
-        res.status(200).json({
-          status: 'success',
-          data: stdout,
-        });
-      }
-    }
-  );
+  runAProductScraper(req, res, command);
 });
 export default router;
