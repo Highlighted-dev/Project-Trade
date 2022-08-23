@@ -8,7 +8,7 @@ import AmazonProductHighResImages from '../models/AmazonProductHighResImagesMode
 import session from 'express-session';
 import { Model } from 'mongoose';
 import AmazonProductPrices from '../models/AmazonProductPrices';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 //Session variables interface for typescript
 declare module 'express-session' {
@@ -65,20 +65,29 @@ router.get('/prices/id/:id', (req: Request, res: Response) =>
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
   getAmazonHighResImages(req, res)
 );
+
 router.get('/updatePrices', async (req: Request, res: Response) => {
   //Get all product ids from /api/favourites/getAll
-  getRequestWithAxios(
-    req,
-    res,
-    'http://localhost:5000/api/favourites/getAll'
-  ).then(responseData => {
-    //Run amazon scraper to update price for every product id found in /api/favourites/getAll
-    getRequestWithAxios(req, res, 'http://localhost:5000/api/as/prices/array', {
-      array: responseData,
-    }).then(() => {
-      res.status(200).json({ status: 'success', message: 'Prices updated' });
+  getRequestWithAxios('http://localhost:5000/api/favourites/getAll')
+    .then(response => {
+      //Run amazon scraper to update price for every product id found in /api/favourites/getAll
+      getRequestWithAxios('http://localhost:5000/api/as/prices/array', {
+        array: response.data.data,
+      })
+        .then(response => {
+          res.status(200).json({
+            status: 'success',
+            message: 'Prices updated',
+            data: response.data,
+          });
+        })
+        .catch((err: AxiosError) => {
+          axiosErrorHandler(err, res);
+        });
+    })
+    .catch((err: AxiosError) => {
+      axiosErrorHandler(err, res);
     });
-  });
 });
 
 const getAmazonProductData = async (
@@ -107,16 +116,23 @@ const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
     product_id: id,
   });
   //If json is not empty that means program found data
-  if (amazon_product_data.length > 3) {
-    res.status(200).send();
-  }
-  //In case if amazon scraper didn't find any items
-  else if (req.session.url == req.originalUrl) {
-    res.status(404).send();
+  if (amazon_product_data.length > 2) {
+    res.status(200).json({ status: 'success', message: 'Product Data found' });
   } else {
-    //Store current url in express sessions
-    req.session.url = req.originalUrl;
-    res.redirect('/api/as/id/' + id);
+    //If program didn't found data, it will try to scrape it with amazons scraper.
+    getRequestWithAxios('http://localhost:5000/api/as/id/' + id)
+      .then(response => {
+        if (response.status == 200) {
+          res.status(200).json({
+            status: 'success',
+            message: 'Product data successfully scraped and added to database.',
+            data: response.data,
+          });
+        }
+      })
+      .catch((err: AxiosError) => {
+        axiosErrorHandler(err, res);
+      });
   }
 };
 
@@ -166,29 +182,29 @@ const getAmazonPrice = async (req: Request, res: Response) => {
 };
 
 //Axios get request for api calling directly from server.
-const getRequestWithAxios = async (
-  req: Request,
-  res: Response,
-  url: string,
-  params: any = null
-) => {
-  const axiosResponse = axios
+const getRequestWithAxios = async (url: string, params: any = null) => {
+  const axiosResponse = await axios
     //If params are not null, program will send params to url
     .get(url, params ? { params } : {})
-    .then(response => response.data)
-    .then(responseData => {
+    .then(response => {
       //If program found data, program will return it further
-      if (responseData.data) {
-        return responseData.data;
-      }
-      //If program didn't find any data, program will return response with status 404
-      return res
-        .status(404)
-        .json({ status: 'error', message: 'No data found!' });
-    })
-    .catch(err => {
-      return res.status(404).json({ status: 'error', message: err });
+      return response;
     });
   return axiosResponse;
+};
+const axiosErrorHandler = (err: AxiosError, res: Response) => {
+  //If the request was made and the server responded.
+  if (err.response) {
+    return res.status(err.response.status).json({
+      error: err.response.statusText,
+      headers: err.response.headers,
+      data: err.response.data,
+    });
+  }
+  //Else something happened in setting up the request that triggered an Error
+  return res.status(500).json({
+    error: '500 Internal Server Error',
+    message: err.message,
+  });
 };
 export default router;
