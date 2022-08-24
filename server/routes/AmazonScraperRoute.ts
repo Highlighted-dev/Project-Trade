@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from 'express';
 import * as stream from 'stream';
-import session from 'express-session';
 import os from 'os';
 import bodyParser from 'body-parser';
 

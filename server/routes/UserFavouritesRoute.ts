@@ -11,12 +11,6 @@ import userFavouritesModel from '../models/UserFavouritesModel';
 const router: Router = express.Router();
 const jsonParser = bodyParser.json();
 
-declare module 'express-session' {
-  export interface SessionData {
-    user_favourites_product_ids: Array<any>;
-  }
-}
-
 router.post('/add', jsonParser, async (req: Request, res: Response) => {
   try {
     await userFavouritesModel.create({

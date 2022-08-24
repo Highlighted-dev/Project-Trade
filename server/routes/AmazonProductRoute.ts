@@ -5,17 +5,12 @@ import AmazonProductThumbImages from '../models/AmazonProductThumbImagesModel';
 import AmazonProductTechnicalDetails from '../models/AmazonProductTechnicalDetailsModel';
 import AmazonProductAbout from '../models/AmazonProductAboutModel';
 import AmazonProductHighResImages from '../models/AmazonProductHighResImagesModel';
-import session from 'express-session';
 import { Model } from 'mongoose';
 import AmazonProductPrices from '../models/AmazonProductPrices';
 import axios, { AxiosError } from 'axios';
 
 //Session variables interface for typescript
-declare module 'express-session' {
-  export interface SessionData {
-    url: string;
-  }
-}
+
 const router: Router = express.Router();
 router.get('/', async (req: Request, res: Response) => {
   res.json(await AmazonProductData.find());
