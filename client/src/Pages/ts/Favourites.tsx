@@ -49,7 +49,7 @@ const Favourites = () => {
         );
       //Add product data to favouritesData
       if (!isItemInFavourites) {
-        setFavouritesData(favouritesData => [...favouritesData, responseData]);
+        setFavouritesData(favouritesData => [...favouritesData, responseData.data]);
       }
     });
   };

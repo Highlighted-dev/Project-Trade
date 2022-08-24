@@ -189,10 +189,9 @@ const getAmazonPrice = async (req: Request, res: Response) => {
   var yourDate = new Date();
   const offset = yourDate.getTimezoneOffset();
   yourDate = new Date(yourDate.getTime() - offset * 60 * 1000);
-
   if (
     //If program found data and today's date is equal to product_price_date of last update (Ex. 07/07/2022 (today) == 07/07/2022 (last update))
-    amazon_prices.length > 2 &&
+    amazon_prices.length > 0 &&
     yourDate.toISOString().split('T')[0] ==
       amazon_prices[amazon_prices.length - 1].product_price_date
   )
@@ -210,7 +209,7 @@ const getAmazonPrice = async (req: Request, res: Response) => {
           });
           //If program succesfuly scraped new data and then found them in database
           if (
-            amazon_prices.length > 2 &&
+            amazon_prices.length > 0 &&
             yourDate.toISOString().split('T')[0] ==
               amazon_prices[amazon_prices.length - 1].product_price_date
           ) {
