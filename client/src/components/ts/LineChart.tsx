@@ -5,8 +5,7 @@ import 'chartjs-adapter-date-fns';
 import '../css/LineChart.css';
 ChartJS.register(...registerables);
 
-const LineChart = ({ data, labels }: any) => {
-  const [chartLabels, setChartLabels] = useState(labels);
+const LineChart = ({ data }: any) => {
   const [chartData, setChartData] = useState(data);
   const chartRef = useRef<ChartJS>(null);
   const options: any = {
@@ -79,11 +78,11 @@ const LineChart = ({ data, labels }: any) => {
       gradient.addColorStop(1, 'rgba(37, 34, 59,0.1)');
     }
     const chartDataSettings: any = {
-      labels: chartLabels,
+      labels: chartData.map((product: any) => product.product_price_date),
       datasets: [
         {
           label: 'Price',
-          data: chartData,
+          data: chartData.map((product: any) => product.product_price),
           pointBackgroundColor: 'rgba(255, 255, 255,0.9)',
           borderWidth: 1,
           borderColor: 'rgb(35, 35, 35)',
@@ -108,9 +107,14 @@ const LineChart = ({ data, labels }: any) => {
     return date.toISOString().split('T')[0];
   };
   const filterDates = () => {
+    console.log(chartData.map((product: any) => product.product_price_date));
     //Delcraing new array for labels and data
-    const dates_array = [...labels];
     const data_array = [...data];
+
+    //Sort the data_array by date
+    data_array.sort((a, b) => {
+      return a.product_price_date.localeCompare(b.product_price_date);
+    });
 
     //Getting current chart
     const chart = chartRef.current;
@@ -121,40 +125,39 @@ const LineChart = ({ data, labels }: any) => {
 
     //If start date is not empty, filter dates_array to only include dates equal start date and end date
     if (start_date && chart) {
-      //Get start date and end date from input
-      const start_date_index = dates_array.indexOf(start_date.value);
-      const end_date_index = dates_array.indexOf(end_date.value);
+      //Get start date index and end date index from input provided by start_date and end_date
+      const start_date_index = data_array
+        .map(product => product.product_price_date)
+        .indexOf(start_date.value);
+      const end_date_index = data_array
+        .map(product => product.product_price_date)
+        .indexOf(end_date.value);
 
       //If there indexes are greater than -1 that means start and end dates are in dates_array
       //If start index is greater than end index, there isn't any date in dates_array that would match the start and end dates.
       if (start_date_index > -1 && end_date_index > -1 && start_date_index <= end_date_index) {
         //If start index is not equal to end index, there is more than one date in dates_array that would match the start and end dates.
         if (start_date_index != end_date_index) {
-          //Filter dates_array to only include dates equal start date and end date
-          dates_array.splice(end_date_index + 1, dates_array.length);
-          dates_array.splice(0, start_date_index);
-          setChartLabels(dates_array);
-
-          //Filter data_array to only include dates equal start date and end date
-          data_array.splice(end_date_index + 1, dates_array.length);
+          //Cut data_array to only include dates equal start date and end date
+          data_array.splice(end_date_index + 1, data_array.length);
           data_array.splice(0, start_date_index);
+
           setChartData(data_array);
         } else {
-          //Set chart data and lables to only one data point
-          setChartLabels(dates_array.slice(start_date_index, end_date_index + 1));
+          //Set chart data and lables to only one data point (Ex. If start date = "2022-08-04" and end date = "2022-08-04", only show "2022-08-04")
           setChartData(data_array.slice(start_date_index, end_date_index + 1));
         }
         chart.update();
         return;
       }
     }
-    //If there are no dates beetwen start and end date, set chart data and labels to all dates
-    setChartLabels(labels);
-    setChartData(data);
+    //If there are no data points beetwen start and end date, set chart data and labels to all dates (Ex. We have data for "2022-08-04" and "2022-08-06", but user requested data
+    //for ""2022-08-06". Becouse we don't have that, we will show all data points
+    setChartData(data_array);
   };
   useEffect(() => {
     filterDates();
-  }, [labels]);
+  }, [data]);
   return (
     <div id="priceChart">
       <div id="chart">

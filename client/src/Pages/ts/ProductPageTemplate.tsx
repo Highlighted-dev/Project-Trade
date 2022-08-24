@@ -19,8 +19,7 @@ const ProductWebsiteTemplate = () => {
   const [highResImages, setHighResImages] = useState<any[]>([]);
   const [productBasicInformations, setProductBasicInformations] = useState<any[]>([]);
   const [prices, setPrices] = useState<any[]>([]);
-  const [chartsPriceData, setChartsPriceData] = useState<any>([]);
-  const [chartsLabels, setChartsLabels] = useState<any>([]);
+  const [chartsData, setChartsData] = useState<any[]>([]);
   const [chartsSetupDone, setChartsSetupDone] = useState<boolean>(false);
 
   const clearStates = () => {
@@ -31,8 +30,7 @@ const ProductWebsiteTemplate = () => {
     setHighResImages([]);
     setProductBasicInformations([]);
     setPrices([]);
-    setChartsPriceData([]);
-    setChartsLabels([]);
+    setChartsData([]);
   };
   const fetchProductData = (
     requestOptions: RequestInit,
@@ -128,10 +126,8 @@ const ProductWebsiteTemplate = () => {
 
   const setUpPriceChart = () => {
     if (prices.length > 0) {
-      const labels = prices.map(price => price.product_price_date);
-      setChartsLabels(labels);
-      const data = prices.map(price => price.product_price);
-      setChartsPriceData(data);
+      //TODO
+      setChartsData(prices);
       setChartsSetupDone(true);
     }
   };
@@ -329,7 +325,7 @@ const ProductWebsiteTemplate = () => {
       <div id="productPriceDiv">
         {prices.length > 0 && chartsSetupDone ? (
           <>
-            <LineChart data={chartsPriceData} labels={chartsLabels} />
+            <LineChart data={chartsData} />
           </>
         ) : (
           <h1>loading...</h1>
