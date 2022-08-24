@@ -115,7 +115,7 @@ const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
   const amazon_product_data = await AmazonProductThumbImages.find({
     product_id: id,
   });
-  //If json is not empty that means program found data
+  //If amazon_product_data is not empty that means program found data
   if (amazon_product_data.length > 2) {
     res.status(200).json({ status: 'success', message: 'Product Data found' });
   } else {
@@ -155,7 +155,7 @@ const getAmazonHighResImages = async (req: Request, res: Response) => {
 };
 const getAmazonPrice = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const amazon_prices = await AmazonProductPrices.find({
+  var amazon_prices = await AmazonProductPrices.find({
     product_id: id,
   });
 
@@ -164,20 +164,45 @@ const getAmazonPrice = async (req: Request, res: Response) => {
   const offset = yourDate.getTimezoneOffset();
   yourDate = new Date(yourDate.getTime() - offset * 60 * 1000);
 
-  //If json is not empty that means program found data
-  if (amazon_prices.length > 0) {
-    //If current date is bigger than date last product price, program will update prices
-    if (
-      yourDate.toISOString().split('T')[0] !==
+  if (
+    //If program found data and today's date is equal to product_price_date of last update (Ex. 07/07/2022 (today) == 07/07/2022 (last update))
+    amazon_prices.length > 2 &&
+    yourDate.toISOString().split('T')[0] ==
       amazon_prices[amazon_prices.length - 1].product_price_date
-    ) {
-      req.session.url = req.originalUrl;
-      res.redirect('/api/as/prices/id/' + id);
-    } else res.status(200).json(amazon_prices);
-  } else {
-    //Store current url in express sessions
-    req.session.url = req.originalUrl;
-    res.redirect('/api/as/prices/id/' + id);
+  )
+    res.status(200).json({ data: amazon_prices });
+  else {
+    getRequestWithAxios('http://localhost:5000/api/as/prices/id/' + id)
+      .then(async response => {
+        if (response.status == 200) {
+          amazon_prices = await AmazonProductPrices.find({
+            product_id: id,
+          });
+          //If program succesfuly scraped new data and then found them in database
+          if (
+            amazon_prices.length > 2 &&
+            yourDate.toISOString().split('T')[0] ==
+              amazon_prices[amazon_prices.length - 1].product_price_date
+          ) {
+            res.status(200).json({
+              status: 'success',
+              message:
+                'Product price successfully was successfully scraped and added to database',
+              data: amazon_prices,
+            });
+          } else {
+            res.status(404).json({
+              status: 'error',
+              error: 'NOT FOUND',
+              message:
+                'Program tried to scrape product price but it didnt find any data',
+            });
+          }
+        }
+      })
+      .catch((err: AxiosError) => {
+        axiosErrorHandler(err, res);
+      });
   }
 };
 
