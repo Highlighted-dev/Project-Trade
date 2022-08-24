@@ -41,10 +41,10 @@ const ProductWebsiteTemplate = () => {
   ) => {
     fetch(url + productId, requestOptions)
       .then(async response => await response.json())
-      .then(data => {
-        //If json is not empty set data, else set empty array\
-
-        if (data.length > 0) setProductData(data);
+      .then(response => {
+        console.log(response.data);
+        //If json is not empty set data, else set empty array
+        if (response.data.length > 0) setProductData(response.data);
         else setProductData([]);
       })
       .catch(e => {
@@ -128,7 +128,6 @@ const ProductWebsiteTemplate = () => {
   };
 
   const setUpPriceChart = () => {
-    setChartsSetupDone(false);
     if (prices.length > 0) {
       console.log('tst');
       const labels = prices.map(price => price.product_price_date);
