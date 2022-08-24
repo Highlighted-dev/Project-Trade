@@ -102,7 +102,11 @@ const getAmazonProductData = async (
   });
   //If json is not empty that means program found data
   if (amazon_product_data.length > 0) {
-    res.status(200).json(amazon_product_data);
+    res.status(200).json({
+      status: 'success',
+      message: 'items found!',
+      data: amazon_product_data,
+    });
   } else {
     //Program didn't find any data, but it's okay becouse sometimes there isn't this type of data on Amazon
     res.status(200).json([{}]);
@@ -141,16 +145,43 @@ const getAmazonHighResImages = async (req: Request, res: Response) => {
   const amazon_product_highres_images = await AmazonProductHighResImages.find({
     product_id: id,
   });
-  if (amazon_product_highres_images.length > 3) {
-    res.status(200).json(amazon_product_highres_images);
-  }
-  //In case if amazon scraper didn't find any items
-  else if (req.session.url == req.originalUrl) {
-    res.status(404).send();
+
+  if (amazon_product_highres_images.length > 2) {
+    res.status(200).json({
+      status: 'success',
+      message: 'Highres images found!',
+      data: amazon_product_highres_images,
+    });
   } else {
-    //Store current url in express sessions
-    req.session.url = req.originalUrl;
-    res.redirect('/api/as/highRes/id/' + id);
+    //If program didn't found data, it will try to scrape it with amazons scraper.
+    getRequestWithAxios('http://localhost:5000/api/as/highRes/id/' + id)
+      .then(async response => {
+        if (response.status == 200) {
+          const amazon_product_highres_images =
+            await AmazonProductHighResImages.find({
+              product_id: id,
+            });
+
+          if (amazon_product_highres_images.length > 2) {
+            res.status(200).json({
+              status: 'success',
+              message:
+                'Product data successfully scraped and added to database.',
+              data: amazon_product_highres_images,
+            });
+          } else {
+            res.status(404).json({
+              status: 'error',
+              error: 'NOT FOUND',
+              message:
+                'Program tried to scrape product price but it didnt find any new data',
+            });
+          }
+        }
+      })
+      .catch((err: AxiosError) => {
+        axiosErrorHandler(err, res);
+      });
   }
 };
 const getAmazonPrice = async (req: Request, res: Response) => {
@@ -170,7 +201,11 @@ const getAmazonPrice = async (req: Request, res: Response) => {
     yourDate.toISOString().split('T')[0] ==
       amazon_prices[amazon_prices.length - 1].product_price_date
   )
-    res.status(200).json({ data: amazon_prices });
+    res.status(200).json({
+      status: 'success',
+      message: 'Product prices found!',
+      data: amazon_prices,
+    });
   else {
     getRequestWithAxios('http://localhost:5000/api/as/prices/id/' + id)
       .then(async response => {
@@ -195,7 +230,7 @@ const getAmazonPrice = async (req: Request, res: Response) => {
               status: 'error',
               error: 'NOT FOUND',
               message:
-                'Program tried to scrape product price but it didnt find any data',
+                'Program tried to scrape product price but it didnt find any new data',
             });
           }
         }
