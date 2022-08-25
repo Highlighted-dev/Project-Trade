@@ -6,7 +6,6 @@ from ..items import AmazonItemPrice
 import logging
 from scrapy_splash import SplashFormRequest
 from datetime import date
-
 class AmazonProductPrices(scrapy.Spider):
     def __init__(self, prod_id=None, string_of_many_prod_ids=None):
         self.start_urls = []
@@ -30,9 +29,11 @@ class AmazonProductPrices(scrapy.Spider):
             raise ValueError('No product id found')
                     
     name = 'AmazonProductPrices'
+    allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
-        prices = AmazonItemPrice()
         try:
+            prices = AmazonItemPrice()
+            self.product_id = response.url.split('https://www.amazon.de/-/en/dp/')[1]
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
             else:
