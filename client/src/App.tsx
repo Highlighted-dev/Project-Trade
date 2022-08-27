@@ -68,7 +68,7 @@ const App: FC = () => (
               }
             />
             <Route
-              path="/Product/:productId"
+              path="/Product/:product_id"
               element={
                 <SignedUserRoute>
                   <ProductWebsiteTemplate />

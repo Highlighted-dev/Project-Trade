@@ -9,9 +9,9 @@ import LineChart from '../../components/ts/LineChart';
 import axios, { AxiosError } from 'axios';
 
 const ProductWebsiteTemplate = () => {
-  const { productId } = useParams();
+  const { product_id } = useParams();
   const { authState } = useContext(AuthContext);
-  const [changingProductId, setChangingProductId] = useState(productId);
+  const [changingProductId, setChangingProductId] = useState(product_id);
   const [isProudctInFavourites, setIsProudctInFavourites] = useState<boolean>(false);
   const [changingFavouriteStatus, setChangingFavouriteStatus] = useState<boolean>(false);
   const [details, setDetails] = useState<any[]>([]);
@@ -39,7 +39,7 @@ const ProductWebsiteTemplate = () => {
     url: string,
     setProductData: (arg0: never[]) => void,
   ) => {
-    fetch(url + productId, requestOptions)
+    fetch(url + product_id, requestOptions)
       .then(async response => await response.json())
       .then(response => {
         //If json is not empty set data, else set empty array
@@ -85,7 +85,7 @@ const ProductWebsiteTemplate = () => {
   const checkIfItemIsInFavourites = async () => {
     await axios
       //Ex. url = /api/favourites/62cf26e4d9db05c765c888ee/B014I8SIJY
-      .get('/api/favourites/check/' + authState._id + '/' + productId)
+      .get('/api/favourites/check/' + authState._id + '/' + product_id)
       .then(response => response.data)
       .then(responseData => {
         responseData.data ? setIsProudctInFavourites(true) : setIsProudctInFavourites(false);
@@ -105,7 +105,7 @@ const ProductWebsiteTemplate = () => {
         url: '/api/favourites/',
         data: {
           user_id: user_id,
-          product_id: productId,
+          product_id: product_id,
         },
       })
       .then(response => response.data)
@@ -122,19 +122,18 @@ const ProductWebsiteTemplate = () => {
 
   const setUpPriceChart = () => {
     if (prices.length > 0) {
-      //TODO
       setChartsData(prices);
       setChartsSetupDone(true);
     }
   };
 
   useEffect(() => {
-    setChangingProductId(productId);
+    setChangingProductId(product_id);
     clearStates();
     const requestOptions = {
       method: 'GET',
     };
-    fetch('/api/ap/checkProduct/id/' + productId, requestOptions)
+    fetch('/api/ap/checkProduct/id/' + product_id, requestOptions)
       .then(async response => {
         if (response.status === 200) {
           return true;
@@ -158,6 +157,9 @@ const ProductWebsiteTemplate = () => {
         fetchProductData(requestOptions, '/api/ap/id/', setProductBasicInformations);
       })
       .then(() => {
+        checkIfItemIsInFavourites();
+      })
+      .then(() => {
         fetchProductData(requestOptions, '/api/ap/prices/id/', setPrices);
       })
       .then(() => {
@@ -166,7 +168,7 @@ const ProductWebsiteTemplate = () => {
       .catch(e => {
         console.log(e);
       });
-  }, [productId]);
+  }, [product_id]);
   useEffect(() => {
     checkIfItemIsInFavourites();
   }, [authState]);
