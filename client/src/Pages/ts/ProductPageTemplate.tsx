@@ -6,12 +6,14 @@ import AuthContext from '../../components/ts/AuthContext';
 var alertify = require('alertifyjs');
 import 'alertifyjs/build/css/alertify.css';
 import LineChart from '../../components/ts/LineChart';
+import axios, { AxiosError } from 'axios';
 
 const ProductWebsiteTemplate = () => {
   const { productId } = useParams();
   const { authState } = useContext(AuthContext);
   const [changingProductId, setChangingProductId] = useState(productId);
   const [isProudctInFavourites, setIsProudctInFavourites] = useState<boolean>(false);
+  const [changingFavouriteStatus, setChangingFavouriteStatus] = useState<boolean>(false);
   const [details, setDetails] = useState<any[]>([]);
   const [images, setImages] = useState<any[]>([]);
   const [technicalDetails, setTechnicalDetails] = useState<any[]>([]);
@@ -80,48 +82,42 @@ const ProductWebsiteTemplate = () => {
     content?.classList.toggle('expand');
   };
 
-  const itemCheck = async (user_id: string) => {
-    //Check if item is in favourites
-    const response = await fetch('/api/favourites/check', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_id: user_id,
-        product_id: productId,
-      }),
-    });
-    //Response 200 means that item is already in favourites
-    if (response.status == 200) return true;
-    return false;
+  const checkIfItemIsInFavourites = async () => {
+    await axios
+      //Ex. url = /api/favourites/62cf26e4d9db05c765c888ee/B014I8SIJY
+      .get('/api/favourites/check/' + authState._id + '/' + productId)
+      .then(response => response.data)
+      .then(responseData => {
+        responseData.data ? setIsProudctInFavourites(true) : setIsProudctInFavourites(false);
+      })
+      .catch((err: AxiosError) => {
+        console.error(err);
+      });
   };
 
   //This function is used to add or remove product from favourites
   const addOrRemoveFromFavourites = async (user_id: string) => {
-    //Check if item is in favourites
-    const isInFavourites = await itemCheck(user_id);
-    const url = '/api/favourites/' + (isInFavourites ? 'remove' : 'add');
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_id: user_id,
-        product_id: productId,
-      }),
-    });
-    const responseData = await response.json();
-    //Change favourite icon after adding or removing item from favourites
-    changeFavouritesIcon(user_id);
-    !isInFavourites ? alertify.success(responseData.message) : alertify.error(responseData.message);
-  };
-
-  //This function is used to change favourites icon. If item is in favourites, change icon to white filled heart, else change to white outline heart
-  const changeFavouritesIcon = async (user_id: string) => {
-    if (await itemCheck(user_id)) setIsProudctInFavourites(true);
-    else setIsProudctInFavourites(false);
+    setChangingFavouriteStatus(true);
+    await checkIfItemIsInFavourites();
+    axios
+      .request({
+        method: isProudctInFavourites ? 'delete' : 'post',
+        url: '/api/favourites/',
+        data: {
+          user_id: user_id,
+          product_id: productId,
+        },
+      })
+      .then(response => response.data)
+      .then(async responseData => {
+        if (responseData.message) {
+          await checkIfItemIsInFavourites();
+          !isProudctInFavourites
+            ? alertify.success(responseData.message)
+            : alertify.error(responseData.message);
+        }
+        setChangingFavouriteStatus(false);
+      });
   };
 
   const setUpPriceChart = () => {
@@ -172,7 +168,7 @@ const ProductWebsiteTemplate = () => {
       });
   }, [productId]);
   useEffect(() => {
-    changeFavouritesIcon(authState._id);
+    checkIfItemIsInFavourites();
   }, [authState]);
   useEffect(() => {
     setUpPriceChart();
@@ -236,9 +232,7 @@ const ProductWebsiteTemplate = () => {
                       <h4>100 Reviews</h4>
                     </div>
                     <h3>
-                      {product.product_sale_price == null
-                        ? '0.00€'
-                        : product.product_sale_price + '€'}
+                      {product.product_sale_price ? '0.00€' : product.product_sale_price + '€'}
                     </h3>
                   </div>
                 ))
@@ -309,15 +303,19 @@ const ProductWebsiteTemplate = () => {
           )}
           <div id="favourites">
             {isProudctInFavourites ? (
-              <AiFillHeart
-                className="favImage"
+              <button
+                disabled={changingFavouriteStatus}
                 onClick={() => addOrRemoveFromFavourites(authState._id)}
-              />
+              >
+                <AiFillHeart className="favImage" />
+              </button>
             ) : (
-              <AiOutlineHeart
-                className="favImage"
+              <button
+                disabled={changingFavouriteStatus}
                 onClick={() => addOrRemoveFromFavourites(authState._id)}
-              />
+              >
+                <AiOutlineHeart className="favImage" />
+              </button>
             )}
           </div>
         </div>

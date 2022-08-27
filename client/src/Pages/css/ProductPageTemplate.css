@@ -154,10 +154,11 @@ h3 {
 }
 #productData #favourites {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 4px;
-  font-size: 22px;
+  bottom: 30px;
+  right: 30px;
+  width: 0;
+  height: 0;
+  font-size: 24px;
   transition: 0.2s ease-in-out;
 }
 #productData #favourites:hover {

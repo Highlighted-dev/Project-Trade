@@ -2,6 +2,7 @@ import { Key, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../components/ts/AuthContext';
 import '../css/Favourites.css';
+import axios from 'axios';
 
 const Favourites = () => {
   interface IProduct {
@@ -16,17 +17,20 @@ const Favourites = () => {
 
   //Get user favourites from database
   const getFavourites = async (user_id: string) => {
-    const response = await fetch('/api/favourites/get/' + user_id, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const responseData = await response.json();
-    setFavourites(responseData.data);
-    favourites.forEach((favourite: any) => {
-      getDataAboutFavourite(favourite.product_id);
-    });
+    if (user_id) {
+      axios
+        .get('/api/favourites/' + user_id)
+        .then(res => res.data)
+        .then(responseData => {
+          setFavourites(responseData.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      favourites.forEach((favourite: any) => {
+        getDataAboutFavourite(favourite.product_id);
+      });
+    }
   };
 
   //Get product data with "x" id from api
@@ -62,7 +66,7 @@ const Favourites = () => {
   ]);
 
   useEffect(() => {
-    if (favourites.length > 0) {
+    if (favourites) {
       favourites.map((favourite: any) => {
         getDataAboutFavourite(favourite.product_id);
       });
