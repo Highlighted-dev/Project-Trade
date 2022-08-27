@@ -71,7 +71,7 @@ router.get('/updatePrices', async (req: Request, res: Response) => {
       })
         .then(response => {
           res.status(200).json({
-            status: 'success',
+            status: 'ok',
             message: 'Prices updated',
             data: response.data,
           });
@@ -98,7 +98,7 @@ const getAmazonProductData = async (
   //If json is not empty that means program found data
   if (amazon_product_data.length > 0) {
     res.status(200).json({
-      status: 'success',
+      status: 'ok',
       message: 'items found!',
       data: amazon_product_data,
     });
@@ -116,14 +116,14 @@ const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
   });
   //If amazon_product_data is not empty that means program found data
   if (amazon_product_data.length > 2) {
-    res.status(200).json({ status: 'success', message: 'Product Data found' });
+    res.status(200).json({ status: 'ok', message: 'Product Data found' });
   } else {
     //If program didn't found data, it will try to scrape it with amazons scraper.
     getRequestWithAxios('http://localhost:5000/api/as/id/' + id)
       .then(response => {
         if (response.status == 200) {
           res.status(200).json({
-            status: 'success',
+            status: 'ok',
             message: 'Product data successfully scraped and added to database.',
             data: response.data,
           });
@@ -143,7 +143,7 @@ const getAmazonHighResImages = async (req: Request, res: Response) => {
 
   if (amazon_product_highres_images.length > 2) {
     res.status(200).json({
-      status: 'success',
+      status: 'ok',
       message: 'Highres images found!',
       data: amazon_product_highres_images,
     });
@@ -159,7 +159,7 @@ const getAmazonHighResImages = async (req: Request, res: Response) => {
 
           if (amazon_product_highres_images.length > 2) {
             res.status(200).json({
-              status: 'success',
+              status: 'ok',
               message:
                 'Product data successfully scraped and added to database.',
               data: amazon_product_highres_images,
@@ -196,7 +196,7 @@ const getAmazonPrice = async (req: Request, res: Response) => {
       amazon_prices[amazon_prices.length - 1].product_price_date
   )
     res.status(200).json({
-      status: 'success',
+      status: 'ok',
       message: 'Product prices found!',
       data: amazon_prices,
     });
@@ -214,9 +214,9 @@ const getAmazonPrice = async (req: Request, res: Response) => {
               amazon_prices[amazon_prices.length - 1].product_price_date
           ) {
             res.status(200).json({
-              status: 'success',
+              status: 'ok',
               message:
-                'Product price successfully was successfully scraped and added to database',
+                'Product price was successfully scraped and added to database',
               data: amazon_prices,
             });
           } else {

@@ -100,9 +100,7 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 168, //7 days,
         });
-        return res
-          .status(200)
-          .json({ status: 'success', message: 'login success' });
+        return res.status(200).json({ status: 'ok', message: 'login success' });
       }
       return res
         .status(400)
@@ -119,7 +117,7 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
 // logout user by deleting cookie.
 router.get('/logout', jsonParser, async (req: Request, res: Response) => {
   res.cookie('token', '', { maxAge: 1 });
-  res.status(200).json({ status: 'success', message: 'logout success' });
+  res.status(200).json({ status: 'ok', message: 'logout success' });
 });
 
 router.get(
