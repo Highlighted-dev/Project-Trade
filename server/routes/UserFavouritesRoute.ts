@@ -1,82 +1,91 @@
 import bodyParser from 'body-parser';
-import express, {
-  application,
-  Request,
-  response,
-  Response,
-  Router,
-} from 'express';
+import express, { Request, Response, Router } from 'express';
 import userFavouritesModel from '../models/UserFavouritesModel';
 
 const router: Router = express.Router();
 const jsonParser = bodyParser.json();
 
-router.post('/add', jsonParser, async (req: Request, res: Response) => {
+//Add a new favourite item to the user
+router.post('/', jsonParser, async (req: Request, res: Response) => {
   try {
+    if (!req.body.product_id || !req.body.user_id) {
+      throw new Error('Request values cannot be null');
+    }
     await userFavouritesModel.create({
       user_id: req.body.user_id,
       product_id: req.body.product_id,
     });
     return res
       .status(200)
-      .json({ status: 'success', message: 'Added to favourites!' });
-  } catch (e) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Something went wrong when adding an item to favourites!',
-    });
+      .json({ status: 'ok', message: 'Added to favourites!' });
+  } catch (err) {
+    errorHandler(err, res);
   }
 });
-router.post('/remove', jsonParser, async (req: Request, res: Response) => {
+
+//Remove favourite item from the database
+router.delete('/', jsonParser, async (req: Request, res: Response) => {
   try {
+    if (!req.body.product_id || !req.body.user_id) {
+      throw new Error('Request values cannot be null');
+    }
     await userFavouritesModel.deleteOne({
       user_id: req.body.user_id,
       product_id: req.body.product_id,
     });
     return res
       .status(200)
-      .json({ status: 'success', message: 'Removed from favourites!' });
-  } catch (e) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Something went wrong while removing item from favourites!',
-    });
+      .json({ status: 'ok', message: 'Removed from favourites!' });
+  } catch (err) {
+    errorHandler(err, res);
   }
 });
-router.post('/check', jsonParser, async (req: Request, res: Response) => {
-  try {
-    const userFavourites = await userFavouritesModel.findOne({
-      user_id: req.body.user_id,
-      product_id: req.body.product_id,
-    });
-    if (userFavourites) {
-      return res
-        .status(200)
-        .json({ status: 'success', message: 'Item is in favourites!' });
-    } else {
-      return res
-        .status(404)
-        .json({ status: 'error', message: 'Item is not in favourites!' });
+
+//Check if the user has a favourite item with the given product id
+router.get(
+  '/check/:user_id/:product_id',
+  jsonParser,
+  async (req: Request, res: Response) => {
+    try {
+      const { product_id, user_id } = req.params;
+      if (!product_id || !user_id) {
+        throw new Error('Request values cannot be null');
+      }
+      const userFavourites = await userFavouritesModel.findOne({
+        user_id: user_id,
+        product_id: product_id,
+      });
+      if (userFavourites) {
+        return res.status(200).json({
+          status: 'ok',
+          message: 'Item is in the favourites.',
+          data: userFavourites,
+        });
+      } else {
+        return res.status(200).json({
+          status: 'error',
+          message: 'Item is not in  the favourites!',
+          data: userFavourites,
+        });
+      }
+    } catch (err) {
+      errorHandler(err, res);
     }
-  } catch (e) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Something went wrong when checking if item is in favourites!',
-    });
   }
-});
-router.get('/get/:user_id', async (req: Request, res: Response) => {
+);
+//Get all favourites of a user
+router.get('/:user_id', async (req: Request, res: Response) => {
   const { user_id } = req.params;
+  if (!user_id) {
+    throw new Error('Request values cannot be null');
+  }
   try {
     const userFavourites = await userFavouritesModel.find({
       user_id: user_id,
     });
-    return res.status(200).json({ status: 'success', data: userFavourites });
-  } catch (e) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Something went wrong when getting favourites!',
-    });
+    return res.status(200).json({ status: 'ok', data: userFavourites });
+  } catch (err) {
+    errorHandler(err, res);
   }
 });
 router.get('/getAll', async (req: Request, res: Response) => {
@@ -85,7 +94,7 @@ router.get('/getAll', async (req: Request, res: Response) => {
     const userFavourites = await userFavouritesModel
       .find()
       .distinct('product_id');
-    return res.status(200).json({ status: 'success', data: userFavourites });
+    return res.status(200).json({ status: 'ok', data: userFavourites });
   } catch (e) {
     return res.status(400).json({
       status: 'error',
@@ -93,4 +102,20 @@ router.get('/getAll', async (req: Request, res: Response) => {
     });
   }
 });
+
+const errorHandler = (err: any, res: Response) => {
+  if (err instanceof Error)
+    return res.status(400).json({
+      status: 'error',
+      error: 'BAD REQUEST',
+      message: err.message,
+      logs: err.stack,
+    });
+  return res.status(400).json({
+    status: 'error',
+    error: 'BAD REQUEST',
+    message: 'Error message was not provided.',
+  });
+};
+
 export default router;
