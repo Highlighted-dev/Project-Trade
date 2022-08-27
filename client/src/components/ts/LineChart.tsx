@@ -107,7 +107,6 @@ const LineChart = ({ data }: any) => {
     return date.toISOString().split('T')[0];
   };
   const filterDates = () => {
-    console.log(chartData.map((product: any) => product.product_price_date));
     //Delcraing new array for labels and data
     const data_array = [...data];
 
