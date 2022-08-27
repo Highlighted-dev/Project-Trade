@@ -23,6 +23,8 @@
   overflow-y: auto;
   background-color: #fff;
   border: 1px solid rgba(13, 12, 22, 0.2);
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 #productInformations #images img {
   padding: 10px;
@@ -132,7 +134,7 @@ h3 {
   opacity: 1;
   visibility: visible;
   overflow: auto;
-  max-height: calc(15vw);
+  max-height: calc(13vw);
 }
 #productData .productDetails .productDetailsContent ol,
 #productData .productAbout .productAboutContent ol,
