@@ -10,9 +10,9 @@ const jsonParser = bodyParser.json();
 const getDirectoryBasedOnSystem = () => {
   switch (os.platform()) {
     case 'win32':
-      return '../amazonscraper';
+      return '../amazonscraper &';
     default:
-      return 'amazonscraper';
+      return '& cd amazonscraper &&';
   }
 };
 
@@ -33,7 +33,7 @@ const runAProductScraper = async (
           logs: error.message,
         });
       } else {
-        res.status(200).json({ status: 'success', logs: stdout });
+        res.status(200).json({ status: 'ok', logs: stdout });
       }
     }
   );
@@ -45,7 +45,7 @@ router.get('/id/:id', async (req: Request, res: Response) => {
   const command =
     'cd ' +
     getDirectoryBasedOnSystem() +
-    ' & scrapy crawl AmazonOneProductSpider -a prod_id="' +
+    ' scrapy crawl AmazonOneProductSpider -a prod_id="' +
     id +
     '"';
   runAProductScraper(req, res, command);
@@ -56,7 +56,7 @@ router.get('/highres/id/:id', async (req: Request, res: Response) => {
   const command =
     'cd ' +
     getDirectoryBasedOnSystem() +
-    ' & scrapy crawl AmazonGetHighResImages -a prod_id="' +
+    ' scrapy crawl AmazonGetHighResImages -a prod_id="' +
     id +
     '"';
   runAProductScraper(req, res, command);
@@ -67,7 +67,7 @@ router.get('/prices/id/:id', async (req: Request, res: Response) => {
   const command =
     'cd ' +
     getDirectoryBasedOnSystem() +
-    ' & scrapy crawl AmazonProductPrices -a prod_id="' +
+    ' scrapy crawl AmazonProductPrices -a prod_id="' +
     id +
     '"';
   runAProductScraper(req, res, command);
@@ -77,7 +77,7 @@ router.get('/prices/array', jsonParser, async (req: Request, res: Response) => {
   const command =
     'cd ' +
     getDirectoryBasedOnSystem() +
-    ' & scrapy crawl AmazonProductPrices -a string_of_many_prod_ids="' +
+    ' scrapy crawl AmazonProductPrices -a string_of_many_prod_ids="' +
     array +
     '"';
   runAProductScraper(req, res, command);
