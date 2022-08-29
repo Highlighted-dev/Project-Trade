@@ -166,9 +166,7 @@ const ProductWebsiteTemplate = () => {
       <div id="productInformations">
         <div id="images">
           <ul>
-            {images.length < 3 ? (
-              <li>loading data...</li>
-            ) : (
+            {images.length > 2 ? (
               images.map((product, key) => (
                 <li key={key}>
                   <img
@@ -182,6 +180,24 @@ const ProductWebsiteTemplate = () => {
                   />
                 </li>
               ))
+            ) : (
+              <>
+                <li>
+                  <div className="skeleton-images skeleton-loading" />
+                </li>
+                <li>
+                  <div className="skeleton-images skeleton-loading" />
+                </li>
+                <li>
+                  <div className="skeleton-images skeleton-loading" />
+                </li>
+                <li>
+                  <div className="skeleton-images skeleton-loading" />
+                </li>
+                <li>
+                  <div className="skeleton-images skeleton-loading" />
+                </li>
+              </>
             )}
           </ul>
         </div>
@@ -199,7 +215,9 @@ const ProductWebsiteTemplate = () => {
                 </li>
               ))
             ) : (
-              <li>loading...</li>
+              <li>
+                <div className={'skeleton-highresimage skeleton-loading'} />
+              </li>
             )}
           </ul>
           <br />
@@ -207,24 +225,42 @@ const ProductWebsiteTemplate = () => {
         <div id="productData">
           {
             //TODO Right now productBasicInformations will allways be bigger than 0, fix that
-            productBasicInformations.length > 0
-              ? productBasicInformations.map(product => (
-                  <div id="productBasicInformations">
+            productBasicInformations.length > 0 ? (
+              productBasicInformations.map(product => (
+                <div id="productBasicInformations">
+                  <div id="productBasicInformationsText">
                     <h1>{product.product_name}</h1>
-                    <div id="reviews">
-                      <AiOutlineStar className="icons" />
-                      <AiOutlineStar className="icons" />
-                      <AiOutlineStar className="icons" />
-                      <AiOutlineStar className="icons" />
-                      <AiOutlineStar className="icons" />
-                      <h4>100 Reviews</h4>
-                    </div>
+                  </div>
+                  <div id="reviews">
+                    <AiOutlineStar className="icons" />
+                    <AiOutlineStar className="icons" />
+                    <AiOutlineStar className="icons" />
+                    <AiOutlineStar className="icons" />
+                    <AiOutlineStar className="icons" />
+                    <h4>100 Reviews</h4>
+                  </div>
+                  <div id="price">
                     <h3>
                       {product.product_sale_price ? product.product_sale_price + '€' : '0.00€'}
                     </h3>
                   </div>
-                ))
-              : false
+                </div>
+              ))
+            ) : (
+              <div id="productBasicInformations">
+                <div id="productBasicInformationsText">
+                  <div className="skeleton-text skeleton-loading" />
+                  <div className="skeleton-text skeleton-loading" />
+                  <div className="skeleton-text skeleton-loading" />
+                </div>
+                <div id="reviews">
+                  <div className="skeleton-ratings skeleton-loading" />
+                </div>
+                <div id="price">
+                  <div className="skeleton-price skeleton-loading" />
+                </div>
+              </div>
+            )
           }
           {details.length > 1 ? (
             <div className="productDetails">
