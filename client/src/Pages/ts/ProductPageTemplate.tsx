@@ -22,7 +22,6 @@ const ProductWebsiteTemplate = () => {
   const [productBasicInformations, setProductBasicInformations] = useState<any[]>([]);
   const [prices, setPrices] = useState<any[]>([]);
   const [chartsData, setChartsData] = useState<any[]>([]);
-  const [chartsSetupDone, setChartsSetupDone] = useState<boolean>(false);
 
   const clearStates = () => {
     setImages([]);
@@ -34,16 +33,13 @@ const ProductWebsiteTemplate = () => {
     setPrices([]);
     setChartsData([]);
   };
-  const fetchProductData = (
-    requestOptions: RequestInit,
-    url: string,
-    setProductData: (arg0: never[]) => void,
-  ) => {
-    fetch(url + product_id, requestOptions)
-      .then(async response => await response.json())
-      .then(response => {
+  const getProductData = (url: string, setProductData: (arg0: never[]) => void) => {
+    axios
+      .get(url + product_id)
+      .then(async response => await response.data)
+      .then(responseData => {
         //If json is not empty set data, else set empty array
-        if (response.data) setProductData(response.data);
+        if (responseData.data) setProductData(responseData.data);
         else setProductData([]);
       })
       .catch(e => {
@@ -67,6 +63,7 @@ const ProductWebsiteTemplate = () => {
     const highResImage = 'highres' + (image.target as HTMLTextAreaElement).id;
     document.getElementById(highResImage)?.classList.toggle('highresSelected');
   };
+
   const hideContent = (className: string) => {
     const expanded = document.querySelector('.expand');
     /*
@@ -120,50 +117,37 @@ const ProductWebsiteTemplate = () => {
       });
   };
 
-  const setUpPriceChart = () => {
-    if (prices.length > 0) {
-      setChartsData(prices);
-      setChartsSetupDone(true);
-    }
-  };
-
   useEffect(() => {
     setChangingProductId(product_id);
     clearStates();
-    const requestOptions = {
-      method: 'GET',
-    };
-    fetch('/api/ap/checkProduct/id/' + product_id, requestOptions)
-      .then(async response => {
-        if (response.status === 200) {
-          return true;
-        } else {
-          return Promise.reject();
-        }
+    axios
+      .get('/api/ap/images/id/' + product_id)
+      .then(async response => response.data)
+      .then(responseData => {
+        if (responseData.data) {
+          setImages(responseData.data);
+        } else return Promise.reject(responseData.message);
       })
       .then(() => {
-        fetchProductData(requestOptions, '/api/ap/images/id/', setImages);
+        getProductData('/api/ap/technicalDetails/id/', setTechnicalDetails);
       })
       .then(() => {
-        fetchProductData(requestOptions, '/api/ap/technicalDetails/id/', setTechnicalDetails);
+        getProductData('/api/ap/details/id/', setDetails);
       })
       .then(() => {
-        fetchProductData(requestOptions, '/api/ap/details/id/', setDetails);
+        getProductData('/api/ap/about/id/', setAbouts);
       })
       .then(() => {
-        fetchProductData(requestOptions, '/api/ap/about/id/', setAbouts);
-      })
-      .then(() => {
-        fetchProductData(requestOptions, '/api/ap/id/', setProductBasicInformations);
+        getProductData('/api/ap/id/', setProductBasicInformations);
       })
       .then(() => {
         checkIfItemIsInFavourites();
       })
       .then(() => {
-        fetchProductData(requestOptions, '/api/ap/prices/id/', setPrices);
+        getProductData('/api/ap/prices/id/', setPrices);
       })
       .then(() => {
-        fetchProductData(requestOptions, '/api/ap/highResImages/id/', setHighResImages);
+        getProductData('/api/ap/highResImages/id/', setHighResImages);
       })
       .catch(e => {
         console.log(e);
@@ -173,7 +157,9 @@ const ProductWebsiteTemplate = () => {
     checkIfItemIsInFavourites();
   }, [authState]);
   useEffect(() => {
-    setUpPriceChart();
+    if (prices.length > 0) {
+      setChartsData(prices);
+    }
   }, [prices]);
   return (
     <div id="productPage">
@@ -201,7 +187,7 @@ const ProductWebsiteTemplate = () => {
         </div>
         <div id="highresImages">
           <ul>
-            {highResImages.length > 2 ? (
+            {highResImages.length > 0 ? (
               highResImages.map((product, key) => (
                 <li key={key}>
                   <img
@@ -234,7 +220,7 @@ const ProductWebsiteTemplate = () => {
                       <h4>100 Reviews</h4>
                     </div>
                     <h3>
-                      {product.product_sale_price ? '0.00€' : product.product_sale_price + '€'}
+                      {product.product_sale_price ? product.product_sale_price + '€' : '0.00€'}
                     </h3>
                   </div>
                 ))
@@ -323,7 +309,7 @@ const ProductWebsiteTemplate = () => {
         </div>
       </div>
       <div id="productPriceDiv">
-        {prices.length > 0 && chartsSetupDone ? (
+        {chartsData.length > 0 ? (
           <>
             <LineChart data={chartsData} />
           </>
