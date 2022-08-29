@@ -15,10 +15,6 @@ const router: Router = express.Router();
 router.get('/', async (req: Request, res: Response) => {
   res.json(await AmazonProductData.find());
 });
-//Check for product data
-router.get('/checkProduct/id/:id', async (req: Request, res: Response) =>
-  isProductDataAlreadyInDatabase(req, res)
-);
 //Get product by name
 router.get('/name/:name', async (req: Request, res: Response) => {
   const { name } = req.params;
@@ -40,7 +36,12 @@ router.get('/details/id/:id', async (req: Request, res: Response) =>
 
 //Get images by id
 router.get('/images/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductThumbImages)
+  getAmazonProductData(
+    req,
+    res,
+    AmazonProductThumbImages,
+    'http://localhost:5000/api/as/id/'
+  )
 );
 
 //Get product technical details by id
@@ -58,7 +59,12 @@ router.get('/prices/id/:id', (req: Request, res: Response) =>
 );
 //Get product high resolution images by id
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
-  getAmazonHighResImages(req, res)
+  getAmazonProductData(
+    req,
+    res,
+    AmazonProductHighResImages,
+    'http://localhost:5000/api/as/highRes/id/'
+  )
 );
 
 router.get('/updatePrices', async (req: Request, res: Response) => {
@@ -86,10 +92,11 @@ router.get('/updatePrices', async (req: Request, res: Response) => {
 });
 
 const getAmazonProductData = async (
-  //Request variable, Response variable, name of the model, if program should search for another data
+  //Request variable, Response variable, name of the model
   req: Request,
   res: Response,
-  modelName: Model<any, any, any, any>
+  modelName: Model<any, any, any, any>,
+  scrapingUrl: string = ''
 ) => {
   const { id } = req.params;
   const amazon_product_data = await modelName.find({
@@ -97,88 +104,40 @@ const getAmazonProductData = async (
   });
   //If json is not empty that means program found data
   if (amazon_product_data.length > 0) {
-    res.status(200).json({
+    return res.status(200).json({
       status: 'ok',
-      message: 'items found!',
+      message: 'data found!',
       data: amazon_product_data,
     });
-  } else {
-    //Program didn't find any data, but it's okay becouse sometimes there isn't this type of data on Amazon
-    res.status(200).json([{}]);
   }
-};
-
-//On Amazon, every product has at least 1 image. So If there are no images it means that there isn't any data about the product in database.
-const isProductDataAlreadyInDatabase = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const amazon_product_data = await AmazonProductThumbImages.find({
-    product_id: id,
-  });
-  //If amazon_product_data is not empty that means program found data
-  if (amazon_product_data.length > 2) {
-    res.status(200).json({ status: 'ok', message: 'Product Data found' });
-  } else {
-    //If program didn't found data, it will try to scrape it with amazons scraper.
-    getRequestWithAxios('http://localhost:5000/api/as/id/' + id)
-      .then(response => {
-        if (response.status == 200) {
-          res.status(200).json({
-            status: 'ok',
-            message: 'Product data successfully scraped and added to database.',
-            data: response.data,
-          });
-        }
-      })
-      .catch((err: AxiosError) => {
-        axiosErrorHandler(err, res);
-      });
-  }
-};
-
-const getAmazonHighResImages = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const amazon_product_highres_images = await AmazonProductHighResImages.find({
-    product_id: id,
-  });
-
-  if (amazon_product_highres_images.length > 2) {
-    res.status(200).json({
-      status: 'ok',
-      message: 'Highres images found!',
-      data: amazon_product_highres_images,
-    });
-  } else {
-    //If program didn't found data, it will try to scrape it with amazons scraper.
-    getRequestWithAxios('http://localhost:5000/api/as/highRes/id/' + id)
+  //If scraping url is set, program will try to scrape data. It will only be set for images(becouse every amazon product has at least 1 image) and highres images
+  else if (scrapingUrl.length > 0) {
+    getRequestWithAxios(scrapingUrl + id)
       .then(async response => {
         if (response.status == 200) {
-          const amazon_product_highres_images =
-            await AmazonProductHighResImages.find({
-              product_id: id,
-            });
-
-          if (amazon_product_highres_images.length > 2) {
-            res.status(200).json({
-              status: 'ok',
-              message:
-                'Product data successfully scraped and added to database.',
-              data: amazon_product_highres_images,
-            });
-          } else {
-            res.status(404).json({
-              status: 'error',
-              error: 'NOT FOUND',
-              message:
-                'Program tried to scrape product price but it didnt find any new data',
-            });
-          }
-        }
+          const amazon_product_data = await modelName.find({
+            product_id: id,
+          });
+          return res.status(200).json({
+            status: 'ok',
+            message: 'Product data successfully scraped and added to database.',
+            data: amazon_product_data,
+          });
+        } else return res.status(500).json(response.data);
       })
       .catch((err: AxiosError) => {
         axiosErrorHandler(err, res);
       });
   }
+
+  //Program didn't find any data, but it's okay becouse sometimes there isn't this type of data on Amazon
+  else {
+    return res
+      .status(200)
+      .json({ status: 'ok', message: 'Couldnt find the data' });
+  }
 };
+
 const getAmazonPrice = async (req: Request, res: Response) => {
   const { id } = req.params;
   var amazon_prices = await AmazonProductPrices.find({
