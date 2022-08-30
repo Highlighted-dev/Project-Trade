@@ -181,6 +181,7 @@ const ProductWebsiteTemplate = () => {
                 </li>
               ))
             ) : (
+              //Skeleton loading setup for price chart
               <>
                 <li>
                   <div className="skeleton-images skeleton-loading" />
@@ -215,6 +216,7 @@ const ProductWebsiteTemplate = () => {
                 </li>
               ))
             ) : (
+              //Skeleton loading setup for price chart
               <li>
                 <div className={'skeleton-highresimage skeleton-loading'} />
               </li>
@@ -239,7 +241,7 @@ const ProductWebsiteTemplate = () => {
                     <AiOutlineStar className="icons" />
                     <h4>100 Reviews</h4>
                   </div>
-                  <div id="price">
+                  <div className="center">
                     <h3>
                       {product.product_sale_price ? product.product_sale_price + '€' : '0.00€'}
                     </h3>
@@ -256,8 +258,8 @@ const ProductWebsiteTemplate = () => {
                 <div id="reviews">
                   <div className="skeleton-ratings skeleton-loading" />
                 </div>
-                <div id="price">
-                  <div className="skeleton-price skeleton-loading" />
+                <div className="center">
+                  <div className="skeleton-small-text skeleton-loading" />
                 </div>
               </div>
             )
@@ -350,7 +352,22 @@ const ProductWebsiteTemplate = () => {
             <LineChart data={chartsData} />
           </>
         ) : (
-          <h1>loading...</h1>
+          //Skeleton loading setup for price chart
+          <div id="priceChart">
+            <div className="center">
+              <div className="skeleton-small-text skeleton-loading" />
+            </div>
+            <div className="center">
+              <div className="skeleton-chart skeleton-loading" />
+            </div>
+            <div className="center">
+              <div className="skeleton-small-text skeleton-loading" />
+            </div>
+            <div className="center">
+              <div className="skeleton-small-text skeleton-loading" />
+              <div className="skeleton-small-text skeleton-loading" />
+            </div>
+          </div>
         )}
       </div>
     </div>
