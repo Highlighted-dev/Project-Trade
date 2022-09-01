@@ -9,87 +9,7 @@ import { Model } from 'mongoose';
 import AmazonProductPrices from '../models/AmazonProductPrices';
 import axios, { AxiosError } from 'axios';
 
-//Session variables interface for typescript
-
 const router: Router = express.Router();
-router.get('/', async (req: Request, res: Response) => {
-  res.json(await AmazonProductData.find());
-});
-//Get product by name
-router.get('/name/:name', async (req: Request, res: Response) => {
-  const { name } = req.params;
-  res.json(
-    await AmazonProductData.find({
-      product_name: { $regex: '^' + name, $options: 'i' },
-    })
-  );
-});
-//Get product by id
-router.get('/id/:id', async (req: Request, res: Response) => {
-  getAmazonProductData(req, res, AmazonProductData);
-});
-
-//Get details by id
-router.get('/details/id/:id', async (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductDetails)
-);
-
-//Get images by id
-router.get('/images/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(
-    req,
-    res,
-    AmazonProductThumbImages,
-    'http://localhost:5000/api/as/id/'
-  )
-);
-
-//Get product technical details by id
-router.get('/technicalDetails/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductTechnicalDetails)
-);
-
-//Get product about by id
-router.get('/about/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductAbout)
-);
-//Get product prices by id
-router.get('/prices/id/:id', (req: Request, res: Response) =>
-  getAmazonPrice(req, res)
-);
-//Get product high resolution images by id
-router.get('/highResImages/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(
-    req,
-    res,
-    AmazonProductHighResImages,
-    'http://localhost:5000/api/as/highRes/id/'
-  )
-);
-
-router.get('/updatePrices', async (req: Request, res: Response) => {
-  //Get all product ids from /api/favourites/getAll
-  getRequestWithAxios('http://localhost:5000/api/favourites/getAll')
-    .then(response => {
-      //Run amazon scraper to update price for every product id found in /api/favourites/getAll
-      getRequestWithAxios('http://localhost:5000/api/as/prices/array', {
-        array: response.data.data,
-      })
-        .then(response => {
-          res.status(200).json({
-            status: 'ok',
-            message: 'Prices updated',
-            data: response.data,
-          });
-        })
-        .catch((err: AxiosError) => {
-          axiosErrorHandler(err, res);
-        });
-    })
-    .catch((err: AxiosError) => {
-      axiosErrorHandler(err, res);
-    });
-});
 
 const getAmazonProductData = async (
   //Request variable, Response variable, name of the model
@@ -220,4 +140,84 @@ const axiosErrorHandler = (err: AxiosError, res: Response) => {
     message: err.message,
   });
 };
+
+router.get('/', async (req: Request, res: Response) => {
+  res.json(await AmazonProductData.find());
+});
+//Get product by name
+router.get('/name/:name', async (req: Request, res: Response) => {
+  const { name } = req.params;
+  res.json(
+    await AmazonProductData.find({
+      product_name: { $regex: '^' + name, $options: 'i' },
+    })
+  );
+});
+//Get product by id
+router.get('/id/:id', async (req: Request, res: Response) => {
+  getAmazonProductData(req, res, AmazonProductData);
+});
+
+//Get details by id
+router.get('/details/id/:id', async (req: Request, res: Response) =>
+  getAmazonProductData(req, res, AmazonProductDetails)
+);
+
+//Get images by id
+router.get('/images/id/:id', (req: Request, res: Response) =>
+  getAmazonProductData(
+    req,
+    res,
+    AmazonProductThumbImages,
+    'http://localhost:5000/api/as/id/'
+  )
+);
+
+//Get product technical details by id
+router.get('/technicalDetails/id/:id', (req: Request, res: Response) =>
+  getAmazonProductData(req, res, AmazonProductTechnicalDetails)
+);
+
+//Get product about by id
+router.get('/about/id/:id', (req: Request, res: Response) =>
+  getAmazonProductData(req, res, AmazonProductAbout)
+);
+//Get product prices by id
+router.get('/prices/id/:id', (req: Request, res: Response) =>
+  getAmazonPrice(req, res)
+);
+//Get product high resolution images by id
+router.get('/highResImages/id/:id', (req: Request, res: Response) =>
+  getAmazonProductData(
+    req,
+    res,
+    AmazonProductHighResImages,
+    'http://localhost:5000/api/as/highRes/id/'
+  )
+);
+
+router.get('/updatePrices', async (req: Request, res: Response) => {
+  //Get all product ids from /api/favourites/getAll
+  getRequestWithAxios('http://localhost:5000/api/favourites/getAll')
+    .then(response => {
+      //Run amazon scraper to update price for every product id found in /api/favourites/getAll
+      getRequestWithAxios('http://localhost:5000/api/as/prices/array', {
+        array: response.data.data,
+      })
+        .then(response => {
+          res.status(200).json({
+            status: 'ok',
+            message: 'Prices updated',
+            data: response.data,
+          });
+        })
+        .catch((err: AxiosError) => {
+          axiosErrorHandler(err, res);
+        });
+    })
+    .catch((err: AxiosError) => {
+      axiosErrorHandler(err, res);
+    });
+});
+
 export default router;

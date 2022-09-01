@@ -5,6 +5,21 @@ import userFavouritesModel from '../models/UserFavouritesModel';
 const router: Router = express.Router();
 const jsonParser = bodyParser.json();
 
+const errorHandler = (err: any, res: Response) => {
+  if (err instanceof Error)
+    return res.status(400).json({
+      status: 'error',
+      error: 'BAD REQUEST',
+      message: err.message,
+      logs: err.stack,
+    });
+  return res.status(400).json({
+    status: 'error',
+    error: 'BAD REQUEST',
+    message: 'Error message was not provided.',
+  });
+};
+
 //Add a new favourite item to the user
 router.post('/', jsonParser, async (req: Request, res: Response) => {
   try {
@@ -102,20 +117,5 @@ router.get('/getAll', async (req: Request, res: Response) => {
     });
   }
 });
-
-const errorHandler = (err: any, res: Response) => {
-  if (err instanceof Error)
-    return res.status(400).json({
-      status: 'error',
-      error: 'BAD REQUEST',
-      message: err.message,
-      logs: err.stack,
-    });
-  return res.status(400).json({
-    status: 'error',
-    error: 'BAD REQUEST',
-    message: 'Error message was not provided.',
-  });
-};
 
 export default router;
