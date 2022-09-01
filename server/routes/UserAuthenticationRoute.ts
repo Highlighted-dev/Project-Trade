@@ -70,6 +70,7 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
   } else {
     return res.status(400).json({
       status: 'error',
+      error: 'BAD REQUEST',
       message:
         'Request values cannot be null. Password must contain at least one number and one uppercase letter and email must be valid(by rfc822 standard)',
     });
@@ -107,8 +108,9 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
         .json({ status: 'error', message: 'You are already logged in' });
     }
   } catch (e) {
-    res.json({
+    res.status(400).json({
       status: 'error',
+      error: 'BAD REQUEST',
       message: 'Something went wrong when trying to sign in User',
     });
   }
@@ -130,15 +132,17 @@ router.get(
     if (!request_token) {
       //We want to return status code 200, becouse it just means user did not login yet, it is not an error.
       return res
-        .status(400)
-        .json({ status: 'error', message: 'User is not logged in.' });
+        .status(200)
+        .json({ status: 'ok', message: 'User is not logged in.' });
     }
     try {
       //Verify token
       if (!jwt.verify(request_token, process.env.JWT_SECRET)) {
-        return res
-          .status(400)
-          .json({ status: 'error', message: 'Token is not valid' });
+        return res.status(400).json({
+          status: 'error',
+          error: 'BAD REQUEST',
+          message: 'Token is not valid',
+        });
       } else {
         auth = true;
       }
@@ -153,9 +157,11 @@ router.get(
       ) as IUserModel;
       userModel.findById(data._id).exec((err, user) => {
         if (err || !user) {
-          return res
-            .status(400)
-            .json({ status: 'error', message: 'User not found' });
+          return res.status(400).json({
+            status: 'error',
+            error: 'BAD REQUEST',
+            message: 'User not found',
+          });
         }
         //If user is found
         const { _id, username, email } = user;
