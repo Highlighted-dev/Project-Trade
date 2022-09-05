@@ -3,29 +3,42 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../css/SignPages.css';
 import { AuthContext } from '../../components/ts/AuthContext';
 
+var alertify = require('alertifyjs');
+
 const Login = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate();
+
   const handleSignIn = async () => {
-    setError(null);
-    //If emailRef and passordRef aren't null
-    if (emailRef.current && passwordRef.current) {
-      setLoading(true);
-      const email = emailRef.current.value;
-      const password = passwordRef.current.value;
-      login(email, password);
-      setLoading(false);
+    if (validateSignIn()) {
+      //If emailRef and passordRef aren't null
+      if (emailRef.current && passwordRef.current) {
+        setLoading(true);
+        const email = emailRef.current.value;
+        const password = passwordRef.current.value;
+        login(email, password);
+        setLoading(false);
+      }
     }
+  };
+
+  const validateSignIn = () => {
+    if (!emailRef.current.value || !passwordRef.current.value) {
+      alertify.error('Email or password is not set');
+      return false;
+    }
+    if (emailRef.current.value.length < 6 || passwordRef.current.value.length < 6) {
+      alertify.error('Email and password must be at least 6 characters long');
+      return false;
+    }
+    return true;
   };
 
   return (
     <div id="SignPage">
       <h1>Login</h1>
-      <div className={error ? 'bar active' : 'bar'}>{error}</div>
       <div id="SignPageForm">
         <div className="inputField">
           <input ref={emailRef} type="text" required />

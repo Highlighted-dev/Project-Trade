@@ -1,7 +1,20 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-export const AuthContext = createContext<any>(null);
+import axios, { AxiosError } from 'axios';
 
+var alertify = require('alertifyjs');
+
+export type IAxiosErrorRestApi = AxiosError & {
+  response: {
+    data: {
+      error: string;
+      status: string;
+      message: string;
+    };
+  };
+};
+
+export const AuthContext = createContext<any>(null);
 export const AuthProvider = (props: any) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
@@ -12,28 +25,29 @@ export const AuthProvider = (props: any) => {
   });
   // isAuthenticated checks If user has a working token - If he has, he is authenticated so this function will return his data as a response.json().
   const isAuthenticated = async () => {
-    return await fetch('/api/auth/isAuthenticated', {
-      method: 'GET',
-    })
-      .then(res => res.json())
-      .catch(err => console.log(err));
+    return await axios.get('/api/auth/isAuthenticated').then(async response => response.data);
   };
   // loadData loads data from api and sets it to the authState.
   const loadData = async () => {
     setLoading(true);
     isAuthenticated()
-      .then(data => {
-        if (data.status == 'error') {
-          console.log(data.message);
+      .then(responseData => {
+        if (responseData.isUserLoggedIn === false) {
+          return;
+        } else if (responseData.error) {
+          console.log(responseData.error, responseData.message);
         } else {
+          //If user is logged in(there is a cookie with token), set authState to user data
           setAuthState({
-            _id: data.user._id,
-            username: data.user.username,
-            email: data.user.email,
+            _id: responseData.user._id,
+            username: responseData.user.username,
+            email: responseData.user.email,
           });
         }
-        return data;
+        return responseData;
       })
+      .catch(err => console.log(err))
+
       .then(() => {
         setLoading(false);
       });
@@ -57,20 +71,19 @@ export const AuthProvider = (props: any) => {
 
   // login logs user in and sets his data to the authState.
   const login = async (email: string, password: string) => {
-    const response = await fetch('/api/auth/login/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    axios
+      .post('/api/auth/login/', {
         email,
         password,
-      }),
-    });
-    if (response.status == 200) {
-      loadData();
-      navigate('/');
-    }
+      })
+      .then(response => response.data)
+      .then(responseData => {
+        if (responseData.isUserLoggedIn === true) {
+          loadData();
+          navigate('/Login');
+        }
+      })
+      .catch((err: IAxiosErrorRestApi) => axiosErrorHandler(err));
   };
 
   // logout logs user out and sets authState to null.
@@ -88,6 +101,12 @@ export const AuthProvider = (props: any) => {
         email: null,
       });
       navigate('/Login');
+    }
+  };
+  const axiosErrorHandler = (err: IAxiosErrorRestApi) => {
+    //If the request was made and the server responded.
+    if (err.response) {
+      alertify.error(err.response.data.message);
     }
   };
   useEffect(() => {

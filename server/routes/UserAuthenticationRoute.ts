@@ -78,35 +78,47 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
 });
 router.post('/login', jsonParser, async (req: Request, res: Response) => {
   try {
+    //Try to find user by email
     const user = await userModel.findOne({
       email: req.body.email,
     });
-    //bcrypt compares function compares password with hashed password in database. If password is not valid, return error.
-    const isPasswordValid = await bcrypt.compare(
-      req.body.password,
-      user!.password
-    );
-    //If password is valid and user is found, return token.
-    if (isPasswordValid && user) {
-      const token = jwt.sign(
-        {
-          _id: user._id,
-        },
-        process.env.JWT_SECRET
+
+    if (user) {
+      //bcrypt compares function compares password with hashed password in database. If password is not valid, return error.
+      const isPasswordValid = await bcrypt.compare(
+        req.body.password,
+        user!.password
       );
-      const cookie = req.cookies.token;
-      //If cookie is already set, return error. If cookie is not set, set cookie.
-      if (cookie == undefined) {
-        res.cookie('token', token, {
-          httpOnly: true,
-          maxAge: 1000 * 60 * 60 * 168, //7 days,
-        });
-        return res.status(200).json({ status: 'ok', message: 'login success' });
+
+      //If password is valid and user is found, return token.
+      if (isPasswordValid) {
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+        const cookie = req.cookies.token;
+        //If cookie is already set, return error. If cookie is not set, set cookie.
+        if (cookie == undefined) {
+          res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 168, //7 days,
+          });
+          return res.status(200).json({
+            status: 'ok',
+            message: 'login success',
+            isUserLoggedIn: true,
+          });
+        }
+        return res
+          .status(400)
+          .json({ status: 'error', message: 'You are already logged in' });
       }
+      //If password is not valid, return error.
       return res
         .status(400)
-        .json({ status: 'error', message: 'You are already logged in' });
+        .json({ status: 'error', message: 'Password is not valid' });
     }
+    //If user is not found, return error.
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'Email is not valid' });
   } catch (e) {
     res.status(400).json({
       status: 'error',
@@ -131,9 +143,11 @@ router.get(
     //If Request token is not set
     if (!request_token) {
       //We want to return status code 200, becouse it just means user did not login yet, it is not an error.
-      return res
-        .status(200)
-        .json({ status: 'ok', message: 'User is not logged in.' });
+      return res.status(200).json({
+        status: 'ok',
+        message: 'User is not logged in.',
+        isUserLoggedIn: false,
+      });
     }
     try {
       //Verify token

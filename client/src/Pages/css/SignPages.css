@@ -86,9 +86,16 @@
   cursor: pointer;
   transition: 0.5s ease;
 }
+#SignPageForm button:disabled {
+  background-color: #49475a;
+  cursor: default;
+}
 #SignPageForm button:hover {
   background-color: #0d0c16;
   transition: 0.5s ease;
+}
+#SignPageForm button:disabled:hover {
+  background-color: #393750;
 }
 #createAccount {
   margin: 30px 0;
