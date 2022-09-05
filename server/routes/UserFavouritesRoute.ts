@@ -89,32 +89,21 @@ router.get(
   }
 );
 //Get all favourites of a user
-router.get('/:user_id', async (req: Request, res: Response) => {
+router.get('/:user_id?', async (req: Request, res: Response) => {
   const { user_id } = req.params;
   if (!user_id) {
-    throw new Error('Request values cannot be null');
+    var userFavourites = await userFavouritesModel
+      .find()
+      .distinct('product_id');
+    return res.status(200).json({ status: 'ok', data: userFavourites });
   }
   try {
-    const userFavourites = await userFavouritesModel.find({
+    userFavourites = await userFavouritesModel.find({
       user_id: user_id,
     });
     return res.status(200).json({ status: 'ok', data: userFavourites });
   } catch (err) {
     errorHandler(err, res);
-  }
-});
-router.get('/getAll', async (req: Request, res: Response) => {
-  try {
-    // Get all product_id's in favourites without duplicates.
-    const userFavourites = await userFavouritesModel
-      .find()
-      .distinct('product_id');
-    return res.status(200).json({ status: 'ok', data: userFavourites });
-  } catch (e) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Something went wrong when getting favourites!',
-    });
   }
 });
 
