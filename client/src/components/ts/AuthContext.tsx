@@ -14,11 +14,17 @@ export type IAxiosErrorRestApi = AxiosError & {
   };
 };
 
+export type IUser = {
+  _id: string | null;
+  username: string | null;
+  email: string | null;
+};
+
 export const AuthContext = createContext<any>(null);
 export const AuthProvider = (props: any) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
-  const [authState, setAuthState] = useState({
+  const [authState, setAuthState] = useState<IUser>({
     _id: null,
     username: null,
     email: null,
@@ -53,20 +59,18 @@ export const AuthProvider = (props: any) => {
       });
   };
   const register = async (username: string, email: string, password: string) => {
-    const response = await fetch('/api/auth/register/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    axios
+      .post('/api/auth/register/', {
         username,
         email,
         password,
-      }),
-    });
-    if (response.status == 200) {
-      login(email, password);
-    }
+      })
+      .then(response => response.data)
+      .then(responseData => {
+        if (responseData.status === 'ok') {
+          login(email, password);
+        }
+      });
   };
 
   // login logs user in and sets his data to the authState.
@@ -80,7 +84,7 @@ export const AuthProvider = (props: any) => {
       .then(responseData => {
         if (responseData.isUserLoggedIn === true) {
           loadData();
-          navigate('/Login');
+          navigate('/');
         }
       })
       .catch((err: IAxiosErrorRestApi) => axiosErrorHandler(err));
