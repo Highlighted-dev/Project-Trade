@@ -153,6 +153,21 @@ router.get('/name/:name', async (req: Request, res: Response) => {
     })
   );
 });
+
+router.get('/array', async (req: Request, res: Response) => {
+  const { array }: any = req.query;
+  const object_of_ids = array.map((id: string) => {
+    return id;
+  });
+  res.json(
+    await AmazonProductData.find({
+      product_id: {
+        $in: object_of_ids,
+      },
+    })
+  );
+});
+
 //Get product by id
 router.get('/id/:id', async (req: Request, res: Response) => {
   getAmazonProductData(req, res, AmazonProductData);
@@ -198,7 +213,7 @@ router.get('/highResImages/id/:id', (req: Request, res: Response) =>
 
 router.get('/updatePrices', async (req: Request, res: Response) => {
   //Get all product ids from /api/favourites/getAll
-  getRequestWithAxios('http://localhost:5000/api/favourites/getAll')
+  getRequestWithAxios('http://localhost:5000/api/favourites/')
     .then(response => {
       //Run amazon scraper to update price for every product id found in /api/favourites/getAll
       getRequestWithAxios('http://localhost:5000/api/as/prices/array', {
