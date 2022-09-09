@@ -102,7 +102,7 @@ const Navbar: FC = () => {
             <h3>
               {authState.username ? authState.username : 'User'}
               <br />
-              <span>Admin</span>
+              <span>{authState.role ? authState.role : 'User'}</span>
             </h3>
             {authState._id ? (
               <ul>
