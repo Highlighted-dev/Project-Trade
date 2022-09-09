@@ -2,6 +2,7 @@ import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../../components/ts/AuthContext';
 import '../css/SignPages.css';
+var alertify = require('alertifyjs');
 
 const SignUp = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -10,7 +11,6 @@ const SignUp = () => {
   const usernameRef = useRef() as MutableRefObject<HTMLInputElement>;
   const birthDateRef = useRef() as MutableRefObject<HTMLInputElement>;
   const sexRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const [error, setError] = useState<string | null>(null);
   const { register } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -46,8 +46,13 @@ const SignUp = () => {
       return true;
     return false;
   };
+
+  const isBirthDateValid = (sampleBirthDate: Date) => {
+    if (new Date(birthDateRef.current.value) > sampleBirthDate) return true;
+    return false;
+  };
+
   const handleSignUp = async () => {
-    setError(null);
     //If all input values aren't null
     if (
       emailRef.current.value &&
@@ -56,14 +61,17 @@ const SignUp = () => {
       birthDateRef.current.value &&
       sexRef.current.value
     ) {
-      if (!doesPasswordMatch()) return setError('Passwords do not match.');
+      if (!isEmailValid()) return alertify.error('Email is not valid.');
+
+      if (!doesPasswordMatch()) return alertify.error('Passwords do not match.');
 
       if (!doesPasswordHaveCapitalLetter())
-        return setError('Password does not have an upper case letter.');
+        return alertify.error('Password does not have an upper case letter.');
 
-      if (!doesPasswordHaveNumber()) return setError('Password does not have a number.');
+      if (!doesPasswordHaveNumber()) return alertify.error('Password does not have a number.');
 
-      if (!isEmailValid()) return setError('Email is not valid.');
+      if (!isBirthDateValid(new Date('01-01-1900')))
+        return alertify.error('Your birtdate cannot be after 01-01-1900.');
 
       try {
         setLoading(true);
@@ -74,19 +82,18 @@ const SignUp = () => {
         const sex = sexRef.current.value;
         register(username, email, password, birthdate, sex);
       } catch {
-        setError('Failed to create an account');
+        alertify.error('Failed to create an account');
       }
 
       setLoading(false);
     } else {
-      return setError('Please input all data.');
+      return alertify.error('Please enter all the data');
     }
   };
 
   return (
     <div id="SignPage">
       <h1>Register</h1>
-      <div className={error ? 'bar active' : 'bar'}>{error}</div>
       <div id="SignPageForm">
         <div className="inputField">
           <input ref={usernameRef} type="text" maxLength={28} required />
@@ -111,7 +118,7 @@ const SignUp = () => {
         <div className="inputField inputFieldSpecial">
           <input ref={birthDateRef} type="date" required />
           <span></span>
-          <label>Birthday</label>
+          <label>Birthdate</label>
         </div>
         <div className="inputField ">
           <input ref={sexRef} type="text" maxLength={20} required />
