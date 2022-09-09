@@ -1,22 +1,9 @@
-import React, { useContext } from 'react';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { BiLogOutCircle } from 'react-icons/bi';
-import { CgProfile } from 'react-icons/cg';
-import { FiSettings } from 'react-icons/fi';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import AuthContext from '../../components/ts/AuthContext';
 import '../css/User.css';
 const User = () => {
-  const { authState, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    try {
-      logout();
-      navigate('/Login');
-    } catch {
-      console.log('Something went wrong when trying to logout');
-    }
-  };
+  const { authState } = useContext(AuthContext);
   return (
     <div id="mainUser">
       <div className="details">
@@ -42,19 +29,19 @@ const User = () => {
                 <tr>
                   <td>Role</td>
                   <td>
-                    <h4>Admin</h4>
+                    <h4>{authState.role}</h4>
                   </td>
                 </tr>
                 <tr>
                   <td>Birthday</td>
                   <td>
-                    <h4>00-00-0000</h4>
+                    <h4>{authState.birthdate}</h4>
                   </td>
                 </tr>
                 <tr>
                   <td>Sex</td>
                   <td>
-                    <h4>Male</h4>
+                    <h4>{authState.sex}</h4>
                   </td>
                 </tr>
               </tbody>
