@@ -3,52 +3,6 @@
   height: 100%;
   display: block;
 }
-/* Navbar */
-.cardBox {
-  position: relative;
-  width: 100%;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 50px;
-}
-.cardBox .card {
-  position: relative;
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.1);
-  transition: 0.4s ease-in-out;
-}
-.cardBox .card .text {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 50px;
-  font-weight: 500;
-  font-size: 2em;
-  color: #0d0c16;
-}
-.cardBox .card .iconBox {
-  font-size: 2.5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #a5a3aa;
-}
-.cardBox .card:hover {
-  background-color: #0d0c16;
-  transition: 0.4s ease-in-out;
-}
-.cardBox .card:hover .text,
-.cardBox .card:hover .iconBox {
-  color: #fff;
-  transition: 0.4s ease-in-out;
-}
 
 /* Orders setup */
 .details {
@@ -56,19 +10,20 @@
   width: 100%;
   padding: 20px;
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-gap: 50px;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 70px;
+  height: 100%;
 }
 .details .recentOrders {
   position: relative;
-  display: grid;
-  min-height: 500px;
+  display: block;
   background: #fff;
   padding: 20px;
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.1);
   color: black;
   border-radius: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
+  min-height: 500px;
 }
 .details h2 {
   font-size: 1.5em;
@@ -78,7 +33,6 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding-bottom: 5px;
 }
 .btn {
   position: relative;
@@ -122,21 +76,27 @@
   text-align: center;
 }
 
+.userDataAndFavouritesData {
+  display: grid;
+  grid-template-columns: repeat(1fr, 2);
+}
 /*User setup */
 
-.userData {
+.userData,
+.favouritesData {
   position: relative;
-  display: grid;
-  min-height: 500px;
+  display: block;
+  min-height: 300px;
   background: #fff;
   padding: 20px;
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.1);
   color: black;
   border-radius: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
-.userData table tr td {
-  padding: 10px;
+.userData table tr td,
+.favouritesData table tr td {
+  padding: 18px;
 }
 .userData table tr td h4 {
   font-size: 16px;
@@ -144,35 +104,23 @@
   line-height: 1.2em;
 }
 
+/* Favourites setup */
+
 @media screen and (max-width: 1270px) {
-  .cardBox {
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    grid-column-gap: 100px;
+  #home {
+    overflow-x: auto;
   }
-  .cardBox .card {
-    padding: 25px;
+  .details {
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 10px;
+  }
+  .details .recentOrders table tr td {
+    padding: 3px;
   }
 }
 
 @media screen and (max-width: 740px) {
-  .cardBox {
-    grid-template-columns: repeat(1, 1fr);
-    width: 100%;
-    grid-row-gap: 10px;
-  }
-  .cardBox .card {
-    padding: 15px;
-    font-size: 0.6em;
-  }
-
-  .details {
-    grid-template-columns: repeat(1, 1fr);
-  }
   .recentOrders table tbody td:nth-child(2) {
     font-size: 0.6em;
-  }
-  .details .recentOrders table tr td {
-    padding: 3px;
   }
 }

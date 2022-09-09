@@ -19,35 +19,90 @@ const User = () => {
   };
   return (
     <div id="mainUser">
-      <div className="cardBox">
-        <div className="card">
-          <div className="text">Profile</div>
-
-          <div className="iconBox">
-            <CgProfile />
-          </div>
-        </div>
-        <div className="card">
-          <div className="text">Edit</div>
-          <div className="iconBox">
-            <AiOutlineEdit />
-          </div>
-        </div>
-        <div className="card">
-          <div className="text">Settings</div>
-          <div className="iconBox">
-            <FiSettings className="icons" />
-          </div>
-        </div>
-        <div className="card">
-          <div className="text">Logout</div>
-
-          <div className="iconBox">
-            <BiLogOutCircle className="icons" />
-          </div>
-        </div>
-      </div>
       <div className="details">
+        <div className="userDataAndFavouritesData">
+          <div className="userData">
+            <div className="cardHeader">
+              <h2>User Data</h2>
+            </div>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Username</td>
+                  <td>
+                    <h4>{authState.username}</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>E-mail</td>
+                  <td>
+                    <h4>{authState.email}</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Role</td>
+                  <td>
+                    <h4>Admin</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Birthday</td>
+                  <td>
+                    <h4>00-00-0000</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sex</td>
+                  <td>
+                    <h4>Male</h4>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="favouritesData">
+            <div className="cardHeader">
+              <h2>Favourites</h2>
+              <Link to="/Favourites" className="btn">
+                View All
+              </Link>
+            </div>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Image</td>
+                  <td>
+                    <h4>Amazon Echo 4</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Image</td>
+                  <td>
+                    <h4>Amazon Echo 4</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Image</td>
+                  <td>
+                    <h4>Amazon Echo 4</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Image</td>
+                  <td>
+                    <h4>Amazon Echo 4</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Image</td>
+                  <td>
+                    <h4>Amazon Echo 4</h4>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div className="recentOrders">
           <div className="cardHeader">
             <h2>Recent Orders</h2>
@@ -119,57 +174,6 @@ const User = () => {
                 </td>
                 <td>11.54$</td>
                 <td>B01D5H93FW</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="userData">
-          <div className="cardHeader">
-            <h2>User Data</h2>
-          </div>
-          <table>
-            <tbody>
-              <tr>
-                <td>Username</td>
-                <td>
-                  <h4>{authState.username}</h4>
-                </td>
-              </tr>
-              <tr>
-                <td>E-mail</td>
-                <td>
-                  <h4>{authState.email}</h4>
-                </td>
-              </tr>
-              <tr>
-                <td>Role</td>
-                <td>
-                  <h4>Admin</h4>
-                </td>
-              </tr>
-              <tr>
-                <td>Birthday</td>
-                <td>
-                  <h4>00-00-0000</h4>
-                </td>
-              </tr>
-              <tr>
-                <td>Sex</td>
-                <td>
-                  <h4>Male</h4>
-                </td>
-              </tr>
-              <tr>
-                <td>Username</td>
-                <td>
-                  <h4>Bartosz</h4>
-                </td>
-              </tr>
-              <tr>
-                <td>Username</td>
-                <td>
-                  <h4>Bartosz</h4>
-                </td>
               </tr>
             </tbody>
           </table>
