@@ -184,8 +184,10 @@ router.get(
           });
         }
         //If user is found
-        const { _id, username, email } = user;
-        return res.status(200).json({ user: { _id, username, email } });
+        const { _id, username, email, birthdate, sex, role } = user;
+        return res
+          .status(200)
+          .json({ user: { _id, username, email, birthdate, sex, role } });
       });
     }
   }
