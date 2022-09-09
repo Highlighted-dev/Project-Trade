@@ -47,7 +47,6 @@ const SignUp = () => {
     return false;
   };
   const handleSignUp = async () => {
-    console.log(birthDateRef.current.value);
     setError(null);
     //If all input values aren't null
     if (
