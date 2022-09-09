@@ -8,6 +8,8 @@ const SignUp = () => {
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const confirmPasswordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const usernameRef = useRef() as MutableRefObject<HTMLInputElement>;
+  const birthDateRef = useRef() as MutableRefObject<HTMLInputElement>;
+  const sexRef = useRef() as MutableRefObject<HTMLInputElement>;
   const [error, setError] = useState<string | null>(null);
   const { register } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,11 +46,17 @@ const SignUp = () => {
       return true;
     return false;
   };
-
   const handleSignUp = async () => {
+    console.log(birthDateRef.current.value);
     setError(null);
-    //If emailRef and passordRef aren't null
-    if (emailRef.current && passwordRef.current) {
+    //If all input values aren't null
+    if (
+      emailRef.current.value &&
+      passwordRef.current.value &&
+      usernameRef.current.value &&
+      birthDateRef.current.value &&
+      sexRef.current.value
+    ) {
       if (!doesPasswordMatch()) return setError('Passwords do not match.');
 
       if (!doesPasswordHaveCapitalLetter())
@@ -63,12 +71,16 @@ const SignUp = () => {
         const email = emailRef.current.value;
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
-        register(username, email, password);
+        const birthdate = birthDateRef.current.value;
+        const sex = sexRef.current.value;
+        register(username, email, password, birthdate, sex);
       } catch {
         setError('Failed to create an account');
       }
 
       setLoading(false);
+    } else {
+      return setError('Please input all data.');
     }
   };
 
@@ -96,6 +108,16 @@ const SignUp = () => {
           <input ref={confirmPasswordRef} type="password" maxLength={100} required />
           <span></span>
           <label>Confirm Password</label>
+        </div>
+        <div className="inputField inputFieldSpecial">
+          <input ref={birthDateRef} type="date" required />
+          <span></span>
+          <label>Birthday</label>
+        </div>
+        <div className="inputField ">
+          <input ref={sexRef} type="text" maxLength={20} required />
+          <span></span>
+          <label>Sex</label>
         </div>
         <button onClick={handleSignUp} disabled={loading}>
           Sign Up

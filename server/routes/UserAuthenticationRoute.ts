@@ -48,6 +48,8 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
     req.body.username &&
     req.body.email &&
     req.body.password &&
+    req.body.birthdate &&
+    req.body.sex &&
     doesPasswordHaveCapitalLetter(req.body.password) &&
     doesPasswordHaveNumber(req.body.password) &&
     isEmailValid(req.body.email)
@@ -58,6 +60,9 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
+        birthdate: req.body.birthdate,
+        sex: req.body.sex,
+        role: 'User',
       });
       res.json({ status: 'ok' });
     } catch (e) {
@@ -76,6 +81,7 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
     });
   }
 });
+
 router.post('/login', jsonParser, async (req: Request, res: Response) => {
   try {
     //Try to find user by email

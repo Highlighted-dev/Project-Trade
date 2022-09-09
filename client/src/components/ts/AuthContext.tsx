@@ -18,6 +18,9 @@ export type IUser = {
   _id: string | null;
   username: string | null;
   email: string | null;
+  birthdate: string | null;
+  sex: string | null;
+  role: string | null;
 };
 
 export const AuthContext = createContext<any>(null);
@@ -28,6 +31,9 @@ export const AuthProvider = (props: any) => {
     _id: null,
     username: null,
     email: null,
+    birthdate: null,
+    sex: null,
+    role: null,
   });
   // isAuthenticated checks If user has a working token - If he has, he is authenticated so this function will return his data as a response.json().
   const isAuthenticated = async () => {
@@ -48,22 +54,32 @@ export const AuthProvider = (props: any) => {
             _id: responseData.user._id,
             username: responseData.user.username,
             email: responseData.user.email,
+            birthdate: responseData.user.birthdate,
+            sex: responseData.user.sex,
+            role: responseData.user.role,
           });
         }
         return responseData;
       })
       .catch(err => console.log(err))
-
       .then(() => {
         setLoading(false);
       });
   };
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (
+    username: string,
+    email: string,
+    password: string,
+    birthdate: string,
+    sex: string,
+  ) => {
     axios
       .post('/api/auth/register/', {
         username,
         email,
         password,
+        birthdate,
+        sex,
       })
       .then(response => response.data)
       .then(responseData => {
@@ -103,6 +119,9 @@ export const AuthProvider = (props: any) => {
         _id: null,
         username: null,
         email: null,
+        birthdate: null,
+        sex: null,
+        role: null,
       });
       navigate('/Login');
     }

@@ -4,7 +4,9 @@ interface IUserModel {
   username: string;
   email: string;
   password: string;
-  //group?: string;
+  birthdate: string;
+  sex: string;
+  role: string;
 }
 
 const userModelSchema = new Schema<IUserModel>(
@@ -12,7 +14,9 @@ const userModelSchema = new Schema<IUserModel>(
     username: String,
     email: { type: String, unique: true },
     password: String,
-    //group: String,
+    birthdate: String,
+    sex: String,
+    role: String,
   },
   { collection: 'userData' }
 );

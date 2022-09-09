@@ -54,6 +54,13 @@
   background-color: #25223b;
   transition: 0.5s;
 }
+#SignPageForm .inputFieldSpecial label {
+  opacity: 0;
+}
+#SignPageForm .inputFieldSpecial input:focus ~ label,
+#SignPageForm .inputFieldSpecial input:valid ~ label {
+  opacity: 1;
+}
 #SignPageForm .inputField input:focus ~ label,
 #SignPageForm .inputField input:valid ~ label {
   top: -5px;
