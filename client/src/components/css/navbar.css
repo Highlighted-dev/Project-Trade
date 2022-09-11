@@ -204,7 +204,8 @@
   top: 70px;
   right: -20px;
   padding: 8px 16px;
-  background: #fff;
+  background-color: #0d0c16;
+  color: #fff;
   width: 180px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
@@ -223,7 +224,7 @@
   right: 30px;
   width: 20px;
   height: 20px;
-  background-color: #fff;
+  background-color: #0d0c16;
   transform: rotate(45deg);
 }
 .topbar .userMenu h3 {
@@ -232,7 +233,6 @@
   padding: 8px 0px;
   font-weight: 500;
   font-size: 18px;
-  color: #0d0c16;
   line-height: 1.2em;
 }
 .topbar .userMenu h3 span {
@@ -258,7 +258,7 @@
 }
 .topbar .userMenu ul li a {
   display: inline-block;
-  color: #555;
+  color: rgb(165, 165, 165);
   font-weight: 500;
   transition: 0.2s;
   cursor: pointer;
@@ -321,7 +321,6 @@
   .sidebar ul li .tooltip {
     position: absolute;
     height: auto;
-    background-color: #fff;
     left: 25px;
     top: -122px;
   }
