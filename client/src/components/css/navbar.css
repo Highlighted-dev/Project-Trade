@@ -62,7 +62,8 @@
   position: absolute;
   height: 35px;
   width: 122px;
-  background-color: #fff;
+  background-color: #0d0c16;
+  color: #fff;
   left: 122px;
   top: 0px;
   transform: translate(-50%, -50%);
@@ -75,11 +76,15 @@
   opacity: 0;
   pointer-events: none;
 }
+
 .sidebar .links_name {
   opacity: 0;
   pointer-events: none;
 }
-
+.sidebar ul li:hover .tooltip {
+  top: 50%;
+  opacity: 1;
+}
 /* topbar */
 .topbar {
   height: 60px;
@@ -310,7 +315,17 @@
   }
 
   .sidebar ul li a {
-    width: 30px;
+    width: 50px;
     height: 30px;
+  }
+  .sidebar ul li .tooltip {
+    position: absolute;
+    height: auto;
+    background-color: #fff;
+    left: 25px;
+    top: -122px;
+  }
+  .sidebar ul li:hover .tooltip {
+    top: -100%;
   }
 }
