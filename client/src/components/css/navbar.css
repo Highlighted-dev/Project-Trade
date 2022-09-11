@@ -277,3 +277,40 @@
 .topbar .userMenu ul li a:hover {
   color: #25223b;
 }
+
+@media screen and (max-width: 640px) {
+  .sidebar {
+    height: 8%;
+    width: 100%;
+    background-color: #0d0c16;
+    position: fixed;
+    top: 92%;
+    left: 0;
+    display: inline;
+  }
+  .sidebar .menu {
+    display: none;
+  }
+  .sidebar .logo_content {
+    display: none;
+  }
+  .sidebar ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    margin-top: 0;
+  }
+  .sidebar ul li {
+    height: 30px;
+    width: 14vw;
+    position: relative;
+    line-height: 30px;
+  }
+
+  .sidebar ul li a {
+    width: 30px;
+    height: 30px;
+  }
+}
