@@ -130,6 +130,7 @@
   transition: all ease 400ms;
   height: 250px;
   overflow-y: scroll;
+  overflow-x: hidden;
   z-index: 99;
 }
 .topbar .searchBar .searchResults::-webkit-scrollbar {
@@ -326,5 +327,16 @@
   }
   .sidebar ul li:hover .tooltip {
     top: -100%;
+  }
+  .topbar {
+    left: 0px;
+    width: 100vw;
+  }
+  .topbar .searchBox {
+    width: 50vw;
+  }
+  .topbar .searchBar .searchResults {
+    width: 50vw;
+    /* left: calc(35vw - 10vh); */
   }
 }
