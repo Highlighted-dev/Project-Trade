@@ -253,3 +253,25 @@ h3 {
   border-radius: 0.2rem;
   border: 1px solid hsl(0, 0%, 86%);
 }
+
+@media screen and (max-width: 640px) {
+  #productInformations {
+    width: 100vw;
+  }
+  #productInformations #images {
+    width: 12vw;
+  }
+  #productInformations #images img {
+    padding: 10px;
+    width: auto;
+  }
+  #productInformations #highresImages {
+    width: 35vw;
+  }
+  #productInformations #productData {
+    width: 40vw;
+  }
+  #productPriceDiv {
+    width: 100vw;
+  }
+}
