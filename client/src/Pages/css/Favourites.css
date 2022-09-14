@@ -1,9 +1,7 @@
 #favouritesPanel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   color: black;
+  position: relative;
+  top: -30px;
   width: 62vw;
   background-color: #fff;
   border-radius: 10px;
@@ -31,8 +29,7 @@
 }
 #favouritesPanel .favourite .image {
   height: 100%;
-  width: 4vw;
-  min-width: 40px;
+  width: 6vw;
   float: left;
   display: flex;
   justify-content: center;
@@ -41,7 +38,7 @@
 }
 #favouritesPanel .favourite .text {
   float: left;
-  width: 58vw;
+  width: 56vw;
   height: 7.9vh;
   padding: 5px;
   display: flex;
@@ -51,12 +48,16 @@
   font-size: 1.5vh;
 }
 @media only screen and (max-width: 1000px) {
-  #favouritesPanel .favourite .text {
-    width: 56vw;
-  }
 }
-@media only screen and (max-width: 667px) {
+@media only screen and (max-width: 680px) {
+  #favouritesPanel .favourite {
+    height: 12.5vh;
+  }
   #favouritesPanel .favourite .text {
-    width: 54vw;
+    width: 52vw;
+    height: 12.5vh;
+  }
+  #favouritesPanel .favourite .image {
+    width: 10vw;
   }
 }

@@ -49,24 +49,26 @@ const Favourites = () => {
   ]);
 
   return (
-    <div id="favouritesPanel">
-      <h1>Favourites</h1>
-      <ul>
-        {loading ? (
-          <li>loading data...</li>
-        ) : (
-          favouritesData.map((product: IProduct, key: Key) => (
-            <li key={key} className="favourite">
-              <Link to={'/Product/' + product.product_id}>
-                <div className="image">
-                  <img src={product.product_image} />
-                </div>
-                <h2 className="text">{product.product_name}</h2>
-              </Link>
-            </li>
-          ))
-        )}
-      </ul>
+    <div className="center">
+      <div id="favouritesPanel">
+        <h1>Favourites</h1>
+        <ul>
+          {loading ? (
+            <li>loading data...</li>
+          ) : (
+            favouritesData.map((product: IProduct, key: Key) => (
+              <li key={key} className="favourite">
+                <Link to={'/Product/' + product.product_id}>
+                  <div className="image">
+                    <img src={product.product_image} />
+                  </div>
+                  <h2 className="text">{product.product_name}</h2>
+                </Link>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
     </div>
   );
 };

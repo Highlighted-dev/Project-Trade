@@ -11,6 +11,9 @@ const User = () => {
           <div className="userData">
             <div className="cardHeader">
               <h2>User Data</h2>
+              <Link to="/Edit" className="btn">
+                Edit Profile
+              </Link>
             </div>
             <table>
               <tbody>

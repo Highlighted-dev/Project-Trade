@@ -297,6 +297,9 @@
   .sidebar .menu {
     display: none;
   }
+  .sidebar .links_name {
+    display: none;
+  }
   .sidebar .logo_content {
     display: none;
   }

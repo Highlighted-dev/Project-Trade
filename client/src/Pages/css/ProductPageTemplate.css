@@ -271,6 +271,11 @@ h3 {
   #productInformations #productData {
     width: 40vw;
   }
+  #productData .productDetails .productDetailsContent.expand,
+  #productData .productAbout .productAboutContent.expand,
+  #productData .productTechnicalDetails .productTechnicalDetailsContent.expand {
+    max-height: 19vh;
+  }
   #productPriceDiv {
     width: 100vw;
   }
