@@ -1,9 +1,12 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext from '../../components/ts/AuthContext';
+import { AuthContext } from '../../components/ts/AuthContext';
+
+import { AuthContextType } from '../../@types/AuthContext';
 import '../css/User.css';
+
 const User = () => {
-  const { authState } = useContext(AuthContext);
+  const { authState } = useContext(AuthContext) as AuthContextType;
   return (
     <div id="mainUser">
       <div className="details">
@@ -112,7 +115,10 @@ const User = () => {
             <tbody>
               <tr>
                 <td>
-                  <img src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg" />
+                  <img
+                    src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg"
+                    alt="product_image"
+                  />
                 </td>
                 <td>
                   AmazonBasics PBH-48914 High-Speed HDMI 2.0 Cable, Ethernet, 3D, 4K Video Playback,
@@ -123,7 +129,10 @@ const User = () => {
               </tr>
               <tr>
                 <td>
-                  <img src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg" />
+                  <img
+                    src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg"
+                    alt="product_image"
+                  />
                 </td>
                 <td>
                   AmazonBasics PBH-48914 High-Speed HDMI 2.0 Cable, Ethernet, 3D, 4K Video Playback,
@@ -134,7 +143,10 @@ const User = () => {
               </tr>
               <tr>
                 <td>
-                  <img src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg" />
+                  <img
+                    src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg"
+                    alt="product_image"
+                  />
                 </td>
                 <td>
                   AmazonBasics PBH-48914 High-Speed HDMI 2.0 Cable, Ethernet, 3D, 4K Video Playback,
@@ -145,7 +157,10 @@ const User = () => {
               </tr>
               <tr>
                 <td>
-                  <img src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg" />
+                  <img
+                    src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg"
+                    alt="product_image"
+                  />
                 </td>
                 <td>
                   AmazonBasics PBH-48914 High-Speed HDMI 2.0 Cable, Ethernet, 3D, 4K Video Playback,
@@ -156,7 +171,10 @@ const User = () => {
               </tr>
               <tr>
                 <td>
-                  <img src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg" />
+                  <img
+                    src="https://m.media-amazon.com/images/I/41rfLGvgLxL._AC_US40_.jpg"
+                    alt="product_image"
+                  />
                 </td>
                 <td>
                   AmazonBasics PBH-48914 High-Speed HDMI 2.0 Cable, Ethernet, 3D, 4K Video Playback,

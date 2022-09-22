@@ -1,15 +1,7 @@
-import React, {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { FC } from 'react';
+import React, { ChangeEventHandler, useContext, useEffect, useState } from 'react';
 import {
   AiFillBank,
   AiOutlineSearch,
-  AiOutlineMenu,
   AiOutlineUser,
   AiOutlineBarChart,
   AiOutlineShoppingCart,
@@ -23,41 +15,45 @@ import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
+import { AuthContextType } from '../../@types/AuthContext';
+import { IProduct } from '../../@types/ProductPageTemplate';
 
-const Navbar: FC = () => {
-  const [data, setData] = useState<any[]>([]);
+const Navbar = () => {
+  const [data, setData] = useState<IProduct[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-  const { authState, logout } = useContext(AuthContext);
+  const { authState, logout } = useContext(AuthContext) as AuthContextType;
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');
       const requestOptions = {
         method: 'GET',
       };
-      //Fetch request is only made if searchWord is not empty string
-      if (searchWord != '') {
-        //Get product data with "x" name from api
-        fetch('/api/ap/name/' + searchWord, requestOptions)
+      // Fetch request is only made if searchWord is not empty string
+      if (searchWord !== '') {
+        // Get product data with "x" name from api
+        fetch(`/api/ap/name/${searchWord}`, requestOptions)
           .then(async response => setData(await response.json()))
           .catch(() => {
-            //Delete all data if there is nothing found in database and hide searchbox
-            setData(['{}']), searchbar?.classList.remove('active');
+            // Delete all data if there is nothing found in database and hide searchbox
+            setData([]);
+            searchbar?.classList.remove('active');
           });
       } else {
-        setData(['{}']), searchbar?.classList.remove('active');
+        setData([]);
+        searchbar?.classList.remove('active');
       }
 
       setIsFetching(false);
     }
   }, [searchWord]);
 
-  const toggleUserPanel = (className: string) => {
-    const avatar = document.querySelector(`.${className}`);
+  const toggleUserPanel = (class_name: string) => {
+    const avatar = document.querySelector(`.${class_name}`);
     avatar?.classList.toggle('active');
   };
 
-  //Perform search every time user input changes
+  // Perform search every time user input changes
   const search: ChangeEventHandler = () => {
     const searchbar = document.querySelector('.searchBar');
     searchbar?.classList.add('active');
@@ -77,12 +73,12 @@ const Navbar: FC = () => {
               search(e);
             }}
             value={searchWord}
-          ></input>
+          />
           {searchWord.length > 0 ? (
             <div className="searchResults">
-              {data.map((product, key) => (
-                <Link to={'/Product/' + product.product_id} key={key}>
-                  <li key={key}>{product.product_name}</li>
+              {data.map(product => (
+                <Link to={`/Product/${product.product_id}`} key={product.product_id}>
+                  <li key={product.product_id}>{product.product_name}</li>
                 </Link>
               ))}
             </div>
@@ -91,8 +87,8 @@ const Navbar: FC = () => {
         <div id="user">
           <div className="avatar">
             <img
-              src={process.env.PUBLIC_URL + '/images/Avatar.png'}
-              alt="image"
+              src={`${process.env.PUBLIC_URL}/images/Avatar.png`}
+              alt="avatar"
               height="40px"
               width="40px"
               onClick={() => toggleUserPanel('userMenu')}
@@ -127,12 +123,12 @@ const Navbar: FC = () => {
               <ul>
                 <li>
                   <Link to="/Login">
-                    <button>Login</button>
+                    <button type="button">Login</button>
                   </Link>
                 </li>
                 <li>
                   <Link to="/Register">
-                    <button>Register</button>
+                    <button type="button">Register</button>
                   </Link>
                 </li>
               </ul>
@@ -164,21 +160,21 @@ const Navbar: FC = () => {
             <span className="tooltip">User</span>
           </li>
           <li>
-            <a href="">
+            <Link to="/">
               <div className="icon">
                 <AiOutlineBarChart />
               </div>
               <span className="links_name">Charts</span>
-            </a>
+            </Link>
             <span className="tooltip">Charts</span>
           </li>
           <li>
-            <a href="">
+            <Link to="/">
               <div className="icon">
                 <AiOutlineShoppingCart />
               </div>
               <span className="links_name">Order</span>
-            </a>
+            </Link>
             <span className="tooltip">Order</span>
           </li>
           <li>
@@ -191,12 +187,12 @@ const Navbar: FC = () => {
             <span className="tooltip">Favourites</span>
           </li>
           <li>
-            <a href="">
+            <Link to="/">
               <div className="icon">
                 <BiCog />
               </div>
               <span className="links_name">Settings</span>
-            </a>
+            </Link>
             <span className="tooltip">Settings</span>
           </li>
         </ul>

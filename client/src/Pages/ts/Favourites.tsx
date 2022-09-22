@@ -1,28 +1,37 @@
-import { Key, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext, { IUser } from '../../components/ts/AuthContext';
-import '../css/Favourites.css';
 import axios, { AxiosError } from 'axios';
+import { AuthContext } from '../../components/ts/AuthContext';
+import { IUser, AuthContextType } from '../../@types/AuthContext';
+import { IProduct } from '../../@types/ProductPageTemplate';
+import { IUserFavourites } from '../../@types/Favourites';
+import '../css/Favourites.css';
 
 const Favourites = () => {
-  interface IProduct {
-    product_name: string;
-    product_id: string;
-    product_image: string;
-  }
-
-  const { authState } = useContext(AuthContext);
+  const { authState } = useContext(AuthContext) as AuthContextType;
   const [loading, setLoading] = useState<boolean>(true);
-  const [favouritesData, setFavouritesData] = useState<any[]>([]);
+  const [favouritesData, setFavouritesData] = useState<IProduct[]>([]);
 
-  //Get user favourites from database
+  // Get data about user favourite products (ex. product name, product image)
+  const getDataAboutFavourite = async (product_id_array: Array<string>) => {
+    console.log(product_id_array);
+    axios
+      .get('/api/ap/array/', { params: { array: product_id_array } })
+      .then(response => response.data)
+      .then(response_data => {
+        setFavouritesData(response_data);
+        setLoading(false);
+      });
+  };
+
+  // Get user favourites from database
   const getFavouritesFromUser = async (user_id: IUser['_id']) => {
     if (user_id) {
       axios
-        .get('/api/favourites/' + user_id)
+        .get(`/api/favourites/${user_id}`)
         .then(response => response.data)
-        .then(async responseData => {
-          getDataAboutFavourite(responseData.data.map((item: any) => item.product_id));
+        .then(async response_data => {
+          getDataAboutFavourite(response_data.data.map((item: IUserFavourites) => item.product_id));
         })
         .catch((err: AxiosError) => {
           console.log(err);
@@ -30,21 +39,10 @@ const Favourites = () => {
     }
   };
 
-  //Get data about user favourite products (ex. product name, product image)
-  const getDataAboutFavourite = async (product_id_array: Array<any>) => {
-    axios
-      .get('/api/ap/array/', { params: { array: product_id_array } })
-      .then(response => response.data)
-      .then(responseData => {
-        setFavouritesData(responseData);
-        setLoading(false);
-      });
-  };
-
   useEffect(() => {
     getFavouritesFromUser(authState._id);
   }, [
-    //authState._id  makes it re-render when authState changes. This is because authState._id changes to null when user refreshes the page.
+    // authState._id  makes it re-render when authState changes. This is because authState._id changes to null when user refreshes the page.
     authState._id,
   ]);
 
@@ -56,11 +54,11 @@ const Favourites = () => {
           {loading ? (
             <li>loading data...</li>
           ) : (
-            favouritesData.map((product: IProduct, key: Key) => (
-              <li key={key} className="favourite">
-                <Link to={'/Product/' + product.product_id}>
+            favouritesData.map((product: IProduct) => (
+              <li key={product.product_id} className="favourite">
+                <Link to={`/Product/${product.product_id}`}>
                   <div className="image">
-                    <img src={product.product_image} />
+                    <img src={product.product_image} alt="product_image" />
                   </div>
                   <h2 className="text">{product.product_name}</h2>
                 </Link>

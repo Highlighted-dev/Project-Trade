@@ -1,8 +1,11 @@
 import { MutableRefObject, useContext, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from '../../components/ts/AuthContext';
+import { Link } from 'react-router-dom';
+// @ts-ignore
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
+import { AuthContext } from '../../components/ts/AuthContext';
+import { AuthContextType } from '../../@types/AuthContext';
 import '../css/SignPages.css';
-var alertify = require('alertifyjs');
 
 const SignUp = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -11,34 +14,35 @@ const SignUp = () => {
   const usernameRef = useRef() as MutableRefObject<HTMLInputElement>;
   const birthDateRef = useRef() as MutableRefObject<HTMLInputElement>;
   const sexRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const { register } = useContext(AuthContext);
+  const { register } = useContext(AuthContext) as AuthContextType;
   const [loading, setLoading] = useState<boolean>(false);
 
   const doesPasswordMatch = () => {
-    //If password and confirm password are equal
-    if (passwordRef.current.value == confirmPasswordRef.current.value) return true;
+    // If password and confirm password are equal
+    if (passwordRef.current.value === confirmPasswordRef.current.value) return true;
     return false;
   };
 
   const doesPasswordHaveCapitalLetter = () => {
-    //Check if there is any uppercase letter in password. If there is not, return error
+    // Check if there is any uppercase letter in password. If there is not, return error
     if (/[A-Z]/.test(passwordRef.current.value)) return true;
     return false;
   };
 
   const doesPasswordHaveNumber = () => {
-    //Check if there is any number in password. If there is not, return error
+    // Check if there is any number in password. If there is not, return error
     if (/[1-9]/.test(passwordRef.current.value)) return true;
     return false;
   };
 
   const isEmailValid = () => {
-    //Regular Expression validating email with rfc822 standard. If email is not valid, return error. Examples:
+    // Regular Expression validating email with rfc822 standard. If email is not valid, return error. Examples:
     // asdkladlkaslkaslk  /Not valid
     // test.com  /Not valid
     // test@test  /Not valid
     // test@test.com   /Valid
     if (
+      // eslint-disable-next-line no-control-regex
       /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$/.test(
         emailRef.current.value,
       )
@@ -47,13 +51,13 @@ const SignUp = () => {
     return false;
   };
 
-  const isBirthDateValid = (sampleBirthDate: Date) => {
-    if (new Date(birthDateRef.current.value) > sampleBirthDate) return true;
+  const isBirthDateValid = (sample_birth_date: Date) => {
+    if (new Date(birthDateRef.current.value) > sample_birth_date) return true;
     return false;
   };
 
   const handleSignUp = async () => {
-    //If all input values aren't null
+    // If all input values aren't null
     if (
       emailRef.current.value &&
       passwordRef.current.value &&
@@ -84,11 +88,10 @@ const SignUp = () => {
       } catch {
         alertify.error('Failed to create an account');
       }
-
       setLoading(false);
-    } else {
-      return alertify.error('Please enter all the data');
+      return alertify.success('Regitration was succesfull.');
     }
+    return alertify.error('Please enter all the data');
   };
 
   return (
@@ -97,35 +100,35 @@ const SignUp = () => {
       <div id="SignPageForm">
         <div className="inputField">
           <input ref={usernameRef} type="text" maxLength={28} required />
-          <span></span>
+          <span />
           <label>Username</label>
         </div>
         <div className="inputField">
           <input ref={emailRef} type="text" maxLength={80} required />
-          <span></span>
+          <span />
           <label>Email</label>
         </div>
         <div className="inputField">
           <input ref={passwordRef} type="password" maxLength={100} required />
-          <span></span>
+          <span />
           <label>Password</label>
         </div>
         <div className="inputField">
           <input ref={confirmPasswordRef} type="password" maxLength={100} required />
-          <span></span>
+          <span />
           <label>Confirm Password</label>
         </div>
         <div className="inputField inputFieldSpecial">
           <input ref={birthDateRef} type="date" required />
-          <span></span>
+          <span />
           <label>Birthdate</label>
         </div>
         <div className="inputField ">
           <input ref={sexRef} type="text" maxLength={20} required />
-          <span></span>
+          <span />
           <label>Sex</label>
         </div>
-        <button onClick={handleSignUp} disabled={loading}>
+        <button type="submit" onClick={handleSignUp} disabled={loading}>
           Sign Up
         </button>
         <br />
