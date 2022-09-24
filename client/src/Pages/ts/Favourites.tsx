@@ -14,7 +14,6 @@ const Favourites = () => {
 
   // Get data about user favourite products (ex. product name, product image)
   const getDataAboutFavourite = async (product_id_array: Array<string>) => {
-    console.log(product_id_array);
     axios
       .get('/api/ap/array/', { params: { array: product_id_array } })
       .then(response => response.data)
