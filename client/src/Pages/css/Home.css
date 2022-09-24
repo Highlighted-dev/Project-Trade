@@ -10,9 +10,10 @@
   background-color: #25223b;
   color: #fff;
 }
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 680px) {
   #home {
     width: 100vw;
     left: 0;
+    height: 85vh;
   }
 }

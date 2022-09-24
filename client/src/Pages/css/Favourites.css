@@ -47,8 +47,6 @@
   font-weight: 500;
   font-size: 1.5vh;
 }
-@media only screen and (max-width: 1000px) {
-}
 @media only screen and (max-width: 680px) {
   #favouritesPanel .favourite {
     height: 12.5vh;
@@ -59,5 +57,8 @@
   }
   #favouritesPanel .favourite .image {
     width: 10vw;
+  }
+  #favouritesPanel {
+    top: 0px;
   }
 }
