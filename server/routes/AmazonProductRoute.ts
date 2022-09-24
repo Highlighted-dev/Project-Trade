@@ -8,6 +8,7 @@ import AmazonProductHighResImages from '../models/AmazonProductHighResImagesMode
 import { Model } from 'mongoose';
 import AmazonProductPrices from '../models/AmazonProductPrices';
 import axios, { AxiosError } from 'axios';
+import AmazonProductReviews from '../models/AmaoznProductReviews';
 
 const router: Router = express.Router();
 
@@ -200,6 +201,10 @@ router.get('/about/id/:id', (req: Request, res: Response) =>
 //Get product prices by id
 router.get('/prices/id/:id', (req: Request, res: Response) =>
   getAmazonPrice(req, res)
+);
+//Get product reviews by id
+router.get('/reviews/id/:id', (req: Request, res: Response) =>
+  getAmazonProductData(req, res, AmazonProductReviews)
 );
 //Get product high resolution images by id
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
