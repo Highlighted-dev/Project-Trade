@@ -22,11 +22,12 @@ class AmazonReviewsSpider(scrapy.Spider):
                 yield from self.solveCaptcha(response, self.parse)
             else:
                 product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//div[@class="a-row"]//span[@class="a-icon-alt"]/text()').extract()
+                product_rating_id = response.xpath('//div[@class="a-section a-spacing-none reviews-content a-size-base"]//div[@class="a-section review aok-relative"]/@id').extract()
                 product_date = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//span[@class="a-size-base a-color-secondary review-date"]/text()').extract()
-                for rating,date_and_country in zip(product_rating,product_date):
+                for rating,rating_id,date_and_country in zip(product_rating,product_rating_id,product_date):
                     amazon_reviews['product_id'] = self.product_id
                     amazon_reviews['product_rating'] = float(rating.strip(" ")[0])
-
+                    amazon_reviews['product_rating_id'] = rating_id
                     #Convert date_and_country to just date (Ex. Reviewed in Germany 🇩🇪 on 17 September 2022 => 17 September 2022)
                     date = date_and_country.split("on ")[1]
                     #Convert date to datetime object (Ex. 17 September 2022 => 2022-09-17)

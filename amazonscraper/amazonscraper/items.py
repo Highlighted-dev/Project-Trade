@@ -43,6 +43,7 @@ class AmazonItemReviews(scrapy.Item):
   mongo_db_column_name = scrapy.Field()
   product_id = scrapy.Field()
   product_rating = scrapy.Field()
+  product_rating_id = scrapy.Field()
   product_rating_date = scrapy.Field()
 
 
