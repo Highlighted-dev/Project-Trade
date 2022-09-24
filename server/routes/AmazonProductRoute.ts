@@ -204,7 +204,12 @@ router.get('/prices/id/:id', (req: Request, res: Response) =>
 );
 //Get product reviews by id
 router.get('/reviews/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductReviews)
+  getAmazonProductData(
+    req,
+    res,
+    AmazonProductReviews,
+    'http://localhost:5000/api/as/reviews/id/'
+  )
 );
 //Get product high resolution images by id
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>

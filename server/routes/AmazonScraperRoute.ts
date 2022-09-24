@@ -82,5 +82,16 @@ router.get('/prices/array', jsonParser, async (req: Request, res: Response) => {
     '"';
   runAProductScraper(req, res, command);
 });
+router.get('/reviews/id/:id', async (req: Request, res: Response) => {
+  //Get the product id from the url
+  const { id } = req.params;
+  const command =
+    'cd ' +
+    getDirectoryBasedOnSystem() +
+    ' scrapy crawl AmazonReviewsSpider -a prod_id="' +
+    id +
+    '"';
+  runAProductScraper(req, res, command);
+});
 
 export default router;
