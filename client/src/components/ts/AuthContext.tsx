@@ -5,9 +5,7 @@ import axios from 'axios';
 import alertify from 'alertifyjs';
 import { AuthContextType, IUser, IAxiosErrorRestApi } from '../../@types/AuthContext';
 
-// Exception
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const authContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<React.ReactNode> = ({ children }) => {
   const navigate = useNavigate();
@@ -128,7 +126,7 @@ const AuthProvider: React.FC<React.ReactNode> = ({ children }) => {
     () => ({ authState, login, logout, register, loading }),
     [authState, loading],
   );
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+  return <authContext.Provider value={values}>{children}</authContext.Provider>;
 };
 
 export default AuthProvider;

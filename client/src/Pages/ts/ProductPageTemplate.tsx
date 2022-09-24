@@ -5,7 +5,7 @@ import axios, { AxiosError } from 'axios';
 // @ts-ignore
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
-import { AuthContext } from '../../components/ts/AuthContext';
+import { authContext } from '../../components/ts/AuthContext';
 import { IUser, AuthContextType } from '../../@types/AuthContext';
 import LineChart from '../../components/ts/LineChart';
 import {
@@ -21,7 +21,7 @@ import '../css/ProductPageTemplate.css';
 
 const ProductWebsiteTemplate = () => {
   const { product_id } = useParams();
-  const { authState } = useContext(AuthContext) as AuthContextType;
+  const { authState } = useContext(authContext) as AuthContextType;
   // TODO fix this
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [changingProductId, setChangingProductId] = useState(product_id);

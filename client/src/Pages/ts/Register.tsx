@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // @ts-ignore
 import alertify from 'alertifyjs';
 import 'alertifyjs/build/css/alertify.css';
-import { AuthContext } from '../../components/ts/AuthContext';
+import { authContext } from '../../components/ts/AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/SignPages.css';
 
@@ -14,7 +14,7 @@ const SignUp = () => {
   const usernameRef = useRef() as MutableRefObject<HTMLInputElement>;
   const birthDateRef = useRef() as MutableRefObject<HTMLInputElement>;
   const sexRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const { register } = useContext(AuthContext) as AuthContextType;
+  const { register } = useContext(authContext) as AuthContextType;
   const [loading, setLoading] = useState<boolean>(false);
 
   const doesPasswordMatch = () => {

@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
-import { AuthContext } from '../../components/ts/AuthContext';
+import { authContext } from '../../components/ts/AuthContext';
 import { IUser, AuthContextType } from '../../@types/AuthContext';
 import { IProduct } from '../../@types/ProductPageTemplate';
 import { IUserFavourites } from '../../@types/Favourites';
 import '../css/Favourites.css';
 
 const Favourites = () => {
-  const { authState } = useContext(AuthContext) as AuthContextType;
+  const { authState } = useContext(authContext) as AuthContextType;
   const [loading, setLoading] = useState<boolean>(true);
   const [favouritesData, setFavouritesData] = useState<IProduct[]>([]);
 

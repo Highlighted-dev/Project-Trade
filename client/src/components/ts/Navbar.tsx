@@ -14,7 +14,7 @@ import { CgProfile } from 'react-icons/cg';
 import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
+import { authContext } from './AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import { IProduct } from '../../@types/ProductPageTemplate';
 
@@ -22,7 +22,7 @@ const Navbar = () => {
   const [data, setData] = useState<IProduct[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
-  const { authState, logout } = useContext(AuthContext) as AuthContextType;
+  const { authState, logout } = useContext(authContext) as AuthContextType;
   useEffect(() => {
     if (isFetching) {
       const searchbar = document.querySelector('.searchBar');

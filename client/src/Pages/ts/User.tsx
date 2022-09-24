@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../components/ts/AuthContext';
+import { authContext } from '../../components/ts/AuthContext';
 
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/User.css';
 
 const User = () => {
-  const { authState } = useContext(AuthContext) as AuthContextType;
+  const { authState } = useContext(authContext) as AuthContextType;
   return (
     <div id="mainUser">
       <div className="details">

@@ -2,7 +2,7 @@ import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 // @ts-ignore
 import alertify from 'alertifyjs';
-import { AuthContext } from '../../components/ts/AuthContext';
+import { authContext } from '../../components/ts/AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/SignPages.css';
 
@@ -10,7 +10,7 @@ const Login = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const [loading, setLoading] = useState<boolean>(false);
-  const { login } = useContext(AuthContext) as AuthContextType;
+  const { login } = useContext(authContext) as AuthContextType;
 
   const validateSignIn = () => {
     if (!emailRef.current.value || !passwordRef.current.value) {
