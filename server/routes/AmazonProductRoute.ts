@@ -8,7 +8,8 @@ import AmazonProductHighResImages from '../models/AmazonProductHighResImagesMode
 import { Model } from 'mongoose';
 import AmazonProductPrices from '../models/AmazonProductPrices';
 import axios, { AxiosError } from 'axios';
-import AmazonProductReviews from '../models/AmaoznProductReviews';
+import AmazonProductReviews from '../models/AmazonProductReviews';
+import amazonProductSales from '../models/AmazonProductSales';
 
 const router: Router = express.Router();
 
@@ -210,6 +211,75 @@ router.get('/reviews/id/:id', (req: Request, res: Response) =>
     AmazonProductReviews,
     'http://localhost:5000/api/as/reviews/id/'
   )
+);
+router.get('/sales/id/:id', (req: Request, res: Response) =>
+  /*
+    Becouse we don't have direct data about sales on Amazon, we will estimate it by using their reviews. 
+    By different sources, we can estimate that 10% of customers who bought product will leave a review.
+    Right now we are collecting reviews from 0 to 10 and from 40 to 50.
+    That means we will get first review date(1) and last review date(50)
+    So we will use this formula to estimate sales:
+    (date_of_last_review - date_of_latest_review) = 50 / number_of_days_beetween_dates * 10 = sales_per_day
+    Ex. 07/07/2022 - 07/05/2021 = 50 / 61 * 10 = 8,36
+  */
+  axios
+    .get('http://localhost:5000/api/ap/reviews/id/' + req.params.id)
+    .then(async response => response.data)
+    .then(async responseData => {
+      //sort json object by date
+      const sortJsonObject = (a: any, b: any) => {
+        return (
+          new Date(a.product_rating_date).getTime() -
+          new Date(b.product_rating_date).getTime()
+        );
+      };
+      responseData.data.sort(sortJsonObject);
+
+      const date_of_last_review = new Date(
+        responseData.data[responseData.data.length - 1].product_rating_date
+      ).getTime();
+
+      const date_of_latest_review = new Date(
+        responseData.data[0].product_rating_date
+      ).getTime();
+
+      const difference_between_dates =
+        (date_of_last_review - date_of_latest_review) / (1000 * 3600 * 24);
+
+      const sales_per_day = (50 / difference_between_dates) * 10;
+
+      //Get current date
+      var yourDate = new Date();
+      const formated_data = new Date(
+        yourDate.getTime() - yourDate.getTimezoneOffset() * 60 * 1000
+      )
+        .toISOString()
+        .split('T')[0];
+
+      //Update or create if not exist new document with sales data
+      await amazonProductSales.updateOne(
+        {
+          product_id: req.params.id,
+          product_sales_date: formated_data,
+        },
+        {
+          product_id: req.params.id,
+          product_sales: sales_per_day.toFixed(2),
+          product_sales_date: formated_data,
+        },
+        { new: true, upsert: true }
+      );
+
+      return res.status(200).json({
+        status: 'ok',
+        message: 'Product sales calculated!',
+        data: {
+          product_id: req.params.id,
+          product_sales: sales_per_day.toFixed(2),
+          product_sales_date: formated_data,
+        },
+      });
+    })
 );
 //Get product high resolution images by id
 router.get('/highResImages/id/:id', (req: Request, res: Response) =>
