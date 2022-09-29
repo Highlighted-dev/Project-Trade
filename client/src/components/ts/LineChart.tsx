@@ -126,7 +126,6 @@ const LineChart = ({ data, variable_type, settings }: any) => {
   const filterDates = () => {
     // Delcraing new array for labels and data
     const data_array = [...data];
-    console.log(data_array);
     // Sort the data_array by date
     data_array.sort((a, b) => {
       return a.labels.localeCompare(b.labels);
@@ -142,8 +141,8 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     // If start date is not empty, filter dates_array to only include dates equal start date and end date
     if (start_date && chart) {
       // Get start date index and end date index from input provided by start_date and end_date
-      const start_date_index = data_array.map(product => product.date).indexOf(start_date.value);
-      const end_date_index = data_array.map(product => product.date).indexOf(end_date.value);
+      const start_date_index = data_array.map(product => product.labels).indexOf(start_date.value);
+      const end_date_index = data_array.map(product => product.labels).indexOf(end_date.value);
 
       // If there indexes are greater than -1 that means start and end dates are in dates_array
       // If start index is greater than end index, there isn't any date in dates_array that would match the start and end dates.
