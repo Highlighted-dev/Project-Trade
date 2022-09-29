@@ -40,6 +40,12 @@ export interface IProductPrice {
   product_price: string;
   product_price_date: string;
 }
+export interface IProductSales {
+  product_id: string;
+  product_sales: number;
+  product_sales_date: string;
+}
+
 export interface IPriceHolder {
   [key: string]: IProductPrice[];
 }
