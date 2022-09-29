@@ -269,15 +269,18 @@ router.get('/sales/id/:id', (req: Request, res: Response) =>
         },
         { new: true, upsert: true }
       );
-
-      return res.status(200).json({
-        status: 'ok',
-        message: 'Product sales calculated!',
-        data: {
-          product_id: req.params.id,
-          product_sales: sales_per_day.toFixed(2),
-          product_sales_date: formated_data,
-        },
+      const amazon_sales = await amazonProductSales.find({
+        product_id: req.params.id,
+      });
+      if (amazon_sales.length > 0)
+        return res.status(200).json({
+          status: 'ok',
+          message: 'Product sales calculated!',
+          data: amazon_sales,
+        });
+      return res.status(404).json({
+        status: 'error',
+        message: 'Product sales not found!',
       });
     })
 );
