@@ -15,6 +15,7 @@ import {
   IProductHighResImages,
   IProductImages,
   IProductPrice,
+  IProductSales,
   IProductTechnicalDetails,
 } from '../../@types/ProductPageTemplate';
 import '../css/ProductPageTemplate.css';
@@ -34,6 +35,7 @@ const ProductWebsiteTemplate = () => {
   const [highResImages, setHighResImages] = useState<IProductHighResImages[]>([]);
   const [productBasicInformations, setProductBasicInformations] = useState<IProduct[]>([]);
   const [prices, setPrices] = useState<IProductPrice[]>([]);
+  const [sales, setSales] = useState<IProductSales[]>([]);
   // TODO remove charts data for prices
   const [chartsData, setChartsData] = useState<IProductPrice[]>([]);
 
@@ -45,6 +47,7 @@ const ProductWebsiteTemplate = () => {
     setHighResImages([]);
     setProductBasicInformations([]);
     setPrices([]);
+    setSales([]);
     setChartsData([]);
   };
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -159,6 +162,9 @@ const ProductWebsiteTemplate = () => {
       })
       .then(() => {
         getProductData('/api/ap/prices/id/', setPrices);
+      })
+      .then(() => {
+        getProductData('/api/ap/sales/id/', setSales);
       })
       .then(() => {
         getProductData('/api/ap/highResImages/id/', setHighResImages);
@@ -374,7 +380,37 @@ const ProductWebsiteTemplate = () => {
       </div>
       <div id="productPriceDiv">
         {chartsData.length > 0 ? (
-          <LineChart data={chartsData} />
+          <LineChart
+            data={chartsData}
+            variable_type="prices"
+            settings={{ title: 'Price History', label: 'Price' }}
+          />
+        ) : (
+          // Skeleton loading setup for price chart
+          <div id="priceChart">
+            <div className="center">
+              <div className="skeleton-small-text skeleton-loading" />
+            </div>
+            <div className="center">
+              <div className="skeleton-chart skeleton-loading" />
+            </div>
+            <div className="center">
+              <div className="skeleton-small-text skeleton-loading" />
+            </div>
+            <div className="center">
+              <div className="skeleton-small-text skeleton-loading" />
+              <div className="skeleton-small-text skeleton-loading" />
+            </div>
+          </div>
+        )}
+      </div>
+      <div id="productPriceDiv">
+        {sales.length > 0 ? (
+          <LineChart
+            data={sales}
+            variable_type="sales"
+            settings={{ title: 'Sales History', label: 'Sales per day' }}
+          />
         ) : (
           // Skeleton loading setup for price chart
           <div id="priceChart">

@@ -1,14 +1,29 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import '../css/LineChart.css';
-import { IProductPrice, IPriceHolder } from '../../@types/ProductPageTemplate';
+import { IChartItem } from '../../@types/LineChart';
 
 ChartJS.register(...registerables);
 
-const LineChart = ({ data }: IPriceHolder) => {
-  const [chartData, setChartData] = useState(data);
+const LineChart = ({ data, variable_type, settings }: any) => {
+  // Becouse this component will use more than 1 type of json object, we need to change keys of the objects to fit the chart.
+  const [chartData, setChartData] = useState(
+    data.map(async (item: any) => {
+      if (variable_type === 'prices') {
+        item.labels = item.product_price_date;
+        item.data = item.product_price;
+      } else if (variable_type === 'sales') {
+        item.labels = item.product_sales_date;
+        item.data = item.product_sales;
+      }
+      return item;
+    }),
+  );
+
   const chartRef = useRef<ChartJS>(null);
   const options: any = {
     responsive: true,
@@ -64,7 +79,7 @@ const LineChart = ({ data }: IPriceHolder) => {
       },
       title: {
         display: true,
-        text: 'Price history',
+        text: settings.title,
         color: 'rgba(37, 34, 59,0.9)',
       },
     },
@@ -80,11 +95,11 @@ const LineChart = ({ data }: IPriceHolder) => {
       gradient.addColorStop(1, 'rgba(37, 34, 59,0.1)');
     }
     const chartDataSettings: any = {
-      labels: chartData.map((product: IProductPrice) => product.product_price_date),
+      labels: chartData.map((product: IChartItem) => product.labels),
       datasets: [
         {
-          label: 'Price',
-          data: chartData.map((product: IProductPrice) => product.product_price),
+          label: settings.label,
+          data: chartData.map((product: IChartItem) => product.data),
           pointBackgroundColor: 'rgba(255, 255, 255,0.9)',
           borderWidth: 1,
           borderColor: 'rgb(35, 35, 35)',
@@ -111,10 +126,10 @@ const LineChart = ({ data }: IPriceHolder) => {
   const filterDates = () => {
     // Delcraing new array for labels and data
     const data_array = [...data];
-
+    console.log(data_array);
     // Sort the data_array by date
     data_array.sort((a, b) => {
-      return a.product_price_date.localeCompare(b.product_price_date);
+      return a.labels.localeCompare(b.labels);
     });
 
     // Getting current chart
@@ -127,12 +142,8 @@ const LineChart = ({ data }: IPriceHolder) => {
     // If start date is not empty, filter dates_array to only include dates equal start date and end date
     if (start_date && chart) {
       // Get start date index and end date index from input provided by start_date and end_date
-      const start_date_index = data_array
-        .map(product => product.product_price_date)
-        .indexOf(start_date.value);
-      const end_date_index = data_array
-        .map(product => product.product_price_date)
-        .indexOf(end_date.value);
+      const start_date_index = data_array.map(product => product.date).indexOf(start_date.value);
+      const end_date_index = data_array.map(product => product.date).indexOf(end_date.value);
 
       // If there indexes are greater than -1 that means start and end dates are in dates_array
       // If start index is greater than end index, there isn't any date in dates_array that would match the start and end dates.
