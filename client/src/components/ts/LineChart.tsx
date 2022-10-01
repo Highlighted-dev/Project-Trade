@@ -84,6 +84,7 @@ const LineChart = ({ data, variable_type, settings }: any) => {
       },
     },
   };
+
   const getChartData = () => {
     const chart = chartRef.current;
     let gradient;
@@ -135,18 +136,19 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     const chart = chartRef.current;
 
     // Get current start and end date from inputs
-    const start_date = document.getElementById('start_date') as HTMLInputElement;
-    const end_date = document.getElementById('end_date') as HTMLInputElement;
+    const start_date = document.getElementById(`start_date_${variable_type}`) as HTMLInputElement;
+    const end_date = document.getElementById(`end_date_${variable_type}`) as HTMLInputElement;
 
     // If start date is not empty, filter dates_array to only include dates equal start date and end date
     if (start_date && chart) {
       // Get start date index and end date index from input provided by start_date and end_date
       const start_date_index = data_array.map(product => product.labels).indexOf(start_date.value);
       const end_date_index = data_array.map(product => product.labels).indexOf(end_date.value);
-
+      console.log(start_date);
       // If there indexes are greater than -1 that means start and end dates are in dates_array
       // If start index is greater than end index, there isn't any date in dates_array that would match the start and end dates.
       if (start_date_index > -1 && end_date_index > -1 && start_date_index <= end_date_index) {
+        console.log('working');
         // If start index is not equal to end index, there is more than one date in dates_array that would match the start and end dates.
         if (start_date_index !== end_date_index) {
           // Cut data_array to only include dates equal start date and end date
@@ -158,6 +160,7 @@ const LineChart = ({ data, variable_type, settings }: any) => {
           // Set chart data and lables to only one data point (Ex. If start date = "2022-08-04" and end date = "2022-08-04", only show "2022-08-04")
           setChartData(data_array.slice(start_date_index, end_date_index + 1));
         }
+
         chart.update();
         return;
       }
@@ -173,16 +176,15 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     <div id="priceChart">
       <div id="chart">
         <Chart ref={chartRef} type="line" data={getChartData()} options={options} />
-
         <input
           type="date"
-          id="start_date"
+          id={`start_date_${variable_type}`}
           defaultValue={getCurrentDateMinusWeek()}
           onChange={() => filterDates()}
         />
         <input
           type="date"
-          id="end_date"
+          id={`end_date_${variable_type}`}
           defaultValue={getCurrentDate()}
           onChange={() => filterDates()}
         />
