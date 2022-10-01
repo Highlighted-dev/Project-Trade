@@ -254,9 +254,9 @@ h3 {
   border: 1px solid hsl(0, 0%, 86%);
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 680px) {
   #productInformations {
-    width: 100vw;
+    width: 100%;
   }
   #productInformations #images {
     width: 12vw;
@@ -277,6 +277,6 @@ h3 {
     max-height: 19vh;
   }
   #productPriceDiv {
-    width: 100vw;
+    width: 100%;
   }
 }
