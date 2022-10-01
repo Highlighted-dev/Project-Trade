@@ -36,8 +36,6 @@ const ProductWebsiteTemplate = () => {
   const [productBasicInformations, setProductBasicInformations] = useState<IProduct[]>([]);
   const [prices, setPrices] = useState<IProductPrice[]>([]);
   const [sales, setSales] = useState<IProductSales[]>([]);
-  // TODO remove charts data for prices
-  const [chartsData, setChartsData] = useState<IProductPrice[]>([]);
 
   const clearStates = () => {
     setImages([]);
@@ -48,7 +46,6 @@ const ProductWebsiteTemplate = () => {
     setProductBasicInformations([]);
     setPrices([]);
     setSales([]);
-    setChartsData([]);
   };
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const getProductData = (url: string, setProductData: (arg0: never[]) => void) => {
@@ -174,13 +171,10 @@ const ProductWebsiteTemplate = () => {
       });
   }, [product_id]);
   useEffect(() => {
-    checkIfItemIsInFavourites();
-  }, [authState]);
-  useEffect(() => {
-    if (prices.length > 0) {
-      setChartsData(prices);
+    if (authState._id) {
+      checkIfItemIsInFavourites();
     }
-  }, [prices]);
+  }, [authState]);
   return (
     <div id="productPage">
       <div id="productInformations">
@@ -379,9 +373,9 @@ const ProductWebsiteTemplate = () => {
         </div>
       </div>
       <div id="productPriceDiv">
-        {chartsData.length > 0 ? (
+        {prices.length > 0 ? (
           <LineChart
-            data={chartsData}
+            data={prices}
             variable_type="prices"
             settings={{ title: 'Price History', label: 'Price' }}
           />
