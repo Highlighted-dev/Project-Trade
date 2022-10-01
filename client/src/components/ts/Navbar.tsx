@@ -72,7 +72,14 @@ const Navbar = () => {
               setSearchWord(e.target.value);
               search(e);
             }}
-            value={searchWord}
+            onBlur={() => {
+              const searchbar = document.querySelector('.searchBar');
+              searchbar?.classList.remove('active');
+            }}
+            onClick={() => {
+              const searchbar = document.querySelector('.searchBar');
+              searchbar?.classList.add('active');
+            }}
           />
           {searchWord.length > 0 ? (
             <div className="searchResults">
