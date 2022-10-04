@@ -144,11 +144,9 @@ const LineChart = ({ data, variable_type, settings }: any) => {
       // Get start date index and end date index from input provided by start_date and end_date
       const start_date_index = data_array.map(product => product.labels).indexOf(start_date.value);
       const end_date_index = data_array.map(product => product.labels).indexOf(end_date.value);
-      console.log(start_date);
       // If there indexes are greater than -1 that means start and end dates are in dates_array
       // If start index is greater than end index, there isn't any date in dates_array that would match the start and end dates.
       if (start_date_index > -1 && end_date_index > -1 && start_date_index <= end_date_index) {
-        console.log('working');
         // If start index is not equal to end index, there is more than one date in dates_array that would match the start and end dates.
         if (start_date_index !== end_date_index) {
           // Cut data_array to only include dates equal start date and end date
