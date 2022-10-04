@@ -47,8 +47,9 @@ const ProductWebsiteTemplate = () => {
     setPrices([]);
     setSales([]);
   };
+
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const getProductData = (url: string, setProductData: (arg0: never[]) => void) => {
+  const getProductData = (url: string, setProductData: (value: never[]) => void) => {
     axios
       .get(url + product_id)
       .then(async response => response.data)
@@ -175,6 +176,7 @@ const ProductWebsiteTemplate = () => {
       checkIfItemIsInFavourites();
     }
   }, [authState]);
+
   return (
     <div id="productPage">
       <div id="productInformations">
@@ -261,7 +263,9 @@ const ProductWebsiteTemplate = () => {
                   </div>
                   <div className="center">
                     <h3>
-                      {product.product_sale_price ? `${product.product_sale_price}€` : '0.00€'}
+                      {prices.map(prod => prod.product_price)[prices.length - 1] !== undefined
+                        ? `${prices.map(prod => prod.product_price)[prices.length - 1]}€`
+                        : '0.00€'}
                     </h3>
                   </div>
                 </div>
