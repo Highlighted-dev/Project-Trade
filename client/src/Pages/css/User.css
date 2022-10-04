@@ -120,7 +120,7 @@
   }
 }
 
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 680px) {
   .recentOrders table tbody td:nth-child(2) {
     font-size: 0.6em;
   }
