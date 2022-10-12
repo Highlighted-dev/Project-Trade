@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { authContext } from '../../components/ts/AuthContext';
-
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/User.css';
 

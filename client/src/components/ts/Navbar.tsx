@@ -11,7 +11,6 @@ import {
 import { BsGrid } from 'react-icons/bs';
 import { BiCog, BiLogOutCircle } from 'react-icons/bi';
 import { CgProfile } from 'react-icons/cg';
-import { FiSettings } from 'react-icons/fi';
 import '../css/navbar.css';
 import { Link } from 'react-router-dom';
 import { authContext } from './AuthContext';
@@ -118,10 +117,6 @@ const Navbar = () => {
                   <Link to="/">Edit Profile</Link>
                 </li>
                 <li>
-                  <FiSettings className="icons" />
-                  <Link to="/">Settings</Link>
-                </li>
-                <li>
                   <BiLogOutCircle className="icons" />
                   <a onClick={logout}>Logout</a>
                 </li>
@@ -194,7 +189,7 @@ const Navbar = () => {
             <span className="tooltip">Favourites</span>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/Settings">
               <div className="icon">
                 <BiCog />
               </div>
