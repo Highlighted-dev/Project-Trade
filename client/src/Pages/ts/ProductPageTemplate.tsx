@@ -263,7 +263,8 @@ const ProductWebsiteTemplate = () => {
                   </div>
                   <div className="center">
                     <h3>
-                      {prices.map(prod => prod.product_price)[prices.length - 1] !== undefined
+                      {prices.map(prod => prod.product_price)[prices.length - 1] !== undefined &&
+                      prices.map(prod => prod.product_price)[prices.length - 1] !== 'None'
                         ? `${prices.map(prod => prod.product_price)[prices.length - 1]}€`
                         : '0.00€'}
                     </h3>
