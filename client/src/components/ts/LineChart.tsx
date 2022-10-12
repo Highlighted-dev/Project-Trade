@@ -142,7 +142,9 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     // If start date is not empty, filter dates_array to only include dates equal start date and end date
     if (start_date && chart) {
       // Get start date index and end date index from input provided by start_date and end_date
-      const start_date_index = data_array.map(product => product.labels).indexOf(start_date.value);
+      const start_date_index = data_array
+        .map((product: IChartItem) => product.labels)
+        .indexOf(start_date.value);
       const end_date_index = data_array.map(product => product.labels).indexOf(end_date.value);
       // If there indexes are greater than -1 that means start and end dates are in dates_array
       // If start index is greater than end index, there isn't any date in dates_array that would match the start and end dates.
@@ -152,7 +154,6 @@ const LineChart = ({ data, variable_type, settings }: any) => {
           // Cut data_array to only include dates equal start date and end date
           data_array.splice(end_date_index + 1, data_array.length);
           data_array.splice(0, start_date_index);
-
           setChartData(data_array);
         } else {
           // Set chart data and lables to only one data point (Ex. If start date = "2022-08-04" and end date = "2022-08-04", only show "2022-08-04")
@@ -164,7 +165,7 @@ const LineChart = ({ data, variable_type, settings }: any) => {
       }
     }
     // If there are no data points beetwen start and end date, set chart data and labels to all dates (Ex. We have data for "2022-08-04" and "2022-08-06", but user requested data
-    // for ""2022-08-06". Becouse we don't have that, we will show all data points
+    // for ""2022-08-05". Becouse we don't have that, we will show all data points
     setChartData(data_array);
   };
   useEffect(() => {
