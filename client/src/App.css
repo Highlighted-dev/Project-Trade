@@ -1,9 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 html {
   overflow-x: hidden;
   overflow-y: hidden;
+  font-family: 'Poppins', sans-serif;
 }
 html,
 div::-webkit-scrollbar {
