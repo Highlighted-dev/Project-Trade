@@ -71,8 +71,11 @@
   width: 100%;
 }
 #forgotPassword {
-  width: 140px;
-  margin: -5px 0 20px 5px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  margin: 0px 0 20px 6px;
   color: #a6a6a6;
   cursor: pointer;
   transition: 0.5s;
