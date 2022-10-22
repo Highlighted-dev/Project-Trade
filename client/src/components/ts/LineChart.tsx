@@ -53,7 +53,7 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     },
     elements: {
       line: {
-        tension: 0.4,
+        tension: 0.3,
       },
     },
     point: {
