@@ -1,7 +1,7 @@
 .sidebar {
   height: 100%;
   width: 72px;
-  background-color: #0d0c16;
+  background-color: #1a1c20;
   position: fixed;
   top: 0;
   left: 0;
@@ -94,7 +94,7 @@
   transition: all ease 400ms;
   z-index: 10;
   width: calc(100vw + 72px);
-  background-color: #0d0c16;
+  background-color: #1a1c20;
   padding: 12px 12px;
 }
 .topbar .searchBox {
@@ -107,7 +107,7 @@
   border-radius: 12px;
   outline: none;
   border: none;
-  background-color: #25223b;
+  background-color: #23272e;
   color: #fff;
   padding-left: 40px;
   font-size: 18px;
@@ -124,7 +124,7 @@
   border-radius: 12px;
   outline: none;
   border: none;
-  background-color: #25223b;
+  background-color: #1e2227;
   color: #fff;
   font-size: 18px;
   transition: all ease 400ms;
@@ -158,7 +158,7 @@
 }
 .topbar .searchBar li:hover {
   transition: all ease 400ms;
-  background-color: #502eb6;
+  background-color: #111111;
   border-radius: 8px;
 }
 
@@ -205,7 +205,7 @@
   top: 70px;
   right: -20px;
   padding: 8px 16px;
-  background-color: #0d0c16;
+  background-color: #1a1c20;
   color: #fff;
   width: 180px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
@@ -225,7 +225,7 @@
   right: 30px;
   width: 20px;
   height: 20px;
-  background-color: #0d0c16;
+  background-color: #1a1c20;
   transform: rotate(45deg);
 }
 .topbar .userMenu h3 {
@@ -281,14 +281,13 @@
   transition: 0.5s ease;
 }
 .topbar .userMenu ul li a:hover {
-  color: #25223b;
+  color: #5b5b5f;
 }
 
 @media screen and (max-width: 680px) {
   .sidebar {
     height: 8%;
     width: 100%;
-    background-color: #0d0c16;
     position: fixed;
     top: 92%;
     left: 0;

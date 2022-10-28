@@ -35,14 +35,14 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     scales: {
       y: {
         gridLines: {
-          color: 'rgba(200, 200, 200, 0.2)',
+          color: '#111111',
           lineWidth: 1,
         },
       },
       x: {
         type: 'time',
         gridLines: {
-          color: 'rgba(200, 200, 200, 0.15)',
+          color: '#111111',
           lineWidth: 1,
         },
         time: {
@@ -62,9 +62,9 @@ const LineChart = ({ data, variable_type, settings }: any) => {
     plugins: {
       tooltip: {
         enabled: true,
-        backgroundColor: 'rgba(37, 34, 59,0.9)',
+        backgroundColor: '#1a1c20',
         borderWidth: 1,
-        borderColor: 'rgb(0, 0, 0)',
+        borderColor: '#000000',
         titleColor: '#fff',
         caretSize: 5,
         cornerRadius: 2,
@@ -74,13 +74,13 @@ const LineChart = ({ data, variable_type, settings }: any) => {
         position: 'bottom',
         reverse: true,
         labels: {
-          color: 'rgba(37, 34, 59,0.9)',
+          color: '#808080',
         },
       },
       title: {
         display: true,
         text: settings.title,
-        color: 'rgba(37, 34, 59,0.9)',
+        color: '#808080',
       },
     },
   };

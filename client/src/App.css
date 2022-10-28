@@ -10,7 +10,7 @@ html {
 html,
 div::-webkit-scrollbar {
   width: 8px;
-  background-color: #25223b;
+  background-color: #0e1011;
 }
 html,
 div::-webkit-scrollbar-track {
@@ -19,7 +19,7 @@ div::-webkit-scrollbar-track {
 }
 html,
 div::-webkit-scrollbar-thumb {
-  background-color: #0d0c16;
+  background-color: #0e1011;
 }
 html,
 body,

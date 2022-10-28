@@ -5,13 +5,15 @@
   height: calc(14vw + 22vh);
   padding: 20px;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: #111111;
+  border: 1px solid #424242;
   display: block;
   position: relative;
 }
 
 #priceChart input {
-  color: rgba(37, 34, 59, 0.9);
-  border: 1px solid rgba(37, 34, 59, 0.9);
+  background-color: #111111;
+  color: #fff;
+  border: 1px solid #424242;
   margin: 5px;
 }

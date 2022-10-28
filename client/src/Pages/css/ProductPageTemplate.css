@@ -27,17 +27,18 @@
   height: 55vh;
   width: 6vh;
   overflow-y: auto;
-  background-color: #fff;
-  border: 1px solid rgba(13, 12, 22, 0.2);
+  background-color: #111111;
+  border: 1px solid #424242;
   overflow-x: hidden;
   overflow-y: hidden;
 }
 #productInformations #images img {
   padding: 10px;
   min-width: 40px;
+  border-radius: 16px;
 }
 #productInformations #images img.selected {
-  border: 1px solid rgba(13, 12, 22, 0.92);
+  border: 1px solid #fff;
   border-radius: 12px 0px 0px 12px;
 }
 #productInformations #highresImages {
@@ -47,7 +48,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  background-color: #111111;
+  border: 1px solid #424242;
+  border-left: 0px;
 }
 #productInformations #highresImages img {
   opacity: 0;
@@ -60,15 +63,17 @@
   height: auto;
   max-width: 18vw;
   max-height: 40vh;
+  border-radius: 12px;
 }
 #productInformations #productData {
   float: left;
   width: 20vw;
   height: 55vh;
-  border: 1px solid rgba(13, 12, 22, 0.2);
+  background-color: #111111;
+  border: 1px solid #424242;
+  border-left: 0px;
   border-radius: 0px 12px 12px 0px;
-  background-color: #fff;
-  color: rgba(13, 12, 22, 0.92);
+  color: #fff;
   text-align: center;
   position: relative;
 }
@@ -137,7 +142,7 @@ h3 {
 #productData .productAbout .productAboutContent.expand::-webkit-scrollbar,
 #productData .productTechnicalDetails .productTechnicalDetailsContent.expand::-webkit-scrollbar {
   transition: 0.5s ease-in-out;
-  background-color: rgba(37, 34, 59, 0.7);
+  background-color: #0e1011;
 }
 #productData .productDetails .productDetailsContent.expand,
 #productData .productAbout .productAboutContent.expand,
@@ -191,7 +196,7 @@ h3 {
   width: calc(100vw - 80px);
   height: 65vh;
   text-align: center;
-  background-color: #25223b;
+  background-color: #0e1011;
 }
 
 /* Skeleton loading setup */

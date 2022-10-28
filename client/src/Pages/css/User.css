@@ -18,10 +18,11 @@
 .details .recentOrders {
   position: relative;
   display: block;
-  background: #fff;
+  background: #111111;
+  border: 1px solid #424242;
   padding: 20px;
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.1);
-  color: black;
+  color: #fff;
   border-radius: 20px;
   margin-bottom: 5vh;
   min-height: auto;
@@ -38,7 +39,7 @@
 .btn {
   position: relative;
   padding: 6px 12px;
-  background-color: #0d0c16;
+  background-color: #0358eb;
   color: #fff;
   border-radius: 6px;
 }
@@ -52,12 +53,11 @@
   padding: 3px;
 }
 .details table tr {
-  color: #0d0c16;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   transition: 0.4s ease-in-out;
 }
 .details table tbody tr:hover {
-  background-color: #0d0c16;
+  background-color: #272727;
   color: #fff;
   transition: 0.4s ease-in-out;
 }
@@ -88,10 +88,11 @@
   position: relative;
   display: block;
   min-height: 300px;
-  background: #fff;
+  background: #111111;
+  border: 1px solid #424242;
   padding: 20px;
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.1);
-  color: black;
+  color: #fff;
   border-radius: 20px;
   margin-bottom: 50px;
 }
