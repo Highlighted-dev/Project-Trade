@@ -66,7 +66,6 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
       });
       res.json({ status: 'ok' });
     } catch (e) {
-      //TODO User valdidator
       res.json({
         status: 'error',
         message: 'Something went wrong when trying to create User',
@@ -192,4 +191,20 @@ router.get(
     }
   }
 );
+router.put('/update', jsonParser, async (req: Request, res: Response) => {
+  await userModel.updateOne(
+    {
+      _id: req.body._id,
+    },
+    {
+      username: req.body.username,
+      email: req.body.email,
+      birthdate: req.body.birthdate,
+    }
+  );
+  res
+    .status(200)
+    .json({ status: 'ok', message: 'User data updated succsefully' });
+});
+
 export default router;
