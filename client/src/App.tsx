@@ -11,6 +11,7 @@ import AuthProvider from './components/ts/AuthContext';
 import SignedUserRoute from './RouteSettings/SignedUserRoute';
 import NotSignedUserRoute from './RouteSettings/NotSignedUserRoute';
 import Favourites from './Pages/ts/Favourites';
+import Settings from './Pages/ts/Settings';
 
 const App = () => {
   return (
@@ -65,6 +66,14 @@ const App = () => {
                 element={
                   <SignedUserRoute>
                     <Favourites />
+                  </SignedUserRoute>
+                }
+              />
+              <Route
+                path="/Settings"
+                element={
+                  <SignedUserRoute>
+                    <Settings />
                   </SignedUserRoute>
                 }
               />
