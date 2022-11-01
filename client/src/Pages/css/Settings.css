@@ -25,7 +25,15 @@
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
+  transition: 0.3s ease-in-out;
+  border: none;
 }
+#Settings .settingsNavBar li:hover {
+  transition: 0.3s ease-in-out;
+  color: #fff;
+  background-color: #1a1c20;
+}
+
 #Settings .settingsNavBar li span {
   pointer-events: none;
 }
