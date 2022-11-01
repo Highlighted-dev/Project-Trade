@@ -125,4 +125,12 @@
   .recentOrders table tbody td:nth-child(2) {
     font-size: 0.6em;
   }
+  .details {
+    padding: 10px;
+  }
+  .details .recentOrders,
+  .userData,
+  .favouritesData {
+    max-width: 320px;
+  }
 }
