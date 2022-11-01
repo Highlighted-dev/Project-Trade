@@ -114,7 +114,7 @@ const Navbar = () => {
                 </li>
                 <li>
                   <AiOutlineEdit className="icons" />
-                  <Link to="/">Edit Profile</Link>
+                  <Link to="/Settings/Account">Edit Profile</Link>
                 </li>
                 <li>
                   <BiLogOutCircle className="icons" />
