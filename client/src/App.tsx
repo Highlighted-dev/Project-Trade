@@ -12,6 +12,7 @@ import SignedUserRoute from './RouteSettings/SignedUserRoute';
 import NotSignedUserRoute from './RouteSettings/NotSignedUserRoute';
 import Favourites from './Pages/ts/Favourites';
 import Settings from './Pages/ts/Settings';
+import AccountSettings from './components/ts/Settings/AccountSettings';
 
 const App = () => {
   return (
@@ -73,7 +74,19 @@ const App = () => {
                 path="/Settings"
                 element={
                   <SignedUserRoute>
-                    <Settings />
+                    <Settings>
+                      <AccountSettings />
+                    </Settings>
+                  </SignedUserRoute>
+                }
+              />
+              <Route
+                path="/Settings/Account"
+                element={
+                  <SignedUserRoute>
+                    <Settings>
+                      <AccountSettings />
+                    </Settings>
                   </SignedUserRoute>
                 }
               />
