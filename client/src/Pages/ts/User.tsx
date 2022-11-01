@@ -13,7 +13,7 @@ const User = () => {
           <div className="userData">
             <div className="cardHeader">
               <h2>User Data</h2>
-              <Link to="/Edit" className="btn">
+              <Link to="/Settings/Account" className="btn">
                 Edit Profile
               </Link>
             </div>
