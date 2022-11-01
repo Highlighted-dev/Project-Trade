@@ -17,7 +17,6 @@ const Settings = ({ children }: RouteComponentProp) => {
   const toggleSelectedSetting: MouseEventHandler = setting => {
     // If there is any setting that has class '.selected', remove that class from it.
     const selectedSetting = document.querySelector('.selected');
-    console.log(selectedSetting, setting.target);
     if (selectedSetting) selectedSetting?.classList.toggle('selected');
 
     // Toggle clicked setting selected class
