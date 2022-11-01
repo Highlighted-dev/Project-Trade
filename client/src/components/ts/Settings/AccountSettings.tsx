@@ -76,7 +76,9 @@ const AccountSettings = () => {
               <div className="inputField">
                 <input type="date" ref={birthDateRef} required />
                 <span />
-                <label style={{ left: '6px' }}>{authState.birthdate}</label>
+                <label style={{ left: '6px' }}>
+                  {authState.birthdate?.split('-').reverse().join('.')}
+                </label>
               </div>
             </div>
             <div className="formButton">
@@ -92,7 +94,7 @@ const AccountSettings = () => {
           <h2>Preferences</h2>
           <span>
             Here you can change your preferences. <br /> You can change your theme and language
-            here.
+            there.
           </span>
         </div>
       </div>
