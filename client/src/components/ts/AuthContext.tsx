@@ -123,7 +123,7 @@ const AuthProvider: React.FC<React.ReactNode> = ({ children }) => {
   }, []);
 
   const values = useMemo(
-    () => ({ authState, login, logout, register, loading }),
+    () => ({ authState, login, logout, register, loading, loadData }),
     [authState, loading],
   );
   return <authContext.Provider value={values}>{children}</authContext.Provider>;
