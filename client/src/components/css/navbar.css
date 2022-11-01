@@ -116,6 +116,7 @@
 .topbar .searchBar .searchResults {
   padding: 5px;
   opacity: 0;
+  visibility: hidden;
   position: absolute;
   width: 30vw;
   left: calc(35vw - 10vh);
@@ -149,6 +150,7 @@
 }
 .topbar .searchBar.active .searchResults {
   opacity: 1;
+  visibility: visible;
 }
 .topbar .searchBar li {
   cursor: pointer;
