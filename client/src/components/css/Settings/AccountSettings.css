@@ -1,0 +1,132 @@
+/* Account Settings */
+#EditProfile {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #424242;
+}
+#Preferences {
+  width: 100%;
+  height: 30vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #424242;
+}
+#AccountSettings .description {
+  width: 35%;
+  height: auto;
+}
+#AccountSettings .description h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 25px 10px 8px 0px;
+}
+#AccountSettings .description span {
+  font-size: 0.8em;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+#EditProfile .content {
+  padding: 20px;
+  width: 70%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#EditProfile .content .form {
+  width: 60%;
+  height: 100%;
+  padding: 10px;
+  background-color: #1a1c20;
+  border-radius: 12px;
+}
+#EditProfile .content .form button {
+  width: 90px;
+  height: 28px;
+  background-color: #0358eb;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 4px;
+}
+#EditProfile .formItem {
+  width: 100%;
+  height: auto;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#EditProfile .labelField {
+  width: 100px;
+}
+#EditProfile .inputField {
+  position: relative;
+  border-bottom: 2px solid #adadad;
+  margin: 20px 0;
+  width: 85%;
+}
+#EditProfile .inputField input {
+  width: 100%;
+  padding: 0 5px;
+  height: 30px;
+  font-size: 16px;
+  border: none;
+  background: none;
+  outline: none;
+}
+#EditProfile .inputField label {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: #adadad;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+#EditProfile .inputField span::before {
+  content: '';
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #0e1011;
+  transition: 0.5s;
+}
+#EditProfile .inputField input::-webkit-input-placeholder {
+  transition: 0.6s ease;
+}
+#EditProfile .inputField input:focus::-webkit-input-placeholder {
+  transition: 0.3s ease;
+  color: transparent;
+}
+#EditProfile .inputField input:focus ~ label,
+#EditProfile .inputField input:valid ~ label {
+  top: -6px;
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+}
+
+#EditProfile .inputField input:focus ~ span::before,
+#EditProfile .inputField input:valid ~ span::before {
+  width: 100%;
+}
+#EditProfile .formButton {
+  display: flex;
+  justify-content: right;
+}
+@media screen and (max-width: 1300px) {
+  #EditProfile .content .form {
+    width: 100%;
+  }
+}
