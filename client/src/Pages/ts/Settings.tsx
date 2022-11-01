@@ -30,18 +30,26 @@ const Settings = ({ children }: RouteComponentProp) => {
         </div>
         <div className="settingsNavBar">
           <ul>
-            <li className="selected" onClick={toggleSelectedSetting}>
-              <Link to="/Settings/Account">Account</Link>
-            </li>
-            <li onClick={toggleSelectedSetting}>
-              <Link to="/Settings/Privacy">Privacy</Link>
-            </li>
-            <li onClick={toggleSelectedSetting}>
-              <Link to="/Settings/Notifications">Notifications</Link>
-            </li>
-            <li onClick={toggleSelectedSetting}>
-              <Link to="/Settings/Admin">Admin</Link>
-            </li>
+            <Link to="/Settings/Account">
+              <li className="selected" onClick={toggleSelectedSetting}>
+                <span>Account</span>
+              </li>
+            </Link>
+            <Link to="/Settings/Privacy">
+              <li onClick={toggleSelectedSetting}>
+                <span>Privacy</span>
+              </li>
+            </Link>
+            <Link to="/Settings/Notifications">
+              <li onClick={toggleSelectedSetting}>
+                <span>Notifications</span>
+              </li>
+            </Link>
+            <Link to="/Settings/Admin">
+              <li onClick={toggleSelectedSetting}>
+                <span>Admin</span>
+              </li>
+            </Link>
           </ul>
         </div>
         {children}
