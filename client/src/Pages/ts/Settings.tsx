@@ -3,12 +3,8 @@ import React, { MouseEventHandler, MutableRefObject, useContext, useRef, useStat
 import '../css/Settings.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// @ts-ignore
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
 import { AuthContextType } from '../../@types/AuthContext';
 import { authContext } from '../../components/ts/AuthContext';
-import AccountSettings from '../../components/ts/Settings/AccountSettings';
 import { RouteComponentProp } from '../../@types/Routes';
 
 const Settings = ({ children }: RouteComponentProp) => {
