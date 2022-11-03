@@ -6,6 +6,7 @@ import 'alertifyjs/build/css/alertify.css';
 import { AuthContextType } from '../../../@types/AuthContext';
 import { authContext } from '../AuthContext';
 import '../../css/Settings/AccountSettings.css';
+import { isBirthDateValid, isEmailValid } from '../Validation';
 
 const AccountSettings = () => {
   const { authState, loadData } = useContext(authContext) as AuthContextType;
@@ -14,7 +15,17 @@ const AccountSettings = () => {
   const birthDateRef = useRef() as MutableRefObject<HTMLInputElement>;
 
   const updateUserData = async () => {
-    if (emailRef.current.value || usernameRef.current.value || birthDateRef.current.value) {
+    if (!(emailRef.current.value || usernameRef.current.value || birthDateRef.current.value)) {
+      alertify.error('Please fill in at least one field.');
+      return;
+    }
+    if (
+      isEmailValid(emailRef.current.value ? emailRef.current.value : authState.email!) &&
+      isBirthDateValid(
+        new Date('01-01-1900'),
+        new Date(birthDateRef.current.value ? birthDateRef.current.value : authState.birthdate!),
+      )
+    ) {
       await axios.put('/api/auth/update', {
         _id: authState._id,
         email: emailRef.current.value ? emailRef.current.value : authState.email,
@@ -24,7 +35,9 @@ const AccountSettings = () => {
       loadData().then(() => {
         alertify.success('User data updated successfully!');
       });
+      return;
     }
+    alertify.error('Email or birthdate is not valid.');
   };
 
   return (
