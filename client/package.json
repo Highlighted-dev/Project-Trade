@@ -5,6 +5,7 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@reduxjs/toolkit": "^1.7.1",
+    "@testing-library/cypress": "^8.0.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
+    "cypress": "^10.11.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
