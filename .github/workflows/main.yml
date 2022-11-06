@@ -15,4 +15,5 @@ jobs:
         with:
           build: npm run build
           start: npm start
-          cache-dependency-path: 'client/package-lock.json'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json' 
