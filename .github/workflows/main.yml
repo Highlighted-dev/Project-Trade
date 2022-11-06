@@ -5,9 +5,6 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: 'client'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -18,3 +15,4 @@ jobs:
         with:
           build: npm run build
           start: npm start
+          cache-dependency-path: 'client/package-lock.json'
