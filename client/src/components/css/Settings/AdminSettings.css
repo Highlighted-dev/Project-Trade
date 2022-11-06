@@ -1,0 +1,23 @@
+#ReloadData {
+  width: 100%;
+  height: 40vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #424242;
+}
+#AdminSettings .description {
+  width: 35%;
+  height: auto;
+}
+#AdminSettings .description h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 25px 10px 8px 0px;
+}
+#AdminSettings .description span {
+  font-size: 0.8em;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
