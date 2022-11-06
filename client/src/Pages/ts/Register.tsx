@@ -12,7 +12,7 @@ import {
   doesPasswordHaveNumber,
   isEmailValid,
   isBirthDateValid,
-} from '../../components/ts/Validation';
+} from '../../utils/Validation';
 
 const SignUp = () => {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;

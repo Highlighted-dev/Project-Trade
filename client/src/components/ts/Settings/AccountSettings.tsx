@@ -6,7 +6,7 @@ import 'alertifyjs/build/css/alertify.css';
 import { AuthContextType } from '../../../@types/AuthContext';
 import { authContext } from '../AuthContext';
 import '../../css/Settings/AccountSettings.css';
-import { isBirthDateValid, isEmailValid } from '../Validation';
+import { isBirthDateValid, isEmailValid } from '../../../utils/Validation';
 
 const AccountSettings = () => {
   const { authState, loadData } = useContext(authContext) as AuthContextType;
