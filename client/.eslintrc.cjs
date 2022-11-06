@@ -12,7 +12,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   overrides: [],
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: ['.eslintrc.cjs', 'cypress.config.ts'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
