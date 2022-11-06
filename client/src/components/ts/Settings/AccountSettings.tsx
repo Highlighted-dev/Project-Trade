@@ -20,10 +20,12 @@ const AccountSettings = () => {
       return;
     }
     if (
-      isEmailValid(emailRef.current.value ? emailRef.current.value : authState.email!) &&
+      isEmailValid(emailRef.current.value ? emailRef.current.value : authState.email || '') &&
       isBirthDateValid(
         new Date('01-01-1900'),
-        new Date(birthDateRef.current.value ? birthDateRef.current.value : authState.birthdate!),
+        new Date(
+          birthDateRef.current.value ? birthDateRef.current.value : authState.birthdate || '',
+        ),
       )
     ) {
       await axios.put('/api/auth/update', {
