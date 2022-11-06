@@ -20,7 +20,7 @@ import {
 } from '../../@types/ProductPageTemplate';
 import '../css/ProductPageTemplate.css';
 
-const ProductWebsiteTemplate = () => {
+const ProductPageTemplate = () => {
   const { product_id } = useParams();
   const { authState } = useContext(authContext) as AuthContextType;
   // TODO fix this
@@ -433,4 +433,4 @@ const ProductWebsiteTemplate = () => {
   );
 };
 
-export default ProductWebsiteTemplate;
+export default ProductPageTemplate;

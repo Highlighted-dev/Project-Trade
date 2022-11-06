@@ -1,7 +1,7 @@
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from './components/ts/Navbar';
-import ProductWebsiteTemplate from './Pages/ts/ProductPageTemplate';
+import ProductPageTemplate from './Pages/ts/ProductPageTemplate';
 import Home from './Pages/ts/Home';
 import User from './Pages/ts/User';
 import NotFound from './Pages/ts/NotFound';
@@ -13,6 +13,7 @@ import NotSignedUserRoute from './RouteSettings/NotSignedUserRoute';
 import Favourites from './Pages/ts/Favourites';
 import Settings from './Pages/ts/Settings';
 import AccountSettings from './components/ts/Settings/AccountSettings';
+import AdminSettings from './components/ts/Settings/AdminSettings';
 
 const App = () => {
   return (
@@ -70,16 +71,7 @@ const App = () => {
                   </SignedUserRoute>
                 }
               />
-              <Route
-                path="/Settings"
-                element={
-                  <SignedUserRoute>
-                    <Settings>
-                      <AccountSettings />
-                    </Settings>
-                  </SignedUserRoute>
-                }
-              />
+              <Route path="/Settings" element={<Navigate to="/Settings/Account" />} />
               <Route
                 path="/Settings/Account"
                 element={
@@ -91,10 +83,20 @@ const App = () => {
                 }
               />
               <Route
+                path="/Settings/Admin"
+                element={
+                  <SignedUserRoute>
+                    <Settings>
+                      <AdminSettings />
+                    </Settings>
+                  </SignedUserRoute>
+                }
+              />
+              <Route
                 path="/Product/:product_id"
                 element={
                   <SignedUserRoute>
-                    <ProductWebsiteTemplate />
+                    <ProductPageTemplate />
                   </SignedUserRoute>
                 }
               />
