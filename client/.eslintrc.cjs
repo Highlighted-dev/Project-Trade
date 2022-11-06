@@ -12,7 +12,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   overrides: [],
-  ignorePatterns: ['.eslintrc.cjs', 'cypress.config.ts'],
+  ignorePatterns: ['.eslintrc.cjs', 'cypress.config.ts', 'src/components/ts/LineChart.tsx'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
