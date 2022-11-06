@@ -42,14 +42,14 @@ const Login = () => {
       <h1>Login</h1>
       <div id="SignPageForm">
         <div className="inputField">
-          <input ref={emailRef} type="text" required />
+          <input ref={emailRef} id="Email" type="text" required />
           <span />
-          <label>Email</label>
+          <label htmlFor="Email">Email</label>
         </div>
         <div className="inputField">
-          <input ref={passwordRef} type="password" required />
+          <input ref={passwordRef} id="Password" type="password" required />
           <span />
-          <label>Password</label>
+          <label htmlFor="Password">Password</label>
         </div>
         {
           // TODO Add forgot password method
