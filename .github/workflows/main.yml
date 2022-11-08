@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare server
-        run: cd server && npm install -g ts-node && npm install typescript -g && npm install && sleep 2
+        run: cd server && && npm install && npm uninstall ts-node typescript && npm install ts-node --save-dev && npm install typescript -g && npm install typescript --save-dev
       - name: Run server
         run: cd server && npm start && sleep 5
       - name: Cypress run
