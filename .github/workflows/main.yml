@@ -8,11 +8,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
+      - name: Run Server
+        run: cd server && npm start && sleep 10
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.0
         with:
           working-directory: client
           build: npm run build
-          start: npm start
+          start: npm start && sleep 10
