@@ -9,9 +9,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare server
-        run: cd server && npm install && sleep 2 && npm uninstall ts-node && sleep 2 && npm install ts-node --save-dev
+        run: cd server && npm install && sleep 2
       - name: Run server
-        run: cd server && npx ts-node index.ts && sleep 5
+        run: cd server && pm2 start --interpreter none "ts-node-esm ./server/index.ts" && sleep 6
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.0
         with:
