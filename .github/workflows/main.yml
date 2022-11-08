@@ -11,7 +11,7 @@ jobs:
       - name: Prepare server
         run: cd server && npm install && sleep 2
       - name: Run server
-        run: cd server && pm2 start --interpreter none "ts-node-esm ./server/index.ts" && sleep 6
+        run: cd server && ts-node-esm ./server/index.ts && sleep 6
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.0
         with:
