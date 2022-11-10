@@ -3,6 +3,7 @@
   width: 43vw;
   min-width: 400px;
   height: calc(14vw + 22vh);
+  min-height: 240px;
   padding: 20px;
   border-radius: 10px;
   background-color: #111111;
@@ -16,4 +17,16 @@
   color: #fff;
   border: 1px solid #424242;
   margin: 5px;
+}
+@media screen and (max-width: 420px) {
+  #priceChart {
+    min-width: 0px;
+    padding: 0px;
+    width: 100vw;
+    height: 40vh;
+  }
+  #priceChart canvas {
+    width: 900px;
+    height: 400px;
+  }
 }

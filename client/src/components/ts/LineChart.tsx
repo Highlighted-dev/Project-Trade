@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-param-reassign */
 import { useEffect, useRef, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS, registerables } from 'chart.js';
@@ -8,7 +6,6 @@ import '../css/LineChart.css';
 import { IChartItem } from '../../@types/LineChart';
 
 ChartJS.register(...registerables);
-
 const LineChart = ({ data, variable_type, settings }: any) => {
   // Becouse this component will use more than 1 type of json object, we need to change keys of the objects to fit the chart.
   const [chartData, setChartData] = useState(
@@ -26,8 +23,6 @@ const LineChart = ({ data, variable_type, settings }: any) => {
 
   const chartRef = useRef<ChartJS>(null);
   const options: any = {
-    responsive: true,
-    maintainAspectRatio: true,
     animation: {
       easing: 'easeInOutQuad',
       duration: 520,
