@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
-echo '🏗️👷 Checking your project before committing👷‍♂️🏗️'
-echo 'please be patient, this may take a while...'
+. "$(dirname -- "$0")/_/husky.sh"
 
-cd client && npx lint-staged
+cd client && npm run test
+
