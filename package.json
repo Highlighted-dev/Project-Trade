@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "client" : "cd client && npx lint-staged",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -10,7 +11,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "cd client && npx lint-staged"
+      "pre-commit": "client"
     }
   }
 }
