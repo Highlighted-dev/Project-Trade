@@ -7,5 +7,10 @@
   },
   "dependencies": {
     "husky": "^8.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "cd client && npx lint-staged"
+    }
   }
 }
