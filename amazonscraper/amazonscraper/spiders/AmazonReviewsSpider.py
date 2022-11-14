@@ -8,13 +8,21 @@ from ..items import AmazonItemReviews
 import logging
 from scrapy_splash import SplashFormRequest
 from datetime import datetime
+import pymongo
 class AmazonReviewsSpider(scrapy.Spider):
     def __init__(self, prod_id):
         #If we want to scrape only one product, we can this by passing the product id as an argument.
         self.product_id = prod_id
         self.start_urls = [f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"]              
+        client = pymongo.MongoClient(GlobalVariables.mongoUrl)
+        db = client[GlobalVariables.mongoDatabase]
+        column = db[GlobalVariables.mongo_column_reviews]
+        column.delete_many({"product_id":self.product_id})
+        client.close()
+        logging.info("Successfully removed old data for product with id: " + self.product_id)
     name = 'AmazonReviewsSpider'
     allowed_domains = GlobalVariables.allowed_domains
+
     def parse(self, response):
         try:
             amazon_reviews = AmazonItemReviews()
