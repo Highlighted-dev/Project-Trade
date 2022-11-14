@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
+echo '🏗️👷 Checking your project before committing👷‍♂️🏗️'
+echo 'please be patient, this may take a while...'
 
 cd client && npx lint-staged
