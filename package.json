@@ -1,0 +1,11 @@
+{
+  "license": "MIT",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "husky": "^8.0.2"
+  }
+}
