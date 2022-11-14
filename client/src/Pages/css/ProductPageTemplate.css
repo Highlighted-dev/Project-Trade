@@ -187,7 +187,8 @@ h3 {
 
 /*Price chart */
 
-#productPriceDiv {
+#productPricesDiv,
+#productSalesDiv {
   padding: 8px;
   position: relative;
   display: flex;
@@ -281,7 +282,8 @@ h3 {
   #productData .productTechnicalDetails .productTechnicalDetailsContent.expand {
     max-height: 19vh;
   }
-  #productPriceDiv {
+  #productPricesDiv,
+  #productSalesDiv {
     width: 100%;
   }
 }

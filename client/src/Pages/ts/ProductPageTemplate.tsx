@@ -23,9 +23,7 @@ import '../css/ProductPageTemplate.css';
 const ProductPageTemplate = () => {
   const { product_id } = useParams();
   const { authState } = useContext(authContext) as AuthContextType;
-  // TODO fix this
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [changingProductId, setChangingProductId] = useState(product_id);
+
   const [isProudctInFavourites, setIsProudctInFavourites] = useState<boolean>(false);
   const [changingFavouriteStatus, setChangingFavouriteStatus] = useState<boolean>(false);
   const [images, setImages] = useState<IProductImages[]>([]);
@@ -134,7 +132,6 @@ const ProductPageTemplate = () => {
   };
 
   useEffect(() => {
-    setChangingProductId(product_id);
     clearStates();
     axios
       .get(`/api/ap/images/id/${product_id}`)
@@ -226,7 +223,13 @@ const ProductPageTemplate = () => {
                 <li key={product.product_highres_image}>
                   <a href={product.product_highres_image} target="_blank" rel="noreferrer">
                     <img
-                      src={product.product_highres_image}
+                      src={
+                        product.product_highres_image !== 'null'
+                          ? product.product_highres_image
+                          : 'https://www.drodd.com/images14/white7.jpg'
+                        // If there is no highres image, then white image will be rendered
+                        // TODO fix that
+                      }
                       id={`highresimg${key}`}
                       // First image will have 'selected' class (visible to user)
                       className={key > 0 ? '' : 'highresSelected'}
@@ -377,7 +380,7 @@ const ProductPageTemplate = () => {
           </div>
         </div>
       </div>
-      <div id="productPriceDiv">
+      <div id="productPricesDiv">
         {prices.length > 0 ? (
           <LineChart
             data={prices}
@@ -403,7 +406,7 @@ const ProductPageTemplate = () => {
           </div>
         )}
       </div>
-      <div id="productPriceDiv">
+      <div id="productSalesDiv">
         {sales.length > 0 ? (
           <LineChart
             data={sales}
