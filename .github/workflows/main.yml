@@ -5,21 +5,16 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-20.04
-    env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare server
         run: cd server && npm install && sleep 2
-      - name: Install pm2
-        run: sudo npm install -g pm2
       - name: Run server
-        run: cd server && pm2 start --interpreter none "ts-node-esm ./express/index.ts" && sleep 6
+        run: cd server && ts-node-esm index.ts
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.0
         with:
           working-directory: client
-          build: npm run build
-          start: npm start && sleep 10
+          build: npm run build && sleep 5
+          start: npm start 
