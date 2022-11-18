@@ -1,7 +1,7 @@
 describe('Product page test', () => {
   console.log(Cypress.env('TEST_USER_EMAIL'));
   it('Goes to product page and checks if every information is displayed corretly', () => {
-    cy.request('POST', 'http://localhost:3000/api/auth/login', {
+    cy.request('POST', 'http://localhost:5000/api/auth/login', {
       email: Cypress.env('TEST_USER_EMAIL'),
       password: Cypress.env('TEST_USER_PASSWORD'),
     }).its('body');
