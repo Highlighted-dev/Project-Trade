@@ -1,9 +1,8 @@
 describe('Product page test', () => {
-  console.log(Cypress.env('TEST_USER_EMAIL'));
   it('Goes to product page and checks if every information is displayed corretly', () => {
     cy.request('POST', 'http://localhost:5000/api/auth/login', {
-      email: Cypress.env('TEST_USER_EMAIL'),
-      password: Cypress.env('TEST_USER_PASSWORD'),
+      email: 'Test1@gmail.com',
+      password: 'Test1@gmail.com',
     }).its('body');
     cy.visit('http://localhost:3000/Product/B09JQZ5DYM');
     cy.findByText('Apple AirPods Pro with MagSafe charging case (2021)').should('exist');
