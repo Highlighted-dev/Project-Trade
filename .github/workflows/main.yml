@@ -11,15 +11,15 @@ jobs:
       - name: Instal tsnode and typescript globally
         run: npm install -g ts-node && npm install -g typescript
       - name: Prepare server
-        run: cd server && npm install && sleep 2
+        run: cd server && npm install
       - name: Install pm2
         run: sudo npm install -g pm2
       - name: Run server
-        run: cd server && pm2 start --interpreter none "ts-node-esm index.ts" && sleep 5
+        run: cd server && pm2 start --interpreter none "ts-node-esm index.ts"
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.0
         with:
           working-directory: client
-          build: npm run build && sleep 5
+          build: npm run build
           start: npm start 
           wait-on: 'http://localhost:3000'
