@@ -22,3 +22,4 @@ jobs:
           working-directory: client
           build: npm run build && sleep 5
           start: npm start 
+          wait-on: 'http://localhost:3000'
