@@ -39,8 +39,7 @@
     "test": "npx cypress run --record --key 8a5d7344-4d49-4450-bc55-46836bd5bdc5",
     "start-and-test": "start-server-and-test start http://localhost:3000 cy:run",
     "cy:run": "cypress run",
-    "pr": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,json}\"",
-    "prepare": "cd .. && husky install"
+    "pr": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,json}\""
   },
   "browserslist": {
     "production": [
