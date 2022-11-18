@@ -298,6 +298,13 @@ router.get('/sales/id/:id', async (req: Request, res: Response) => {
           .get('http://localhost:5000/api/ap/reviews/id/' + req.params.id)
           .then(response => response.data)
           .then(async responseData => {
+            if (!responseData.data) {
+              return res.status(200).json({
+                status: 'ok',
+                message: 'No reviews found',
+              });
+            }
+            console.log(responseData.data);
             //sort json object by date
             const sortJsonObject = (a: any, b: any) => {
               return (

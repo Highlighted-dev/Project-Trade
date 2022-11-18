@@ -97,7 +97,7 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
 
       //If password is valid and user is found, return token.
       if (isPasswordValid) {
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ _id: user._id }, 'amazonscraperjwt');
         const cookie = req.cookies.token;
         //If cookie is already set, return error. If cookie is not set, set cookie.
         if (cookie == undefined) {
@@ -156,7 +156,7 @@ router.get(
     }
     try {
       //Verify token
-      if (!jwt.verify(request_token, process.env.JWT_SECRET)) {
+      if (!jwt.verify(request_token, 'amazonscraperjwt')) {
         return res.status(400).json({
           status: 'error',
           error: 'BAD REQUEST',
@@ -170,10 +170,7 @@ router.get(
     }
     //If Token is valid
     if (auth) {
-      const data = jwt.verify(
-        request_token,
-        process.env.JWT_SECRET
-      ) as IUserModel;
+      const data = jwt.verify(request_token, 'amazonscraperjwt') as IUserModel;
       userModel.findById(data._id).exec((err, user) => {
         if (err || !user) {
           return res.status(400).json({

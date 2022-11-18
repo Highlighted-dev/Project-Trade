@@ -12,7 +12,8 @@ const app: Application = express();
 
 //as=amazonScraper
 
-const url: string = process.env.MONGODB_URI!;
+const url: string =
+  'mongodb+srv://root:root@project-trade.d28vx.mongodb.net/project-trade';
 const port: number = 5000;
 
 mongoose
