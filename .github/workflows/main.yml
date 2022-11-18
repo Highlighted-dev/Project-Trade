@@ -8,6 +8,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Instal tsnode and typescript globally
+        run: npm install -g ts-node && npm install -g typescript
       - name: Prepare server
         run: cd server && npm install && sleep 2
       - name: Run server
