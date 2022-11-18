@@ -5,6 +5,9 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-20.04
+    env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
