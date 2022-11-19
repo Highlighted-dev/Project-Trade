@@ -17,9 +17,9 @@ const amazonProductTechnicalDetailsSchema =
     },
     { collection: 'amazonProductTechnicalDetails' }
   );
-var amazonProductTechnicalDetails: Model<IProductTechnicalDetails> =
+var amazonProductTechnicalDetailsModel: Model<IProductTechnicalDetails> =
   mongoose.model(
     'amazonProductTechnicalDetails',
     amazonProductTechnicalDetailsSchema
   );
-export default amazonProductTechnicalDetails;
+export default amazonProductTechnicalDetailsModel;

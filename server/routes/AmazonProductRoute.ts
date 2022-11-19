@@ -1,15 +1,15 @@
 import express, { Request, response, Response, Router } from 'express';
-import AmazonProductData from '../models/AmazonProductDataModel';
-import AmazonProductDetails from '../models/AmazonProductDetailsModel';
-import AmazonProductThumbImages from '../models/AmazonProductThumbImagesModel';
-import AmazonProductTechnicalDetails from '../models/AmazonProductTechnicalDetailsModel';
-import AmazonProductAbout from '../models/AmazonProductAboutModel';
-import AmazonProductHighResImages from '../models/AmazonProductHighResImagesModel';
+import amazonProductDataModel from '../models/AmazonProductDataModel';
+import amazonProductDetailsModel from '../models/AmazonProductDetailsModel';
+import amazonProductThumbImagesModel from '../models/AmazonProductThumbImagesModel';
+import amazonProductTechnicalDetailsModel from '../models/AmazonProductTechnicalDetailsModel';
+import amazonProductAboutModel from '../models/AmazonProductAboutModel';
+import amazonProductHighResImagesModel from '../models/AmazonProductHighResImagesModel';
 import { Model } from 'mongoose';
-import AmazonProductPrices from '../models/AmazonProductPrices';
+import amazonProductPricesModel from '../models/AmazonProductPricesModel';
 import axios, { AxiosError } from 'axios';
-import AmazonProductReviews from '../models/AmazonProductReviews';
-import amazonProductSales from '../models/AmazonProductSales';
+import amazonProductReviewsModel from '../models/AmazonProductReviewsModel';
+import amazonProductSalesModel from '../models/AmazonProductSalesModel';
 
 const router: Router = express.Router();
 
@@ -91,7 +91,7 @@ const getAmazonSpecificDataOrUpdateIfNeeded = async (
     getRequestWithAxios(scrapingUrl + id)
       .then(async response => {
         if (response.status == 200) {
-          amazon_data = await AmazonProductPrices.find({
+          amazon_data = await amazonProductPricesModel.find({
             product_id: id,
           });
           //If program succesfuly scraped new data and then found them in database
@@ -149,13 +149,13 @@ const axiosErrorHandler = (err: AxiosError, res: Response) => {
 };
 
 router.get('/', async (req: Request, res: Response) => {
-  res.json(await AmazonProductData.find());
+  res.json(await amazonProductDataModel.find());
 });
 //Get product by name
 router.get('/name/:name', async (req: Request, res: Response) => {
   const { name } = req.params;
   res.json(
-    await AmazonProductData.find({
+    await amazonProductDataModel.find({
       product_name: { $regex: '^' + name, $options: 'i' },
     })
   );
@@ -167,7 +167,7 @@ router.get('/array', async (req: Request, res: Response) => {
     return id;
   });
   res.json(
-    await AmazonProductData.find({
+    await amazonProductDataModel.find({
       product_id: {
         $in: object_of_ids,
       },
@@ -177,12 +177,12 @@ router.get('/array', async (req: Request, res: Response) => {
 
 //Get product by id
 router.get('/id/:id', async (req: Request, res: Response) => {
-  getAmazonProductData(req, res, AmazonProductData);
+  getAmazonProductData(req, res, amazonProductDataModel);
 });
 
 //Get details by id
 router.get('/details/id/:id', async (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductDetails)
+  getAmazonProductData(req, res, amazonProductDetailsModel)
 );
 
 //Get images by id
@@ -190,26 +190,26 @@ router.get('/images/id/:id', (req: Request, res: Response) =>
   getAmazonProductData(
     req,
     res,
-    AmazonProductThumbImages,
+    amazonProductThumbImagesModel,
     'http://localhost:5000/api/as/id/'
   )
 );
 
 //Get product technical details by id
 router.get('/technicalDetails/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductTechnicalDetails)
+  getAmazonProductData(req, res, amazonProductTechnicalDetailsModel)
 );
 
 //Get product about by id
 router.get('/about/id/:id', (req: Request, res: Response) =>
-  getAmazonProductData(req, res, AmazonProductAbout)
+  getAmazonProductData(req, res, amazonProductAboutModel)
 );
 //Get product prices by id
 router.get('/prices/id/:id', (req: Request, res: Response) =>
   getAmazonSpecificDataOrUpdateIfNeeded(
     req,
     res,
-    AmazonProductPrices,
+    amazonProductPricesModel,
     'http://localhost:5000/api/as/prices/id/'
   )
 );
@@ -218,7 +218,7 @@ router.get('/reviews/id/:id', (req: Request, res: Response) =>
   getAmazonProductData(
     req,
     res,
-    AmazonProductReviews,
+    amazonProductReviewsModel,
     'http://localhost:5000/api/as/reviews/id/'
   )
 );
@@ -227,7 +227,7 @@ router.get('/highResImages/id/:id', (req: Request, res: Response) =>
   getAmazonProductData(
     req,
     res,
-    AmazonProductHighResImages,
+    amazonProductHighResImagesModel,
     'http://localhost:5000/api/as/highRes/id/'
   )
 );
@@ -264,7 +264,7 @@ router.get('/sales/id/:id', async (req: Request, res: Response) => {
     .toISOString()
     .split('T')[0];
 
-  let amazon_sales = await amazonProductSales.find({
+  let amazon_sales = await amazonProductSalesModel.find({
     product_id: req.params.id,
   });
   if (
@@ -338,7 +338,7 @@ router.get('/sales/id/:id', async (req: Request, res: Response) => {
               (50 / difference_between_dates) *
               10
             ).toFixed(2);
-            await amazonProductSales.updateOne(
+            await amazonProductSalesModel.updateOne(
               {
                 product_id: req.params.id,
                 product_sales_date: current_date,
@@ -350,7 +350,7 @@ router.get('/sales/id/:id', async (req: Request, res: Response) => {
               },
               { new: true, upsert: true }
             );
-            amazon_sales = await amazonProductSales.find({
+            amazon_sales = await amazonProductSalesModel.find({
               product_id: req.params.id,
             });
             if (amazon_sales.length > 0)

@@ -15,8 +15,8 @@ const amazonProductAboutSchema = new Schema<IProductAbout>(
   },
   { collection: 'amazonProductAbout' }
 );
-var amazonProductAbout: Model<IProductAbout> = mongoose.model(
+let amazonProductAboutModel: Model<IProductAbout> = mongoose.model(
   'amazonProductAbout',
   amazonProductAboutSchema
 );
-export default amazonProductAbout;
+export default amazonProductAboutModel;

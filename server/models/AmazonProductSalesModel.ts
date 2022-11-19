@@ -15,8 +15,8 @@ const amazonProductSalesSchema = new Schema<IProductSales>(
   },
   { collection: 'amazonProductSales', versionKey: false }
 );
-var amazonProductSales: Model<IProductSales> = mongoose.model(
+var amazonProductSalesModel: Model<IProductSales> = mongoose.model(
   'amazonProductSales',
   amazonProductSalesSchema
 );
-export default amazonProductSales;
+export default amazonProductSalesModel;

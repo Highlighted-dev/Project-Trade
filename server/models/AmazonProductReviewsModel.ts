@@ -19,8 +19,8 @@ const amazonProductReviewsSchema = new Schema<IProductReviews>(
   },
   { collection: 'amazonProductReviews' }
 );
-var amazonProductReviews: Model<IProductReviews> = mongoose.model(
+var amazonProductReviewsModel: Model<IProductReviews> = mongoose.model(
   'amazonProductReviews',
   amazonProductReviewsSchema
 );
-export default amazonProductReviews;
+export default amazonProductReviewsModel;

@@ -14,8 +14,8 @@ const amazonProductThumbImagesSchema = new Schema<IProductThumbImages>(
   },
   { collection: 'amazonProductThumbImages' }
 );
-var amazonProductThumbImages: Model<IProductThumbImages> = mongoose.model(
+var amazonProductThumbImagesModel: Model<IProductThumbImages> = mongoose.model(
   'amazonProductThumbImages',
   amazonProductThumbImagesSchema
 );
-export default amazonProductThumbImages;
+export default amazonProductThumbImagesModel;

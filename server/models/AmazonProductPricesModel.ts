@@ -16,8 +16,8 @@ const amazonProductPricesSchema = new Schema<IProductPrices>(
   },
   { collection: 'amazonProductPrices' }
 );
-var amazonProductPrices: Model<IProductPrices> = mongoose.model(
+var amazonProductPricesModel: Model<IProductPrices> = mongoose.model(
   'amazonProductPrices',
   amazonProductPricesSchema
 );
-export default amazonProductPrices;
+export default amazonProductPricesModel;

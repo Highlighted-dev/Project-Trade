@@ -19,8 +19,8 @@ const amazonProductDataSchema = new Schema<IProductData>(
   },
   { collection: 'amazonProductData' }
 );
-let AmazonProductDataModel: Model<IProductData> = mongoose.model(
+let amazonProductDataModel: Model<IProductData> = mongoose.model(
   'amazonProductData',
   amazonProductDataSchema
 );
-export default AmazonProductDataModel;
+export default amazonProductDataModel;

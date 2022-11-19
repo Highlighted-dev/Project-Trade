@@ -14,8 +14,9 @@ const amazonProductHighResImagesSchema = new Schema<IProductHighResImages>(
   },
   { collection: 'amazonProductHighResImages' }
 );
-var amazonProductHighResImages: Model<IProductHighResImages> = mongoose.model(
-  'amazonProductHighResImages',
-  amazonProductHighResImagesSchema
-);
-export default amazonProductHighResImages;
+var amazonProductHighResImagesModel: Model<IProductHighResImages> =
+  mongoose.model(
+    'amazonProductHighResImages',
+    amazonProductHighResImagesSchema
+  );
+export default amazonProductHighResImagesModel;
