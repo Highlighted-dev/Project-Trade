@@ -6,7 +6,7 @@ import { AuthContextType, IUser, IAxiosErrorRestApi } from '../../@types/AuthCon
 
 export const authContext = createContext<AuthContextType | null>(null);
 
-const AuthProvider: React.FC<React.ReactNode> = ({ children }) => {
+function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [authState, setAuthState] = useState<IUser>({
@@ -126,6 +126,6 @@ const AuthProvider: React.FC<React.ReactNode> = ({ children }) => {
     [authState, loading],
   );
   return <authContext.Provider value={values}>{children}</authContext.Provider>;
-};
+}
 
 export default AuthProvider;

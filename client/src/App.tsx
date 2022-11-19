@@ -17,7 +17,7 @@ import Settings from './Pages/ts/Settings';
 import AccountSettings from './components/ts/Settings/AccountSettings';
 import AdminSettings from './components/ts/Settings/AdminSettings';
 
-const App = () => {
+function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -116,6 +116,6 @@ const App = () => {
       </AuthProvider>
     </BrowserRouter>
   );
-};
+}
 
 export default App;

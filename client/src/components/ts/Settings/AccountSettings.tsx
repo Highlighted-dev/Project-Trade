@@ -6,7 +6,7 @@ import { authContext } from '../AuthContext';
 import '../../css/Settings/AccountSettings.css';
 import { isBirthDateValid, isEmailValid } from '../../../utils/Validation';
 
-const AccountSettings = () => {
+function AccountSettings() {
   const { authState, loadData } = useContext(authContext) as AuthContextType;
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const usernameRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -112,6 +112,6 @@ const AccountSettings = () => {
       </div>
     </div>
   );
-};
+}
 
 export default AccountSettings;

@@ -41,7 +41,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/destructuring-assignment': 'off',
-    'react/function-component-definition': 'off',
     'jsx-a11y/label-has-associated-control': 'off', //May be removed in future
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-noninteractive-element-interactions': 'off',

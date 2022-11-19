@@ -12,7 +12,7 @@ import {
   isBirthDateValid,
 } from '../../utils/Validation';
 
-const SignUp = () => {
+function SignUp() {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const confirmPasswordRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -108,5 +108,5 @@ const SignUp = () => {
       </div>
     </div>
   );
-};
+}
 export default SignUp;

@@ -6,7 +6,7 @@ import '../css/LineChart.css';
 import { IChartItem } from '../../@types/LineChart';
 
 ChartJS.register(...registerables);
-const LineChart = ({ data, variable_type, settings }: any) => {
+function LineChart({ data, variable_type, settings }: any) {
   // Becouse this component will use more than 1 type of json object, we need to change keys of the objects to fit the chart.
   const [chartData, setChartData] = useState(
     data.map(async (item: any) => {
@@ -185,6 +185,6 @@ const LineChart = ({ data, variable_type, settings }: any) => {
       </div>
     </div>
   );
-};
+}
 
 export default LineChart;

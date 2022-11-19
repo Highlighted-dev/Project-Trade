@@ -7,7 +7,7 @@ import { AuthContextType } from '../../@types/AuthContext';
 import { authContext } from '../../components/ts/AuthContext';
 import { RouteComponentProp } from '../../@types/Routes';
 
-const Settings = ({ children }: RouteComponentProp) => {
+function Settings({ children }: RouteComponentProp) {
   const { authState, loadData } = useContext(authContext) as AuthContextType;
   const [currentPage, setCurrentPage] = useState('Account Settings');
   const toggleSelectedSetting: MouseEventHandler = setting => {
@@ -52,6 +52,6 @@ const Settings = ({ children }: RouteComponentProp) => {
       </div>
     </div>
   );
-};
+}
 
 export default Settings;

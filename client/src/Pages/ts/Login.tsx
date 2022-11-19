@@ -5,7 +5,7 @@ import { authContext } from '../../components/ts/AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/SignPages.css';
 
-const Login = () => {
+function Login() {
   const emailRef = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordRef = useRef() as MutableRefObject<HTMLInputElement>;
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +41,7 @@ const Login = () => {
       <h1>Login</h1>
       <div id="SignPageForm">
         <div className="inputField">
-          <input ref={emailRef} id="Email" type="email" required />
+          <input ref={emailRef} id="Email" type="text" required />
           <span />
           <label htmlFor="Email">Email</label>
         </div>
@@ -64,6 +64,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

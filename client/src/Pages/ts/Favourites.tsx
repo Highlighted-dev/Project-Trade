@@ -7,7 +7,7 @@ import { IProduct } from '../../@types/ProductPageTemplate';
 import { IUserFavourites } from '../../@types/Favourites';
 import '../css/Favourites.css';
 
-const Favourites = () => {
+function Favourites() {
   const { authState } = useContext(authContext) as AuthContextType;
   const [loading, setLoading] = useState<boolean>(true);
   const [favouritesData, setFavouritesData] = useState<IProduct[]>([]);
@@ -72,6 +72,6 @@ const Favourites = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Favourites;

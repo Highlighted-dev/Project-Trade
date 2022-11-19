@@ -18,7 +18,7 @@ import {
 } from '../../@types/ProductPageTemplate';
 import '../css/ProductPageTemplate.css';
 
-const ProductPageTemplate = () => {
+function ProductPageTemplate() {
   const { product_id } = useParams();
   const { authState } = useContext(authContext) as AuthContextType;
 
@@ -432,6 +432,6 @@ const ProductPageTemplate = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ProductPageTemplate;

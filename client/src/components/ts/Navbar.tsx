@@ -17,7 +17,7 @@ import { authContext } from './AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import { IProduct } from '../../@types/ProductPageTemplate';
 
-const Navbar = () => {
+function Navbar() {
   const [data, setData] = useState<IProduct[]>([]);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFetching, setIsFetching] = React.useState(false);
@@ -201,6 +201,6 @@ const Navbar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Navbar;

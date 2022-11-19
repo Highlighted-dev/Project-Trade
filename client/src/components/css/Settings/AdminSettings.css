@@ -1,11 +1,12 @@
 #ReloadData {
-  width: 100%;
-  height: 40vh;
+  width: 50%;
+  height: auto;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   padding-bottom: 4px;
   border-bottom: 1px solid #424242;
+  border-right: 1px solid #252525;
 }
 #AdminSettings .description {
   width: 35%;
@@ -20,4 +21,69 @@
   font-size: 0.8em;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.7);
+}
+#AdminSettings .content {
+  padding: 20px;
+  width: 65%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#AdminSettings .content .form {
+  width: 75%;
+  height: 100%;
+  padding: 10px;
+  background-color: #1a1c20;
+  border-radius: 12px;
+}
+#AdminSettings .content .form button {
+  width: calc(7vw + 8vh);
+  height: 42px;
+  background-color: #0358eb;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 8px;
+}
+#AdminSettings .formItem {
+  width: 100%;
+  height: auto;
+  padding: 25px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 1200px) {
+  #ReloadData {
+    width: 100%;
+    border-right: none;
+  }
+  #AdminSettings .content .form button {
+    width: 160px;
+    height: 42px;
+    background-color: #0358eb;
+    font-size: 1rem;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 8px;
+  }
+}
+@media screen and (max-width: 680px) {
+  #ReloadData {
+    display: inline-block;
+  }
+  #AdminSettings .description {
+    width: 100%;
+  }
+  #AdminSettings .content {
+    width: 100%;
+  }
+  #AdminSettings .content .form {
+    width: 75%;
+  }
+  #AdminSettings .content .form button {
+    font-size: 0.8rem;
+    width: 140px;
+  }
 }
