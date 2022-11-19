@@ -5,8 +5,8 @@ import { AuthContextType } from '../@types/AuthContext';
 import { RouteComponentProp } from '../@types/Routes';
 
 // If user isn't sign in, redirect him to signIn page
-const PrivateRoute = ({ children }: RouteComponentProp) => {
+function PrivateRoute({ children }: RouteComponentProp) {
   const { authState, loading } = useContext(authContext) as AuthContextType;
   return authState._id || loading ? children : <Navigate to="/Login" />;
-};
+}
 export default PrivateRoute;

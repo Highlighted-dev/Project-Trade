@@ -4,7 +4,7 @@ import { authContext } from '../../components/ts/AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/User.css';
 
-const User = () => {
+function User() {
   const { authState } = useContext(authContext) as AuthContextType;
   return (
     <div id="mainUser">
@@ -188,6 +188,6 @@ const User = () => {
       </div>
     </div>
   );
-};
+}
 
 export default User;
