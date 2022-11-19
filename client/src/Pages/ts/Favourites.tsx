@@ -30,7 +30,11 @@ const Favourites = () => {
         .get(`/api/favourites/${user_id}`)
         .then(response => response.data)
         .then(async response_data => {
-          getDataAboutFavourite(response_data.data.map((item: IUserFavourites) => item.product_id));
+          if (response_data.data.length > 0) {
+            getDataAboutFavourite(
+              response_data.data.map((item: IUserFavourites) => item.product_id),
+            );
+          }
         })
         .catch((err: AxiosError) => {
           console.log(err);

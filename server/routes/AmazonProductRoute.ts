@@ -163,6 +163,13 @@ router.get('/name/:name', async (req: Request, res: Response) => {
 
 router.get('/array', async (req: Request, res: Response) => {
   const { array }: any = req.query;
+  if (!array) {
+    res.status(400).json({
+      error: '400 Bad Request',
+      message: 'Missing array parameter',
+    });
+    return;
+  }
   const object_of_ids = array.map((id: string) => {
     return id;
   });
@@ -304,7 +311,6 @@ router.get('/sales/id/:id', async (req: Request, res: Response) => {
                 message: 'No reviews found',
               });
             }
-            console.log(responseData.data);
             //sort json object by date
             const sortJsonObject = (a: any, b: any) => {
               return (
