@@ -30,3 +30,11 @@ body,
   height: 100vh;
   width: 100vw;
 }
+/* Tostify setup */
+.toastBody {
+  font-family: 'Poppins', sans-serif;
+  color: #202224;
+}
+.toastProgress {
+  background: #202224 !important;
+}

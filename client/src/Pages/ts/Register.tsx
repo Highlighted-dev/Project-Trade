@@ -1,8 +1,6 @@
 import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-// @ts-ignore
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
+import { toast } from 'react-toastify';
 import { authContext } from '../../components/ts/AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/SignPages.css';
@@ -40,30 +38,30 @@ const SignUp = () => {
       const confirm_password = confirmPasswordRef.current.value;
       const birthdate = birthDateRef.current.value;
       const sex = sexRef.current.value;
-      if (!isEmailValid(email)) return alertify.error('Email is not valid.');
+      if (!isEmailValid(email)) return toast('Email is not valid.', { type: 'error' });
 
       if (!doesPasswordMatch(password, confirm_password))
-        return alertify.error('Passwords do not match.');
+        return toast('Passwords do not match.', { type: 'error' });
 
       if (!doesPasswordHaveCapitalLetter(password))
-        return alertify.error('Password does not have an upper case letter.');
+        return toast('Password does not have an upper case letter.', { type: 'error' });
 
       if (!doesPasswordHaveNumber(password))
-        return alertify.error('Password does not have a number.');
+        return toast('Password does not have a number.', { type: 'error' });
 
       if (!isBirthDateValid(new Date('01-01-1900'), new Date(birthDateRef.current.value)))
-        return alertify.error('Your birtdate cannot be after 01-01-1900.');
+        return toast('Your birtdate cannot be after 01-01-1900.', { type: 'error' });
 
       try {
         setLoading(true);
         register(username, email, password, birthdate, sex);
       } catch {
-        alertify.error('Failed to create an account');
+        toast('Failed to create an account', { type: 'error' });
       }
       setLoading(false);
-      return alertify.success('Regitration was succesfull.');
+      return toast('Regitration was succesfull.', { type: 'success' });
     }
-    return alertify.error('Please enter all the data');
+    return toast('Please enter all the data', { type: 'error' });
   };
 
   return (

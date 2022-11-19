@@ -1,8 +1,7 @@
 import React, { useState, useEffect, createContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// @ts-ignore
-import alertify from 'alertifyjs';
+import { toast } from 'react-toastify';
 import { AuthContextType, IUser, IAxiosErrorRestApi } from '../../@types/AuthContext';
 
 export const authContext = createContext<AuthContextType | null>(null);
@@ -54,7 +53,7 @@ const AuthProvider: React.FC<React.ReactNode> = ({ children }) => {
   const axiosErrorHandler = (err: IAxiosErrorRestApi) => {
     // If the request was made and the server responded.
     if (err.response) {
-      alertify.error(err.response.data.message);
+      toast(err.response.data.message, { type: 'error' });
     }
   };
 

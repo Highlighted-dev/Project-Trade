@@ -2,9 +2,7 @@ import React, { MouseEventHandler, useContext, useEffect, useState } from 'react
 import { useParams } from 'react-router-dom';
 import { AiOutlineStar, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import axios, { AxiosError } from 'axios';
-// @ts-ignore
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
+import { toast } from 'react-toastify';
 import { authContext } from '../../components/ts/AuthContext';
 import { IUser, AuthContextType } from '../../@types/AuthContext';
 import LineChart from '../../components/ts/LineChart';
@@ -124,8 +122,8 @@ const ProductPageTemplate = () => {
         if (response_data.message) {
           await checkIfItemIsInFavourites();
           !isProudctInFavourites
-            ? alertify.success(response_data.message)
-            : alertify.error(response_data.message);
+            ? toast(response_data.message, { type: 'success' })
+            : toast(response_data.message, { type: 'error' });
         }
         setChangingFavouriteStatus(false);
       });

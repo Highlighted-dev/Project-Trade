@@ -1,7 +1,6 @@
 import { MutableRefObject, useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-// @ts-ignore
-import alertify from 'alertifyjs';
+import { toast } from 'react-toastify';
 import { authContext } from '../../components/ts/AuthContext';
 import { AuthContextType } from '../../@types/AuthContext';
 import '../css/SignPages.css';
@@ -14,11 +13,11 @@ const Login = () => {
 
   const validateSignIn = () => {
     if (!emailRef.current.value || !passwordRef.current.value) {
-      alertify.error('Email or password is not set');
+      toast('Email or password is not set', { type: 'error' });
       return false;
     }
     if (emailRef.current.value.length < 6 || passwordRef.current.value.length < 6) {
-      alertify.error('Email and password must be at least 6 characters long');
+      toast('Email and password must be at least 6 characters long', { type: 'error' });
       return false;
     }
     return true;
@@ -42,7 +41,7 @@ const Login = () => {
       <h1>Login</h1>
       <div id="SignPageForm">
         <div className="inputField">
-          <input ref={emailRef} id="Email" type="text" required />
+          <input ref={emailRef} id="Email" type="email" required />
           <span />
           <label htmlFor="Email">Email</label>
         </div>

@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { MutableRefObject, useContext, useRef } from 'react';
-// @ts-ignore
-import alertify from 'alertifyjs';
-import 'alertifyjs/build/css/alertify.css';
+import { toast } from 'react-toastify';
 import { AuthContextType } from '../../../@types/AuthContext';
 import { authContext } from '../AuthContext';
 import '../../css/Settings/AccountSettings.css';
@@ -16,7 +14,7 @@ const AccountSettings = () => {
 
   const updateUserData = async () => {
     if (!(emailRef.current.value || usernameRef.current.value || birthDateRef.current.value)) {
-      alertify.error('Please fill in at least one field.');
+      toast('Please fill in at least one field.', { type: 'error' });
       return;
     }
     if (
@@ -35,11 +33,11 @@ const AccountSettings = () => {
         birthdate: birthDateRef.current.value ? birthDateRef.current.value : authState.birthdate,
       });
       loadData().then(() => {
-        alertify.success('User data updated successfully!');
+        toast('User data updated successfully!', { type: 'success' });
       });
       return;
     }
-    alertify.error('Email or birthdate is not valid.');
+    toast('Email or birthdate is not valid.', { type: 'error' });
   };
 
   return (
@@ -48,8 +46,8 @@ const AccountSettings = () => {
         <div className="description">
           <h2>Edit Profile</h2>
           <span>
-            Here you can edit profile data you provided when you created your account <br />
-            (username, email, birthdate). Password can be changed in Privacy tab.
+            Here you can edit profile data you provided when you created your account (username,
+            email, birthdate). Password can be changed in Privacy tab.
           </span>
         </div>
         <div className="content">
@@ -108,8 +106,7 @@ const AccountSettings = () => {
         <div className="description">
           <h2>Preferences</h2>
           <span>
-            Here you can change your preferences. <br /> You can change your theme and language
-            there.
+            Here you can change your preferences. You can change your theme and language there.
           </span>
         </div>
       </div>

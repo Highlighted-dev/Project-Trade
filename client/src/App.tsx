@@ -1,5 +1,7 @@
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Navbar from './components/ts/Navbar';
 import ProductPageTemplate from './Pages/ts/ProductPageTemplate';
 import Home from './Pages/ts/Home';
@@ -20,6 +22,14 @@ const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <div id="App">
+          <ToastContainer
+            progressClassName="toastProgress"
+            bodyClassName="toastBody"
+            closeButton={false}
+            position="bottom-right"
+            autoClose={3000}
+            theme="colored"
+          />
           <Navbar />
           <div id="home">
             <Routes>

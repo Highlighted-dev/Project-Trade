@@ -51,6 +51,7 @@ module.exports = {
       'error',
       { selector: 'variable', format: ['snake_case', 'camelCase'] },
       { selector: 'variable', types: ['function'], format: ['camelCase', 'PascalCase'] },
+      { selector: 'function', format: ['camelCase', 'PascalCase'] },
       { selector: 'variableLike', format: ['snake_case'] },
       { selector: 'typeLike', format: ['PascalCase'] },
     ],
