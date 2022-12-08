@@ -59,6 +59,7 @@ function AccountSettings() {
               <div className="inputField">
                 <input
                   type="text"
+                  maxLength={28}
                   ref={usernameRef}
                   placeholder={authState.username || 'username'}
                   required
@@ -74,6 +75,7 @@ function AccountSettings() {
               <div className="inputField">
                 <input
                   type="text"
+                  maxLength={60}
                   ref={emailRef}
                   placeholder={authState.email || 'email'}
                   required

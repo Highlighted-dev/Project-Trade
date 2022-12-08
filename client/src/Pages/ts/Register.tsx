@@ -74,17 +74,17 @@ function SignUp() {
           <label>Username</label>
         </div>
         <div className="inputField">
-          <input ref={emailRef} type="text" maxLength={80} required />
+          <input ref={emailRef} type="text" maxLength={60} required />
           <span />
           <label>Email</label>
         </div>
         <div className="inputField">
-          <input ref={passwordRef} type="password" maxLength={100} required />
+          <input ref={passwordRef} type="password" maxLength={50} required />
           <span />
           <label>Password</label>
         </div>
         <div className="inputField">
-          <input ref={confirmPasswordRef} type="password" maxLength={100} required />
+          <input ref={confirmPasswordRef} type="password" maxLength={50} required />
           <span />
           <label>Confirm Password</label>
         </div>
