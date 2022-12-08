@@ -38,6 +38,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-unused-expressions': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
+    'react/jsx-no-useless-fragment': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/destructuring-assignment': 'off',
@@ -46,6 +47,7 @@ module.exports = {
     'jsx-a11y/no-noninteractive-element-interactions': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
+
     '@typescript-eslint/naming-convention': [
       'error',
       { selector: 'variable', format: ['snake_case', 'camelCase'] },
