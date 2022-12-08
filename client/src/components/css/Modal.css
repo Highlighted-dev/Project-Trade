@@ -1,0 +1,75 @@
+#modalBackground {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.modalContainer {
+  width: calc(20vw + 20vh);
+  height: 50vh;
+  min-height: 300px;
+  border-radius: 12px;
+  background-color: #0e1011;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  opacity: 1;
+}
+
+.modalContainer .title {
+  display: inline-block;
+  text-align: center;
+}
+
+.titleCloseBtn {
+  display: block;
+  position: relative;
+  font-size: 24px;
+  width: 18px;
+  right: -99%;
+  top: -5%;
+}
+
+.titleCloseBtn button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.modalContainer .body {
+  flex: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.modalContainer .footer {
+  flex: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContainer .footer button {
+  width: 150px;
+  min-width: 80px;
+  height: 45px;
+  margin: 10px;
+  border: none;
+  background-color: #0358eb;
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
