@@ -1,9 +1,10 @@
 import { useContext } from 'react';
+import { ModalContextType } from '../../../@types/ModalContext';
 import '../../css/Settings/AdminSettings.css';
 import { modalContext } from '../Modal/ModalProvider';
 
 function AdminSettings() {
-  const { setOpen, modalSetup } = useContext(modalContext) as any;
+  const { setOpen, modalSetup } = useContext(modalContext) as ModalContextType;
   function confirmFetch() {
     modalSetup('Confirm fetch', 'Are you sure you want to fetch data from external API?');
     setOpen(true);
