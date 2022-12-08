@@ -1,9 +1,12 @@
-import { toast } from 'react-toastify';
+import { useContext } from 'react';
 import '../../css/Settings/AdminSettings.css';
+import { modalContext } from '../Modal/ModalProvider';
 
 function AdminSettings() {
+  const { setOpen, modalSetup } = useContext(modalContext) as any;
   function confirmFetch() {
-    toast('Fetch confirmed', { type: 'success' });
+    modalSetup('Confirm fetch', 'Are you sure you want to fetch data from external API?');
+    setOpen(true);
   }
   return (
     <div id="AdminSettings">
