@@ -14,6 +14,7 @@
   #home {
     width: 100vw;
     left: 0;
-    height: calc(100vh - 120px);
+    top: 8%;
+    height: 84%;
   }
 }

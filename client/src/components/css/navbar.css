@@ -269,7 +269,6 @@
 .topbar .userMenu ul li a button {
   width: 150px;
   height: 50px;
-
   background-color: #0358eb;
   border-radius: 25px;
   font-size: 16px;
@@ -333,14 +332,32 @@
     top: -100%;
   }
   .topbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8%;
+    min-height: 36px;
     left: 0px;
     width: 100vw;
+    padding: 12px 12px;
   }
   .topbar .searchBox {
     width: 50vw;
   }
   .topbar .searchBar .searchResults {
     width: 50vw;
-    /* left: calc(35vw - 10vh); */
+  }
+  .topbar .searchIcon {
+    position: absolute;
+    color: #fff;
+    z-index: 99;
+    font-size: 22px;
+    left: calc(35vw - 9vh);
+    transform: translateY(-50%);
+    transition: all ease 400ms;
+  }
+  .topbar .avatar {
+    width: 30px;
+    height: 30px;
   }
 }
