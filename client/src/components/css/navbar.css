@@ -287,6 +287,7 @@
 
 @media screen and (max-width: 680px) {
   .sidebar {
+    border-top: 1px solid #0d0c16;
     height: 8%;
     width: 100%;
     position: fixed;
@@ -339,7 +340,7 @@
     min-height: 36px;
     left: 0px;
     width: 100vw;
-    padding: 12px 12px;
+    border-bottom: 1px solid #0d0c16;
   }
   .topbar .searchBox {
     width: 50vw;
