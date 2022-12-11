@@ -11,6 +11,7 @@ function ModalProvider({ children }: { children: React.ReactNode }) {
   const modalSetup = (title: string, text: string) => {
     setModalTitle(title);
     setModalText(text);
+    setOpen(true);
   };
 
   const values = useMemo(
