@@ -1,8 +1,9 @@
 import { useContext } from 'react';
+import { ModalContextType } from '../../../@types/ModalContext';
 import { modalContext } from './ModalProvider';
 
 function Modal() {
-  const { open, setOpen, modalText, modalTitle } = useContext(modalContext) as any;
+  const { open, setOpen, modalText, modalTitle } = useContext(modalContext) as ModalContextType;
   function decline() {
     console.log('decline');
     setOpen(false);
