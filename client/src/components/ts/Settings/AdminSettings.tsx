@@ -4,10 +4,30 @@ import '../../css/Settings/AdminSettings.css';
 import { modalContext } from '../Modal/ModalProvider';
 
 function AdminSettings() {
-  const { setOpen, modalSetup } = useContext(modalContext) as ModalContextType;
-  function confirmFetch() {
-    modalSetup('Confirm fetch', 'Are you sure you want to fetch data from external API?');
-    setOpen(true);
+  const { modalSetup } = useContext(modalContext) as ModalContextType;
+  function confirmFetch(e: React.MouseEvent<HTMLButtonElement>) {
+    switch (e.currentTarget.id) {
+      case 'fetchEverything':
+        modalSetup(
+          'Confirm fetch',
+          'Are you sure you want to fetch all the data from external API? This may take up to few hours',
+        );
+        break;
+      case 'fetchPrices':
+        modalSetup(
+          'Confirm fetch',
+          'Are you sure you want to fetch prices data? This may take up to few hours',
+        );
+        break;
+      case 'fetchSales':
+        modalSetup(
+          'Confirm fetch',
+          'Are you sure you want to fetch sales data? This may take up to few hours',
+        );
+        break;
+      default:
+        break;
+    }
   }
   return (
     <div id="AdminSettings">
@@ -22,15 +42,19 @@ function AdminSettings() {
         <div className="content">
           <div className="form">
             <div className="formItem">
-              <button type="button" onClick={confirmFetch}>
+              <button type="button" onClick={confirmFetch} id="fetchEverything">
                 Fetch everything
               </button>
             </div>
             <div className="formItem">
-              <button type="button">Fetch prices</button>
+              <button type="button" onClick={confirmFetch} id="fetchPrices">
+                Fetch prices
+              </button>
             </div>
             <div className="formItem">
-              <button type="button">Fetch sales</button>
+              <button type="button" onClick={confirmFetch} id="fetchSales">
+                Fetch sales
+              </button>
             </div>
           </div>
         </div>
