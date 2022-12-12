@@ -1,15 +1,17 @@
 import { useContext } from 'react';
-import { ModalContextType } from '../../../@types/ModalContext';
+import { ModalContextType } from '../../../@types/Modal';
 import { modalContext } from './ModalProvider';
 
 function Modal() {
-  const { open, setOpen, modalText, modalTitle } = useContext(modalContext) as ModalContextType;
+  const { open, setOpen, modalText, modalTitle, setIsSubmitted } = useContext(
+    modalContext,
+  ) as ModalContextType;
   function decline() {
     console.log('decline');
     setOpen(false);
   }
   function submit() {
-    console.log('submit');
+    setIsSubmitted(true);
     setOpen(false);
   }
   return (
