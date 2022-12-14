@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ModalContextType } from '../../../@types/ModalContext';
+import { ModalContextType } from '../../../@types/Modal';
 import '../../css/Settings/AdminSettings.css';
 import { modalContext } from '../Modal/ModalProvider';
 
@@ -8,27 +8,28 @@ function AdminSettings() {
   function confirmFetch(e: React.MouseEvent<HTMLButtonElement>) {
     switch (e.currentTarget.id) {
       case 'fetchEverything':
-        modalSetup(
-          'Confirm fetch',
-          'Are you sure you want to fetch all the data from external API? This may take up to few hours',
-        );
+        modalSetup({
+          title: 'Confirm fetch',
+          text: 'Are you sure you want to fetch all the data from external API? This may take up to few hours',
+        });
         break;
       case 'fetchPrices':
-        modalSetup(
-          'Confirm fetch',
-          'Are you sure you want to fetch prices data? This may take up to few hours',
-        );
+        modalSetup({
+          title: 'Confirm fetch',
+          text: 'Are you sure you want to fetch prices data? This may take up to few hours',
+        });
         break;
       case 'fetchSales':
-        modalSetup(
-          'Confirm fetch',
-          'Are you sure you want to fetch sales data? This may take up to few hours',
-        );
+        modalSetup({
+          title: 'Confirm fetch',
+          text: 'Are you sure you want to fetch sales data? This may take up to few hours',
+        });
         break;
       default:
         break;
     }
   }
+
   return (
     <div id="AdminSettings">
       <div id="ReloadData">
