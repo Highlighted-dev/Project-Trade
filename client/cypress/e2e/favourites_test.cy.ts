@@ -1,5 +1,5 @@
-describe('login test', () => {
-  it('Log ins into the website', () => {
+describe('Favourites test', () => {
+  it('Checks if favourites are showed properly', () => {
     cy.request('POST', 'http://localhost:5000/api/auth/login', {
       email: 'Test1@gmail.com',
       password: 'Test1@gmail.com',
