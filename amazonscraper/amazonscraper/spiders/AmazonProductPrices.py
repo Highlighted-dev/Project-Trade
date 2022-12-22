@@ -6,6 +6,7 @@ from ..items import AmazonItemPrice
 import logging
 from scrapy_splash import SplashFormRequest
 from datetime import date
+#TODO If you can buy used product instead of new, product prices will scrape the used one | Change to the new one price ex.https://www.amazon.de/dp/B09JQZ5DYM?th=1
 class AmazonProductPrices(scrapy.Spider):
     def __init__(self, prod_id=None, string_of_many_prod_ids=None):
         self.start_urls = []
@@ -43,7 +44,7 @@ class AmazonProductPrices(scrapy.Spider):
                     current_price = response.xpath('//div[@id="corePriceDisplay_desktop_feature_div"]//span[@class="a-price aok-align-center reinventPricePriceToPayMargin priceToPay"]//span[@class="a-offscreen"]/text()').extract_first()
                 current_date = date.today()
                 prices['product_id'] = self.product_id
-                prices['product_price'] = re.sub(r"[\'\[\]\€]|\bname\b", '', str(current_price))  # remove "/", " ' " and "€" from current price with regex.
+                prices['product_price'] = re.sub(r"[\'\[\]\€]|\bname\b", '', str(current_price)) if current_price else None # remove "/", " ' " and "€" from current price with regex.
                 prices['product_price_date'] = str(current_date)
                 prices['mongo_db_column_name'] = GlobalVariables.mongo_column_prices
                 yield prices
