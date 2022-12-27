@@ -1,41 +1,47 @@
-import { useContext } from 'react';
-import { ModalContextType } from '../../../@types/Modal';
-import { modalContext } from './ModalProvider';
+import { animated, useSpring } from 'react-spring';
+import useModalStore from './ModalStore';
 
 function Modal() {
-  const { open, setOpen, modalText, modalTitle, setIsSubmitted } = useContext(
-    modalContext,
-  ) as ModalContextType;
-  function decline() {
-    console.log('decline');
-    setOpen(false);
+  const modalStates = useModalStore();
+  function handleSubmit(submitted: boolean) {
+    modalStates.toggleIsClosing();
+    setTimeout(() => {
+      modalStates.close();
+      modalStates.toggleIsClosing();
+    }, 300);
+    if (submitted) {
+      console.log('accepted');
+    } else {
+      console.log('declined');
+    }
   }
-  function submit() {
-    setIsSubmitted(true);
-    setOpen(false);
-  }
+  const react_spring_styles = useSpring({
+    config: { duration: 300 },
+    opacity: modalStates.isOpen && !modalStates.isClosing ? 1 : 0,
+    y: modalStates.isOpen && !modalStates.isClosing ? 0 : 24,
+  });
   return (
     <>
-      {open && (
-        <div id="modalBackground">
+      {modalStates.isOpen && (
+        <animated.div style={react_spring_styles} id="modalBackground">
           <div className="modalContainer">
-            <button type="button" className="titleCloseBtn" onClick={decline}>
+            <button type="button" className="titleCloseBtn" onClick={() => handleSubmit(false)}>
               x
             </button>
-            <div className="title">{modalTitle}</div>
+            <div className="title">{modalStates.title}</div>
             <div className="body">
-              <p>{modalText}</p>
+              <p>{modalStates.text}</p>
             </div>
             <div className="footer">
-              <button type="button" onClick={submit}>
+              <button type="button" onClick={() => handleSubmit(true)}>
                 OK
               </button>
-              <button type="button" onClick={decline}>
+              <button type="button" onClick={() => handleSubmit(false)}>
                 Cancel
               </button>
             </div>
           </div>
-        </div>
+        </animated.div>
       )}
     </>
   );

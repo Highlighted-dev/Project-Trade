@@ -1,10 +1,9 @@
-import { useContext } from 'react';
-import { ModalContextType } from '../../../@types/Modal';
+import { IModal } from '../../../@types/Modal';
 import '../../css/Settings/AdminSettings.css';
-import { modalContext } from '../Modal/ModalProvider';
+import useModalStore from '../Modal/ModalStore';
 
 function AdminSettings() {
-  const { modalSetup } = useContext(modalContext) as ModalContextType;
+  const modalSetup = useModalStore((state: IModal) => state.modalSetup);
   function confirmFetch(e: React.MouseEvent<HTMLButtonElement>) {
     switch (e.currentTarget.id) {
       case 'fetchEverything':
@@ -29,7 +28,6 @@ function AdminSettings() {
         break;
     }
   }
-
   return (
     <div id="AdminSettings">
       <div id="ReloadData">
