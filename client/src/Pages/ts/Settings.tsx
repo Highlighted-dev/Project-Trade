@@ -8,16 +8,6 @@ import { authContext } from '../../components/ts/AuthContext';
 import { RouteComponentProp } from '../../@types/Routes';
 
 function Settings({ children }: RouteComponentProp) {
-  const { authState, loadData } = useContext(authContext) as AuthContextType;
-  const [currentPage, setCurrentPage] = useState('Account Settings');
-  const toggleSelectedSetting: MouseEventHandler = setting => {
-    // If there is any setting that has class '.selected', remove that class from it.
-    const selectedSetting = document.querySelector('.selected');
-    if (selectedSetting) selectedSetting?.classList.toggle('selected');
-
-    // Toggle clicked setting selected class
-    (setting.target as HTMLTextAreaElement).classList.toggle('selected');
-  };
   return (
     <div id="Settings">
       <div id="SettingsContent">
@@ -27,22 +17,36 @@ function Settings({ children }: RouteComponentProp) {
         <div className="settingsNavBar">
           <ul>
             <Link to="/Settings/Account">
-              <li className="selected" onClick={toggleSelectedSetting}>
+              <li
+                className={
+                  window.location.pathname === '/Settings/Account' ? 'selected' : undefined
+                }
+              >
                 <span>Account</span>
               </li>
             </Link>
             <Link to="/Settings/Privacy">
-              <li onClick={toggleSelectedSetting}>
+              <li
+                className={
+                  window.location.pathname === '/Settings/Privacy' ? 'selected' : undefined
+                }
+              >
                 <span>Privacy</span>
               </li>
             </Link>
             <Link to="/Settings/Notifications">
-              <li onClick={toggleSelectedSetting}>
+              <li
+                className={
+                  window.location.pathname === '/Settings/Notifications' ? 'selected' : undefined
+                }
+              >
                 <span>Notifications</span>
               </li>
             </Link>
             <Link to="/Settings/Admin">
-              <li onClick={toggleSelectedSetting}>
+              <li
+                className={window.location.pathname === '/Settings/Admin' ? 'selected' : undefined}
+              >
                 <span>Admin</span>
               </li>
             </Link>
