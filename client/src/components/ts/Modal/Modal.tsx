@@ -15,16 +15,18 @@ function Modal() {
       console.log('declined');
     }
   }
-  const react_spring_styles = useSpring({
+  const modal_background_spring_style = useSpring({
     config: { duration: 300 },
     opacity: modalStates.isOpen && !modalStates.isClosing ? 1 : 0,
+  });
+  const modal_container_spring_style = useSpring({
     y: modalStates.isOpen && !modalStates.isClosing ? 0 : 24,
   });
   return (
     <>
       {modalStates.isOpen && (
-        <animated.div style={react_spring_styles} id="modalBackground">
-          <div className="modalContainer">
+        <animated.div style={modal_background_spring_style} id="modalBackground">
+          <animated.div style={modal_container_spring_style} className="modalContainer">
             <button type="button" className="titleCloseBtn" onClick={() => handleSubmit(false)}>
               x
             </button>
@@ -40,7 +42,7 @@ function Modal() {
                 Cancel
               </button>
             </div>
-          </div>
+          </animated.div>
         </animated.div>
       )}
     </>
