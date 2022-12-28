@@ -8,18 +8,21 @@ function AdminSettings() {
     switch (e.currentTarget.id) {
       case 'fetchEverything':
         modalSetup({
+          id: 'fetchEverything',
           title: 'Confirm fetch',
           text: 'Are you sure you want to fetch all the data from external API? This may take up to few hours',
         });
         break;
       case 'fetchPrices':
         modalSetup({
+          id: 'fetchPrices',
           title: 'Confirm fetch',
           text: 'Are you sure you want to fetch prices data? This may take up to few hours',
         });
         break;
       case 'fetchSales':
         modalSetup({
+          id: 'fetchSales',
           title: 'Confirm fetch',
           text: 'Are you sure you want to fetch sales data? This may take up to few hours',
         });

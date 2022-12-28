@@ -3,20 +3,19 @@ import useModalStore from './ModalStore';
 
 function Modal() {
   const modalStates = useModalStore();
+  const animationDuration = 300;
+
   function handleSubmit(submitted: boolean) {
     modalStates.toggleIsClosing();
+    // Timeout is needed to prevent modal from closing before animation is finished
     setTimeout(() => {
       modalStates.close();
       modalStates.toggleIsClosing();
-    }, 300);
-    if (submitted) {
-      console.log('accepted');
-    } else {
-      console.log('declined');
-    }
+    }, animationDuration);
+    modalStates.addToSubmittedList(modalStates.id, submitted);
   }
   const modal_background_spring_style = useSpring({
-    config: { duration: 300 },
+    config: { duration: animationDuration },
     opacity: modalStates.isOpen && !modalStates.isClosing ? 1 : 0,
   });
   const modal_container_spring_style = useSpring({
