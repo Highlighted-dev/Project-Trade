@@ -265,11 +265,10 @@ router.get('/updatePrices', async (req: Request, res: Response) => {
 router.get('/sales/id/:id', async (req: Request, res: Response) => {
   //Get current date
   var yourDate = new Date();
-  const current_date = new Date(
+  yourDate = new Date(
     yourDate.getTime() - yourDate.getTimezoneOffset() * 60 * 1000
-  )
-    .toISOString()
-    .split('T')[0];
+  );
+  const current_date = yourDate.toISOString().split('T')[0];
 
   let amazon_sales = await amazonProductSalesModel.find({
     product_id: req.params.id,
@@ -319,26 +318,46 @@ router.get('/sales/id/:id', async (req: Request, res: Response) => {
               );
             };
             responseData.data.sort(sortJsonObject);
-            const date_of_last_review = new Date(
-              responseData.data[
-                responseData.data.length - 1
-              ].product_rating_date
+
+            /*
+            We will get average date of latest reviews and last reviews For this we will use "for" loop to iterate through every item in the list,
+            and add date of every item to the variable "average_number_of__days_beetwen_latest_review".
+            Then we will divide this variable by number of items in the list.
+            Ex. We have 20 reviews in total, we will get average date of 10 latest reviews, and the other 10 to get the average date of 10 last reviews.
+            */
+            const getTheAverageDate = (array: any, start_from: number) => {
+              let average_date_as_number = 0;
+              for (
+                let i = start_from;
+                i < responseData.data.length / 2 + start_from;
+                i++
+              ) {
+                average_date_as_number += new Date(
+                  array[i].product_rating_date
+                ).getTime();
+                console.log(responseData.data[i].product_rating_date);
+              }
+              const one_day = 1000 * 60 * 60 * 24;
+              const average_date = new Date(
+                Math.round(
+                  average_date_as_number / (array.length / 2) / one_day
+                ) * one_day
+              );
+              return average_date;
+            };
+            let latest_average_date = getTheAverageDate(responseData.data, 0);
+            let last_average_date = getTheAverageDate(
+              responseData.data,
+              responseData.data.length / 2
             );
 
-            const date_of_latest_review = new Date(
-              responseData.data[0].product_rating_date
-            );
-
-            //Remove time, leave only date
             yourDate.setHours(0, 0, 0, 0);
-            date_of_last_review.setHours(0, 0, 0, 0);
-            date_of_latest_review.setHours(0, 0, 0, 0);
 
             const difference_between_dates =
-              (date_of_last_review.getTime() -
-                date_of_latest_review.getTime() +
+              (last_average_date.getTime() -
+                latest_average_date.getTime() +
                 yourDate.getTime() -
-                date_of_last_review.getTime()) /
+                last_average_date.getTime()) /
               (1000 * 3600 * 24);
             const sales_per_day = (
               (50 / difference_between_dates) *

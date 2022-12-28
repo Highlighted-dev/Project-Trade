@@ -157,7 +157,7 @@ function ProductPageTemplate() {
         getProductData('/api/ap/prices/id/', setPrices);
       })
       .then(() => {
-        getProductData('/api/ap/sales/id/', setSales);
+        getProductData('/api/sales/id/', setSales);
       })
       .then(() => {
         getProductData('/api/ap/highResImages/id/', setHighResImages);

@@ -6,6 +6,7 @@ import session from 'express-session';
 import UserAuthenticationRoute from './routes/UserAuthenticationRoute';
 import UserFavouritesRoute from './routes/UserFavouritesRoute';
 import schedulePriceUpdate from './ScheduledTasks';
+import AmazonSalesRoute from './routes/AmazonSalesRoute';
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const app: Application = express();
@@ -40,6 +41,7 @@ app.use(
 ); //TODO Change secret key
 app.use('/api/ap', AmazonProductRoute);
 app.use('/api/as', AmazonScraperRoute);
+app.use('/api/sales', AmazonSalesRoute);
 app.use('/api/auth', UserAuthenticationRoute);
 app.use('/api/favourites', UserFavouritesRoute);
 
