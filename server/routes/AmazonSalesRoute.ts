@@ -138,7 +138,12 @@ router.get('/id/:id', async (req: Request, res: Response) => {
             amazon_sales = await amazonProductSalesModel.find({
               product_id: req.params.id,
             });
-            return checkIfItemsExistInDbAndReturnResponse(res, amazon_sales);
+            return checkIfItemsExistInDbAndReturnResponse(
+              res,
+              amazon_sales,
+              'Product sales calculated!',
+              'Product sales not found!'
+            );
           });
       }
     });

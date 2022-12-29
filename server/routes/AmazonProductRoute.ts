@@ -10,6 +10,7 @@ import amazonProductPricesModel from '../models/AmazonProductPricesModel';
 import axios, { AxiosError } from 'axios';
 import amazonProductReviewsModel from '../models/AmazonProductReviewsModel';
 import { axiosErrorHandler, getRequestWithAxios } from '../utils/AxiosRequests';
+import { checkIfItemsExistInDbAndReturnResponse } from '../utils/ResponseReturnPatterns';
 
 const router: Router = express.Router();
 
@@ -94,26 +95,14 @@ const getAmazonSpecificDataOrUpdateIfNeeded = async (
           amazon_data = await amazonProductPricesModel.find({
             product_id: id,
           });
-          //If program succesfuly scraped new data and then found them in database
-          if (
-            amazon_data.length > 0 &&
+          return checkIfItemsExistInDbAndReturnResponse(
+            res,
+            amazon_data,
+            'Product specific data was successfully scraped and added to database',
+            'Program tried to scrape product specific data but it didnt find any new data',
             yourDate.toISOString().split('T')[0] ==
               amazon_data[amazon_data.length - 1].product_price_date
-          ) {
-            res.status(200).json({
-              status: 'ok',
-              message:
-                'Product specific data was successfully scraped and added to database',
-              data: amazon_data,
-            });
-          } else {
-            res.status(404).json({
-              status: 'error',
-              error: 'NOT FOUND',
-              message:
-                'Program tried to scrape product specific data but it didnt find any new data',
-            });
-          }
+          );
         }
       })
       .catch((err: AxiosError) => {
