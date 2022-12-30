@@ -10,7 +10,7 @@ const router: Router = express.Router();
     We will get average date of latest reviews and last reviews For this we will use "for" loop to iterate through every item in the list,
     and add date of every item to the variable "average_number_of__days_beetwen_latest_review".
     Then we will divide this variable by number of items in the list.
-    Ex. We have 20 reviews in total, we will get average date of 10 latest reviews, and the other 10 to get the average date of 10 last reviews.
+    Ex. We have 20 reviews in total, we will use the first 10 to get average date of 10 latest reviews, and the other 10 to get the average date of 10 last reviews.
  */
 const getTheAverageDate = (array: any, start_from: number) => {
   let average_date_as_number = 0;
@@ -138,12 +138,13 @@ router.get('/id/:id', async (req: Request, res: Response) => {
             amazon_sales = await amazonProductSalesModel.find({
               product_id: req.params.id,
             });
-            return checkIfItemsExistInDbAndReturnResponse(
+
+            return checkIfItemsExistInDbAndReturnResponse({
               res,
-              amazon_sales,
-              'Product sales calculated!',
-              'Product sales not found!'
-            );
+              searched_items_in_db_model: amazon_sales,
+              success_message: 'Product sales calculated!',
+              error_message: 'Product sales not found!',
+            });
           });
       }
     });

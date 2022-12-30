@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import express, { Request, Response, Router } from 'express';
 import userFavouritesModel from '../models/UserFavouritesModel';
+import { checkIfItemsExistInDbAndReturnResponse } from '../utils/ResponseReturnPatterns';
 
 const router: Router = express.Router();
 const jsonParser = bodyParser.json();
@@ -66,23 +67,19 @@ router.get(
       if (!product_id || !user_id) {
         throw new Error('Request values cannot be null');
       }
-      const userFavourites = await userFavouritesModel.findOne({
+      const userFavourites = await userFavouritesModel.find({
         user_id: user_id,
         product_id: product_id,
       });
-      if (userFavourites) {
-        return res.status(200).json({
-          status: 'ok',
-          message: 'Item is in the favourites.',
-          data: userFavourites,
-        });
-      } else {
-        return res.status(200).json({
-          status: 'error',
-          message: 'Item is not in  the favourites!',
-          data: userFavourites,
-        });
-      }
+      console.log(userFavourites.length);
+      return checkIfItemsExistInDbAndReturnResponse({
+        res,
+        searched_items_in_db_model: userFavourites,
+        success_message: 'Item is in the favourites.',
+        error_message: 'Item is not in the favourites!',
+        //If item is not in the favourites its ok so we return 200 status code
+        custom_error_status_code: 200,
+      });
     } catch (err) {
       errorHandler(err, res);
     }

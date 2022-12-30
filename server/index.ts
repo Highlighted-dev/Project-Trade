@@ -7,6 +7,7 @@ import UserAuthenticationRoute from './routes/UserAuthenticationRoute';
 import UserFavouritesRoute from './routes/UserFavouritesRoute';
 import schedulePriceUpdate from './ScheduledTasks';
 import AmazonSalesRoute from './routes/AmazonSalesRoute';
+
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const app: Application = express();

@@ -95,14 +95,17 @@ const getAmazonSpecificDataOrUpdateIfNeeded = async (
           amazon_data = await amazonProductPricesModel.find({
             product_id: id,
           });
-          return checkIfItemsExistInDbAndReturnResponse(
+          return checkIfItemsExistInDbAndReturnResponse({
             res,
-            amazon_data,
-            'Product specific data was successfully scraped and added to database',
-            'Program tried to scrape product specific data but it didnt find any new data',
-            yourDate.toISOString().split('T')[0] ==
-              amazon_data[amazon_data.length - 1].product_price_date
-          );
+            searched_items_in_db_model: amazon_data,
+            success_message:
+              'Product specific data was successfully scraped and added to database',
+            error_message:
+              'Program tried to scrape product specific data but it didnt find any new data',
+            special_condition:
+              yourDate.toISOString().split('T')[0] ==
+              amazon_data[amazon_data.length - 1].product_price_date,
+          });
         }
       })
       .catch((err: AxiosError) => {
