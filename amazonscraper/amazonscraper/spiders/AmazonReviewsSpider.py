@@ -10,22 +10,38 @@ from scrapy_splash import SplashFormRequest
 from datetime import datetime
 import pymongo
 class AmazonReviewsSpider(scrapy.Spider):
-    def __init__(self, prod_id):
-        #If we want to scrape only one product, we can this by passing the product id as an argument.
-        self.product_id = prod_id
-        self.start_urls = [f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"]              
+    def __init__(self, prod_id = None,fetch_prod_ids_from_db = False):
+        self.start_urls = []
         client = pymongo.MongoClient(GlobalVariables.mongoUrl)
         db = client[GlobalVariables.mongoDatabase]
-        column = db[GlobalVariables.mongo_column_reviews]
-        column.delete_many({"product_id":self.product_id})
-        client.close()
-        logging.info("Successfully removed old data for product with id: " + self.product_id)
+        #If we want to scrape only one product, we can this by passing the product id as an argument.
+        if(prod_id):
+            self.product_id = prod_id
+            self.start_urls = [f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"]              
+            column = db[GlobalVariables.mongo_column_reviews]
+            column.delete_many({"product_id":self.product_id})
+            client.close()
+            logging.info("Successfully removed old data for product with id: " + self.product_id)
+        elif(fetch_prod_ids_from_db):
+            mongdo_product_column = db[GlobalVariables.mongoColumn]
+            mongo_column_reviews =  db[GlobalVariables.mongo_column_reviews]
+            prod_ids = mongdo_product_column.find({}).distinct("product_id")
+            if prod_ids:
+                for prod_id in prod_ids:
+                    self.start_urls.append(f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent")
+                    self.start_urls.append(f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5")
+                    mongo_column_reviews.delete_many({"product_id":prod_id})
+            client.close()
+        else:
+            raise ValueError("You must pass either a product id or set fetch_prod_ids_from_db=True")
     name = 'AmazonReviewsSpider'
     allowed_domains = GlobalVariables.allowed_domains
 
     def parse(self, response):
         try:
             amazon_reviews = AmazonItemReviews()
+            self.product_id = response.url.split('https://www.amazon.de/-/en/product-reviews/')[1].split('/ref=')[0]
+            logging.info("Extracting items from product with id: " + self.product_id)
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
             else:
@@ -66,7 +82,7 @@ class AmazonReviewsSpider(scrapy.Spider):
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
             logging.info("Captcha solved!")
-            yield SplashFormRequest.from_response(response,
+            yield scrapy.FormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
                                         callback=origin_method)
         except Exception as e:

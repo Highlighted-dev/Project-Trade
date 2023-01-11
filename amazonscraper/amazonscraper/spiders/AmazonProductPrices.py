@@ -6,26 +6,23 @@ from ..items import AmazonItemPrice
 import logging
 from scrapy_splash import SplashFormRequest
 from datetime import date
+import pymongo
+
 #TODO If you can buy used product instead of new, product prices will scrape the used one | Change to the new one price ex.https://www.amazon.de/dp/B09JQZ5DYM?th=1
 class AmazonProductPrices(scrapy.Spider):
-    def __init__(self, prod_id=None, string_of_many_prod_ids=None):
+    def __init__(self, prod_id=None, fetch_prod_ids_from_db = False):
         self.start_urls = []
         #If we want to scrape only one product, we can this by passing the product id as an argument.
         if(prod_id):
-            self.product_id = prod_id
-            self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
-        # If we want to scrape many products at once, we need to pass a string of many product ids.
-        elif(string_of_many_prod_ids):
-            #Split the string of many product ids into a list of product ids.
-            #Example string_of_many_prod_ids: "B074QQQQQQ,B074QQQQQQ,B074QQQQQQ"
-            #Product_id_array after split: ["B074QQQQQQ", "B074QQQQQQ", "B074QQQQQQ"]
-            prod_id_array = string_of_many_prod_ids.split(',')
-            if prod_id_array:
-                for prod_id in prod_id_array:
-                    self.product_id = prod_id
-                    self.start_urls.append("https://www.amazon.de/-/en/dp/"+self.product_id)
-            else:
-                raise ValueError("No product ids found in array")
+            self.start_urls = ["https://www.amazon.de/-/en/dp/"+prod_id]
+        elif(fetch_prod_ids_from_db):
+            client = pymongo.MongoClient(GlobalVariables.mongoUrl)
+            db = client[GlobalVariables.mongoDatabase]
+            mongo_db_column_name = db[GlobalVariables.mongoColumn]
+            prod_ids = mongo_db_column_name.find({}).distinct("product_id")
+            if prod_ids:
+                for prod_id in prod_ids:
+                    self.start_urls.append("https://www.amazon.de/-/en/dp/"+prod_id)
         else:
             raise ValueError('No product id found')
                     
@@ -69,7 +66,7 @@ class AmazonProductPrices(scrapy.Spider):
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
             logging.info("Captcha solved!")
-            yield SplashFormRequest.from_response(response,
+            yield scrapy.FormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
                                         callback=origin_method)
         except Exception as e:

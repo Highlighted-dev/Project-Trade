@@ -1,9 +1,11 @@
 Requirements:
 pip install scrapy
+pip install scrapy-splash
+pip install scrapy-fake-useragent
 pip install pymongo
 pip install amazoncaptcha
-pip install scrapy-splash
 pip install python-dotenv
+
 Docker
 
 How to start:

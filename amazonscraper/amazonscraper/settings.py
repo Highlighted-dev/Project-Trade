@@ -4,8 +4,8 @@ NEWSPIDER_MODULE = 'amazonscraper.spiders'
 SPLASH_URL = 'http://localhost:8050'
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2229.0 Safari/537.36',
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
 
 ROBOTSTXT_OBEY = False
 
@@ -21,7 +21,16 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': None,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
 }
+FAKEUSERAGENT_PROVIDERS = [
+    'scrapy_fake_useragent.providers.FakeUserAgentProvider',  # this is the first provider we'll try
+    'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
+    'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
+]
 
 ITEM_PIPELINES = {
     'amazonscraper.pipelines.AmazonscraperPipeline': 300,

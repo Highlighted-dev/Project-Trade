@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 #Here are all important variables that you would like to change.
-#HOW TO CREATE WORKING URL
+#!HOW TO CREATE WORKING URL
 #1.Go to any amazon category
 #2. Copy its url | Ex. https://www.amazon.de/-/en/gp/browse.html?node=429874031, https://www.amazon.de/-/en/b/node=21617878031
 #3. Remove anything before 'node=xyz'. Ex https://www.amazon.de/-/en/gp/browse.html?node=42987403 ->  https://www.amazon.de/node=42987403, https://www.amazon.de/-/en/b/node=21617878031 -> https://www.amazon.de/node=21617878031
