@@ -72,14 +72,11 @@ router.get('/prices/id/:id', async (req: Request, res: Response) => {
     '"';
   runAProductScraper(req, res, command);
 });
-router.get('/prices/array', jsonParser, async (req: Request, res: Response) => {
-  const { array } = req.query;
+router.get('/prices/', jsonParser, async (req: Request, res: Response) => {
   const command =
     'cd ' +
     getDirectoryBasedOnSystem() +
-    ' scrapy crawl AmazonProductPrices -a string_of_many_prod_ids="' +
-    array +
-    '"';
+    ' scrapy crawl AmazonProductPrices -a fetch_prod_ids_from_db=True';
   runAProductScraper(req, res, command);
 });
 router.get('/reviews/id/:id', async (req: Request, res: Response) => {

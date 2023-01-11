@@ -7,7 +7,7 @@ interface IResponse {
   data: string;
 }
 
-const schedulePriceUpdate = schedule.scheduleJob('00 19 * * *', () => {
+const schedulePriceUpdate = schedule.scheduleJob('00 22 * * *', () => {
   axios
     .get('http://localhost:5000/api/ap/updatePrices')
     .then((response: AxiosResponse) => response.data)

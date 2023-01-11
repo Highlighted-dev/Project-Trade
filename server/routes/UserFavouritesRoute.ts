@@ -71,7 +71,6 @@ router.get(
         user_id: user_id,
         product_id: product_id,
       });
-      console.log(userFavourites.length);
       return checkIfItemsExistInDbAndReturnResponse({
         res,
         searched_items_in_db_model: userFavourites,

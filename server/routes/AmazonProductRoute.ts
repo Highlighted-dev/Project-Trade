@@ -117,29 +117,31 @@ const getAmazonSpecificDataOrUpdateIfNeeded = async (
 router.get('/', async (req: Request, res: Response) => {
   res.json(await amazonProductDataModel.find());
 });
+router.get('/id/', async (req: Request, res: Response) => {
+  return res.json(await amazonProductDataModel.find().distinct('product_id'));
+});
+
 //Get product by name
 router.get('/name/:name', async (req: Request, res: Response) => {
   const { name } = req.params;
-  res.json(
-    await amazonProductDataModel.find({
-      product_name: { $regex: '^' + name, $options: 'i' },
-    })
-  );
+  const data = await amazonProductDataModel.find({
+    product_name: { $regex: '^' + name, $options: 'i' },
+  });
+  return res.json(data);
 });
 
 router.get('/array', async (req: Request, res: Response) => {
   const { array }: any = req.query;
   if (!array) {
-    res.status(400).json({
+    return res.status(400).json({
       error: '400 Bad Request',
       message: 'Missing array parameter',
     });
-    return;
   }
   const object_of_ids = array.map((id: string) => {
     return id;
   });
-  res.json(
+  return res.json(
     await amazonProductDataModel.find({
       product_id: {
         $in: object_of_ids,
@@ -206,23 +208,16 @@ router.get('/highResImages/id/:id', (req: Request, res: Response) =>
 );
 
 router.get('/updatePrices', async (req: Request, res: Response) => {
-  //Get all product ids from /api/favourites/getAll
-  getRequestWithAxios('http://localhost:5000/api/favourites/')
+  getRequestWithAxios('http://localhost:5000/api/as/prices/')
     .then(response => {
-      //Run amazon scraper to update price for every product id found in /api/favourites/getAll
-      getRequestWithAxios('http://localhost:5000/api/as/prices/array', {
-        array: response.data.data,
-      })
-        .then(response => {
-          res.status(200).json({
-            status: 'ok',
-            message: 'Prices updated',
-            data: response.data,
-          });
-        })
-        .catch((err: AxiosError) => {
-          axiosErrorHandler(err, res);
-        });
+      res.status(200).json({
+        status: 'ok',
+        message: 'Prices updated',
+        data: response.data,
+      });
+    })
+    .catch((err: AxiosError) => {
+      axiosErrorHandler(err, res);
     })
     .catch((err: AxiosError) => {
       axiosErrorHandler(err, res);
