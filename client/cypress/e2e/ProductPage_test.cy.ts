@@ -22,6 +22,7 @@ describe('Product page test', () => {
       );
     cy.findByText('DETAILS').should('exist');
     cy.findByText('ABOUT').should('exist');
+    cy.wait(2000);
     cy.get('#productPricesDiv').within(() => {
       cy.get('canvas');
     });

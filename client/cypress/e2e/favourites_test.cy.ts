@@ -14,11 +14,11 @@ describe('Favourites test', () => {
     cy.get('.image')
       .find('img')
       .first()
-      .should('have.attr', 'src', 'https://m.media-amazon.com/images/I/61aivGaiCCL._AC_UL320_.jpg');
+      .should('have.attr', 'src', 'https://m.media-amazon.com/images/I/7178cUjo4jL._AC_UL320_.jpg');
     cy.get('.image')
       .find('img')
       .last()
-      .should('have.attr', 'src', 'https://m.media-amazon.com/images/I/7178cUjo4jL._AC_UL320_.jpg');
+      .should('have.attr', 'src', 'https://m.media-amazon.com/images/I/61aivGaiCCL._AC_UL320_.jpg');
   });
 });
 export {};
