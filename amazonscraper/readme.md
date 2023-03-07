@@ -1,12 +1,4 @@
-Requirements:
-pip install scrapy
-pip install scrapy-splash
-pip install scrapy-fake-useragent
-pip install pymongo
-pip install amazoncaptcha
-pip install python-dotenv
-
-Docker
+You have to download & install Docker
 
 How to start:
 docker run -p 5023:5023 -p 8050:8050 -p 8051:8051 scrapinghub/splash
