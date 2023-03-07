@@ -17,6 +17,8 @@ class AmazonscraperPipeline:
     def close_spider(self, spider):
         self.client.close()
     def process_item(self, item, spider):
+        if('mongo_db_column_name' not in item):
+            return item
         mongo_db_column_name = self.db[item['mongo_db_column_name']]
         try:
             match item['mongo_db_column_name']:
@@ -48,6 +50,9 @@ class AmazonscraperPipeline:
                                 break
                             
                     mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_price_date":item["product_price_date"]},item,upsert=True)
+                case 'amazonProductReviews':
+                    del item['mongo_db_column_name']
+                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_rating_id":item["product_rating_id"]},item,upsert=True)
                 case 'None': #TODO add case for AmazonProductSpider
                     del item['mongo_db_column_name']
         except Exception as e:
