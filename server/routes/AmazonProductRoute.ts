@@ -142,11 +142,13 @@ router.get('/array', async (req: Request, res: Response) => {
     return id;
   });
   return res.json(
-    await amazonProductDataModel.find({
-      product_id: {
-        $in: object_of_ids,
-      },
-    })
+    await amazonProductDataModel
+      .find({
+        product_id: {
+          $in: object_of_ids,
+        },
+      })
+      .sort({ product_name: 1 })
   );
 });
 
