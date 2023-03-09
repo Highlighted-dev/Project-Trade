@@ -4,7 +4,7 @@ import sys
 import os
 #Add parent folder to sys paths
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from tests.responses.__init__ import fake_response_from_file
+from tests.setup.__init__ import fake_response_from_file
 #Second import is when you won't use python -m unittest discover
 try:
     from amazonscraper.amazonscraper.spiders.AmazonOneProductSpider import AmazonOneProductSpider
