@@ -18,7 +18,6 @@ class AmazonReviewsSpider(scrapy.Spider):
     def __init__(self, prod_id = None,fetch_prod_ids_from_db = False,testing = False):
         super().__init__()
         logging.getLogger('scrapy').propagate = False
-        self.start_urls = []
         self.insert_one_product_to_db = False
 
         if testing:
@@ -107,11 +106,10 @@ class AmazonReviewsSpider(scrapy.Spider):
     
     def get_reviews(self, response, product_id):
         reviews = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section review aok-relative"]')
-        logging.info("Found %s reviews", len(reviews))
         for review in reviews:
-            rating = review.xpath('//div[@class="a-row a-spacing-none"]//span[@class="a-icon-alt"]/text()').extract()[0]
-            rating_id = review.xpath('./@id').get()
-            date = review.xpath('//span[@class="a-size-base a-color-secondary review-date"]/text()').extract()[0]
+            rating = review.xpath('.//div[@class="a-row a-spacing-none"]//span[@class="a-icon-alt"]/text()').extract_first()
+            rating_id = review.xpath('./@id').extract_first()
+            date = review.xpath('.//span[@class="a-size-base a-color-secondary review-date"]/text()').extract_first()
             product_rating = float(rating.strip(" ")[0])
             date_formatted = self.format_date(date.split("on ")[1])
             item = AmazonItemReviews(
