@@ -1,80 +1,80 @@
-import datetime
+import logging
 import json
 import os
-import scrapy
-from .. import GlobalVariables
-from amazoncaptcha import AmazonCaptcha
-from ..items import AmazonItemReviews
-import logging
 from datetime import datetime
-import pymongo
 from pathlib import Path
+
+import scrapy
+from amazoncaptcha import AmazonCaptcha
+import pymongo
+from scrapy_splash import SplashFormRequest, SplashRequest
+
+from .. import GlobalVariables
+from ..items import AmazonItemReviews
 class AmazonReviewsSpider(scrapy.Spider):
+    name = 'AmazonReviewsSpider'
+    allowed_domains = GlobalVariables.allowed_domains
+
     def __init__(self, prod_id = None,fetch_prod_ids_from_db = False,testing = False):
+        super().__init__()
         logging.getLogger('scrapy').propagate = False
         self.start_urls = []
         self.insert_one_product_to_db = False
-        if(testing):
+
+        if testing:
             self.insert_one_product_to_db = True
             return
+
         client = pymongo.MongoClient(GlobalVariables.mongoUrl)
         db = client[GlobalVariables.mongoDatabase]
-        #If we want to scrape only one product, we can this by passing the product id as an argument.
-        if(prod_id):
+
+        if prod_id:
             self.insert_one_product_to_db = True
-            self.start_urls = [f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"]              
-            column = db[GlobalVariables.mongo_column_reviews]
-            column.delete_many({"product_id":prod_id})
-            logging.info("Successfully removed old data for product with id: " + prod_id)
-        elif(fetch_prod_ids_from_db):
-            mongdo_product_column = db[GlobalVariables.mongoColumn]
+            self.start_urls = [
+                f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent", 
+                f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"
+            ]
+            db[GlobalVariables.mongo_column_reviews].delete_many({"product_id": prod_id})
+            logging.info(f"Successfully removed old data for product with id: {prod_id}")
+
+        elif fetch_prod_ids_from_db:
+            mongo_product_column = db[GlobalVariables.mongoColumn]
             # db[GlobalVariables.mongo_column_reviews].delete_many({})
             # logging.info("Successfully removed old data for all products")
-            prod_ids = mongdo_product_column.find({}).distinct("product_id")  
+            prod_ids = mongo_product_column.distinct("product_id")
             if prod_ids:
                 for prod_id in prod_ids:
                     self.start_urls.append(f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent")
                     self.start_urls.append(f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5")
         else:
             raise ValueError("You must pass either a product id or set fetch_prod_ids_from_db=True")
+
         client.close()
-    name = 'AmazonReviewsSpider'
-    allowed_domains = GlobalVariables.allowed_domains
-
-
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SplashRequest(url, self.parse)
+    
     def parse(self, response):
         try:
-            amazon_reviews = AmazonItemReviews()
-            try:
-                self.product_id = response.url.split('https://www.amazon.de/-/en/product-reviews/')[1].split('/ref=')[0]
-            except:
-                self.product_id = "None"
+            self.product_id = self.get_product_id(response)
             logging.info("Extracting items from product with id: " + self.product_id)
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
             else:
-                product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//div[@class="a-row"]//span[@class="a-icon-alt"]/text()').extract()
-                if(len(product_rating) == 0):
-                    product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section review aok-relative"]//div[@class="a-row a-spacing-none"]//span[@class="a-icon-alt"]/text()').extract()      
-                product_rating_id = response.xpath('//div[@class="a-section a-spacing-none reviews-content a-size-base"]//div[@class="a-section review aok-relative"]/@id').extract()
-                product_date = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//span[@class="a-size-base a-color-secondary review-date"]/text()').extract()
-                for rating,rating_id,date_and_country in zip(product_rating,product_rating_id,product_date):
-                    amazon_reviews['product_id'] = self.product_id
-                    amazon_reviews['product_rating'] = float(rating.strip(" ")[0])
-                    amazon_reviews['product_rating_id'] = rating_id
-                    #Convert date_and_country to just date (Ex. Reviewed in Germany 🇩🇪 on 17 September 2022 => 17 September 2022)
-                    date = date_and_country.split("on ")[1]
-                    #Convert date to datetime object (Ex. 17 September 2022 => 2022-09-17)
-                    date_time = datetime.strptime(date, '%d %B %Y')
-                    amazon_reviews['product_rating_date'] = date_time.strftime('%Y-%m-%d') 
-                    if(self.insert_one_product_to_db):
-                        amazon_reviews['mongo_db_column_name'] = GlobalVariables.mongo_column_reviews
-
-                    yield amazon_reviews
+                for review in self.get_reviews(response, self.product_id):
+                    yield review
         except Exception as e:
             logging.error("Something went wrong while extracting items\n")
             logging.error(e)      
 
+    
+    def get_product_id(self, response):
+        try:
+            return response.url.split("/product-reviews/")[1].split("/")[0]
+        except IndexError:
+            logging.warning("Unable to get product id from url: %s", response.url)
+            return "None"
+        
     def checkForCaptcha(self, response):
         captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
         
@@ -93,13 +93,37 @@ class AmazonReviewsSpider(scrapy.Spider):
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
             logging.info("Captcha solved!")
-            yield scrapy.FormRequest.from_response(response,
+            yield SplashFormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
                                         callback=origin_method)
         except Exception as e:
             logging.error("Something went wrong while solving captcha\n")
             logging.error(e)
             return None
+        
+    def format_date(self, date):
+        date_time = datetime.strptime(date, '%d %B %Y')
+        return date_time.strftime('%Y-%m-%d')
+    
+    def get_reviews(self, response, product_id):
+        product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//div[@class="a-row"]//span[@class="a-icon-alt"]/text()').extract()
+        if(len(product_rating) == 0):
+            product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section review aok-relative"]//div[@class="a-row a-spacing-none"]//span[@class="a-icon-alt"]/text()').extract()      
+        product_rating_id = response.xpath('//div[@class="a-section a-spacing-none reviews-content a-size-base"]//div[@class="a-section review aok-relative"]/@id').extract()
+        product_date = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//span[@class="a-size-base a-color-secondary review-date"]/text()').extract()
+        for rating,rating_id,date_and_country in zip(product_rating,product_rating_id,product_date):
+            product_rating = float(rating.strip(" ")[0])
+            date_formatted = self.format_date(date_and_country.split("on ")[1])
+            item = AmazonItemReviews(
+                product_id=product_id,
+                product_rating=product_rating,
+                product_rating_id=rating_id,
+                product_rating_date=date_formatted,
+                mongo_db_column_name=GlobalVariables.mongo_column_reviews if self.insert_one_product_to_db else None
+            )
+            yield item
+            
+    
     def closed(self, reason):  
         if(self.insert_one_product_to_db):
             return
