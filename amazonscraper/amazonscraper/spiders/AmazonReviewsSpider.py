@@ -10,10 +10,13 @@ from datetime import datetime
 import pymongo
 from pathlib import Path
 class AmazonReviewsSpider(scrapy.Spider):
-    def __init__(self, prod_id = None,fetch_prod_ids_from_db = False):
+    def __init__(self, prod_id = None,fetch_prod_ids_from_db = False,testing = False):
         logging.getLogger('scrapy').propagate = False
         self.start_urls = []
         self.insert_one_product_to_db = False
+        if(testing):
+            self.insert_one_product_to_db = True
+            return
         client = pymongo.MongoClient(GlobalVariables.mongoUrl)
         db = client[GlobalVariables.mongoDatabase]
         #If we want to scrape only one product, we can this by passing the product id as an argument.

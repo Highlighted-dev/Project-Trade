@@ -1,0 +1,65 @@
+{
+  "data": [
+		{
+			"product_id": "None",
+			"product_rating": 5,
+			"product_rating_id": "R1SWRF629OI1WL",
+			"product_rating_date": "2023-01-16"
+		},
+    	{
+			"product_id": "None",
+			"product_rating": 1,
+			"product_rating_id": "R3MYFWSOL0V7E1",
+			"product_rating_date": "2023-01-15"
+		},
+    	{
+			"product_id": "None",
+			"product_rating": 1,
+			"product_rating_id": "R3B9TLMXQQXW9Y",
+			"product_rating_date": "2023-01-14"
+		},
+		{
+			"product_id": "None",
+			"product_rating": 3,
+			"product_rating_id": "R2OYFIP92IH4A5",
+			"product_rating_date": "2023-01-12"
+		},
+    	{
+			"product_id": "None",
+			"product_rating": 5,
+			"product_rating_id": "R2T165TBKMLY9M",
+			"product_rating_date": "2023-01-11"
+		},
+    	{
+			"product_id": "None",
+			"product_rating": 3,
+			"product_rating_id": "R3U6PYGQ2MZL61",
+			"product_rating_date": "2023-01-10"
+		},
+    	{
+			"product_id": "None",
+			"product_rating": 3,
+			"product_rating_id": "R36QL1Z44WPPZI",
+			"product_rating_date": "2023-01-09"
+		},
+    	{
+			"product_id": "None",
+			"product_rating": 5,
+			"product_rating_id": "R1XESHJ1Y6AJM3",
+			"product_rating_date": "2023-01-09"
+		},
+		{
+			"product_id": "None",
+			"product_rating": 5,
+			"product_rating_id": "R2P1QSPLDV35K4",
+			"product_rating_date": "2023-01-09"
+		},
+		{
+			"product_id": "None",
+			"product_rating": 5,
+			"product_rating_id": "R1PL7N06TCUMPA",
+			"product_rating_date": "2023-01-08"
+		}
+    	
+	]
+}
