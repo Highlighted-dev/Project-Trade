@@ -106,14 +106,14 @@ class AmazonReviewsSpider(scrapy.Spider):
         return date_time.strftime('%Y-%m-%d')
     
     def get_reviews(self, response, product_id):
-        product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//div[@class="a-row"]//span[@class="a-icon-alt"]/text()').extract()
-        if(len(product_rating) == 0):
-            product_rating = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section review aok-relative"]//div[@class="a-row a-spacing-none"]//span[@class="a-icon-alt"]/text()').extract()      
-        product_rating_id = response.xpath('//div[@class="a-section a-spacing-none reviews-content a-size-base"]//div[@class="a-section review aok-relative"]/@id').extract()
-        product_date = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section celwidget"]//span[@class="a-size-base a-color-secondary review-date"]/text()').extract()
-        for rating,rating_id,date_and_country in zip(product_rating,product_rating_id,product_date):
+        reviews = response.xpath('//div[@id="cm_cr-review_list"]//div[@class="a-section review aok-relative"]')
+        logging.info("Found %s reviews", len(reviews))
+        for review in reviews:
+            rating = review.xpath('//div[@class="a-row a-spacing-none"]//span[@class="a-icon-alt"]/text()').extract()[0]
+            rating_id = review.xpath('./@id').get()
+            date = review.xpath('//span[@class="a-size-base a-color-secondary review-date"]/text()').extract()[0]
             product_rating = float(rating.strip(" ")[0])
-            date_formatted = self.format_date(date_and_country.split("on ")[1])
+            date_formatted = self.format_date(date.split("on ")[1])
             item = AmazonItemReviews(
                 product_id=product_id,
                 product_rating=product_rating,
