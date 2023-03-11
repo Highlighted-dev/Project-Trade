@@ -10,12 +10,9 @@ class AmazonProductSpider(scrapy.Spider):
     def __init__(self, consoleNumber, maxConsoleNumber):
         #For improving performance program will split start urls depending on how many consoles will be running
         self.start_urls = GlobalVariables.start_urls[int(consoleNumber)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber)):(int(consoleNumber)+1)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber))] 
-        global pathToJson
-        #Get current path -> 2 directories up -> add file name -> replace "\" for "/"
-        pathToJson = (str(Path(__file__).parents[2])+f'/file{consoleNumber}.json').replace(os.sep, '/')
-        logging.info(pathToJson)
-        if os.path.exists(f"file{consoleNumber}.json"):
-                os.remove(f"file{consoleNumber}.json")
+
+        if os.path.exists("amazon_product_data.json"):
+                os.remove("amazon_product_data.json")
     name = 'AmazonProductSpider'
     allowed_domains = GlobalVariables.allowed_domains
     def parse(self, response):
@@ -51,6 +48,8 @@ class AmazonProductSpider(scrapy.Spider):
     #Send file.json to database when finished scraping
     def closed(self, reason):
         #Check if there is a file at that path
+        #Get current path -> 2 directories up -> add file name -> replace "\" for "/"
+        pathToJson = (str(Path(__file__).parents[2])+'/amazon_product_data.json').replace(os.sep, '/')
         assert os.path.isfile(pathToJson)
         myclient = pymongo.MongoClient(GlobalVariables.mongoUrl)
         mydb = myclient[GlobalVariables.mongoDatabase]
@@ -61,7 +60,8 @@ class AmazonProductSpider(scrapy.Spider):
         try:
             for obj in file_data:
                 mycol.replace_one({"product_id":obj["product_id"]},obj,upsert=True)
-            logging.info("All products inserted to database successfully.")        
+            logging.info("All products inserted to database successfully.")
+            os.remove("amazon_product_data.json")        
         except Exception as e:
             logging.error("An error has occurred when trying to add products to database\n")
             logging.error(e)

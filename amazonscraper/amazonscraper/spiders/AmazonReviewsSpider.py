@@ -18,12 +18,11 @@ class AmazonReviewsSpider(scrapy.Spider):
         db = client[GlobalVariables.mongoDatabase]
         #If we want to scrape only one product, we can this by passing the product id as an argument.
         if(prod_id):
-            self.product_id = prod_id
             self.insert_one_product_to_db = True
-            self.start_urls = [f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",f"https://www.amazon.de/-/en/product-reviews/{self.product_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"]              
+            self.start_urls = [f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"]              
             column = db[GlobalVariables.mongo_column_reviews]
-            column.delete_many({"product_id":self.product_id})
-            logging.info("Successfully removed old data for product with id: " + self.product_id)
+            column.delete_many({"product_id":prod_id})
+            logging.info("Successfully removed old data for product with id: " + prod_id)
         elif(fetch_prod_ids_from_db):
             mongdo_product_column = db[GlobalVariables.mongoColumn]
             # db[GlobalVariables.mongo_column_reviews].delete_many({})
@@ -43,8 +42,10 @@ class AmazonReviewsSpider(scrapy.Spider):
     def parse(self, response):
         try:
             amazon_reviews = AmazonItemReviews()
-            logging.info(response.url)
-            self.product_id = response.url.split('https://www.amazon.de/-/en/product-reviews/')[1].split('/ref=')[0]
+            try:
+                self.product_id = response.url.split('https://www.amazon.de/-/en/product-reviews/')[1].split('/ref=')[0]
+            except:
+                self.product_id = "None"
             logging.info("Extracting items from product with id: " + self.product_id)
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
