@@ -23,7 +23,7 @@ function Favourites() {
       });
   };
 
-  // Get user favourites from database
+  // Get user favourites from db
   const getFavouritesFromUser = async (user_id: IUser['_id']) => {
     if (user_id) {
       axios
