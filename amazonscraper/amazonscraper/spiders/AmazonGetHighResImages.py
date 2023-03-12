@@ -20,9 +20,8 @@ class AmazonGetHighResImages(scrapy.Spider):
             if self.checkForCaptcha(response):
                 yield from self.solveCaptcha(response, self.parse)
             else:
-
-                #Getting data from amazon  
-                product_highres_images = str(response.xpath('//script/text()').re(".*'colorImages'.*"))
+                #Getting data from amazon 
+                product_highres_images = str(response.xpath('//div[@id="dp-container"]//div[@id="leftCol"]//script/text()').extract())
                 #Format string product_highres_images with regular expression
                 #Example input:  { \'initial\': [{"hiRes":"https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg", ...]} | { \'initial\': [{"hiRes":null, ...]}
                 #Example output: https://m.media-amazon.com/images/I/61HC1k6PJmL._AC_SL1500_.jpg | null
