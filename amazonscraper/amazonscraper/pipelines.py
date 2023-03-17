@@ -33,10 +33,7 @@ class AmazonscraperPipeline:
                     mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_technical_detail_name":item["product_technical_detail_name"]},item,upsert=True)
                 case 'amazonProductAbout':
                     del item['mongo_db_column_name']
-                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_about":item["product_about"]},item,upsert=True)
-                case 'amazonProductHighResImages':
-                    del item['mongo_db_column_name']
-                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_highres_image":item["product_highres_image"]},item,upsert=True)          
+                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_about":item["product_about"]},item,upsert=True)      
                 case 'None': #TODO add case for AmazonProductSpider
                     del item['mongo_db_column_name']
         except Exception as e:

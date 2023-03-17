@@ -5,10 +5,15 @@ from ..items import AmazonItemHighResImages
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
 import re
+import pymongo
 class AmazonGetHighResImages(scrapy.Spider):
     def __init__(self, prod_id):
         self.product_id = prod_id
         self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
+
+        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
+        self.db = self.client[GlobalVariables.mongoDatabase]
+
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
@@ -33,7 +38,7 @@ class AmazonGetHighResImages(scrapy.Spider):
                         images['product_highres_image'] = highres_image[1:-1]
                     else:
                         images['product_highres_image'] = highres_image
-                    images['mongo_db_column_name'] = GlobalVariables.mongo_column_highres_images
+                    self.db[GlobalVariables.mongo_column_highres_images].replace_one({"product_id":images["product_id"],"product_highres_image":images["product_highres_image"]},images,upsert=True)     
                     yield images
 
         except Exception as e:
