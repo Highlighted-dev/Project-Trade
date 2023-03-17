@@ -21,7 +21,6 @@ class AmazonReviewsSpider(scrapy.Spider):
         self.insert_one_product_to_db = False
 
         if testing:
-            self.insert_one_product_to_db = True
             return
 
         self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
@@ -116,7 +115,6 @@ class AmazonReviewsSpider(scrapy.Spider):
                 product_rating=product_rating,
                 product_rating_id=rating_id,
                 product_rating_date=date_formatted,
-                mongo_db_column_name=GlobalVariables.mongo_column_reviews if self.insert_one_product_to_db else None
             )
             if(self.insert_one_product_to_db):
                 self.db[GlobalVariables.mongo_column_reviews].replace_one({"product_id":item["product_id"],"product_rating_id":item["product_rating_id"]},item,upsert=True)

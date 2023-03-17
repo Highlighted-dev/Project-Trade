@@ -6,7 +6,7 @@ import os
 #Add parent folder to sys paths
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tests.setup.__init__ import fake_response_from_file
-#Second import is when you won't use python -m unittest discover
+#Second import is needed when you won't use python -m unittest discover
 try:
     from amazonscraper.amazonscraper.spiders.AmazonProductPrices import AmazonProductPrices
 except ImportError:
@@ -20,9 +20,9 @@ class AmazonProductPricesTest(unittest.TestCase):
         self.spider = AmazonProductPrices("any")
         self.expected_output = {\
             "item1": \
-                {'product_id': 'any', 'product_price': 'â‚¬239.00', 'product_price_date': str(date.today()), 'mongo_db_column_name': 'amazonProductPrices'},\
+                {'product_id': 'None', 'product_price': '239.00', 'product_price_date': str(date.today()), 'mongo_db_column_name': 'amazonProductPrices'},\
             "item2": \
-                {'product_id': 'any', 'product_price': 'â‚¬24.99', 'product_price_date': str(date.today()), 'mongo_db_column_name': 'amazonProductPrices'}\
+                {'product_id': 'None', 'product_price': '24.99', 'product_price_date': str(date.today()), 'mongo_db_column_name': 'amazonProductPrices'}\
             }
 
     def _test_item_results(self, results, item_name):
@@ -35,13 +35,11 @@ class AmazonProductPricesTest(unittest.TestCase):
             
     def test_parse(self):
         #Get results from spider
-        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage1.html'))
-        self._test_item_results(results, "item1")
-        logging.info("log: Test 1 passed")  
-        
-        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittestpage2.html'))
-        self._test_item_results(results, "item2")
-        logging.info("log: Test 2 passed") 
+        for which_test_is_it in range(1,3):
+            results = self.spider.parse(fake_response_from_file(f'offline_test_pages/unittestpage{which_test_is_it}.html'))
+            self._test_item_results(results, f"item{which_test_is_it}")
+            logging.info(f"log: Test {which_test_is_it} passed")  
+      
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

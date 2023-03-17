@@ -5,7 +5,7 @@ import os
 #Add parent folder to sys paths
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tests.setup.__init__ import fake_response_from_file
-#Second import is when you won't use python -m unittest discover
+#Second import is needed when you won't use python -m unittest discover
 try:
     from amazonscraper.amazonscraper.spiders.AmazonGetHighResImages import AmazonGetHighResImages
 except ImportError:

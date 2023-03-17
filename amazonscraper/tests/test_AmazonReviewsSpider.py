@@ -7,7 +7,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tests.setup.__init__ import fake_response_from_file
 import json
-#Second import is when you won't use python -m unittest discover
+#Second import is needed when you won't use python -m unittest discover
 try:
     from amazonscraper.amazonscraper.spiders.AmazonReviewsSpider import AmazonReviewsSpider
 except ImportError:
@@ -43,11 +43,6 @@ class AmazonProductReviewsTest(unittest.TestCase):
             results = self.spider.parse(fake_response_from_file(f'offline_test_pages/unittest_reviews{which_test_is_it}.html'))
             self._test_item_results(results, 10, self.get_expected_output(f"AmazonReviews_{which_test_is_it}")['data'])
             logging.info(f"log: Test {which_test_is_it} passed")  
-        
-
-        # results = self.spider.parse(fake_response_from_file('offline_test_pages/unittest_reviews4.html'))
-        # self._test_item_results(results, 10)
-        # logging.info("log: Test 4 passed") 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
