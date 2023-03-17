@@ -24,8 +24,8 @@ class AmazonReviewsSpider(scrapy.Spider):
             self.insert_one_product_to_db = True
             return
 
-        client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        db = client[GlobalVariables.mongoDatabase]
+        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
+        self.db = self.client[GlobalVariables.mongoDatabase]
 
         if prod_id:
             self.insert_one_product_to_db = True
@@ -33,11 +33,11 @@ class AmazonReviewsSpider(scrapy.Spider):
                 f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent", 
                 f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5"
             ]
-            db[GlobalVariables.mongo_column_reviews].delete_many({"product_id": prod_id})
+            self.db[GlobalVariables.mongo_column_reviews].delete_many({"product_id": prod_id})
             logging.info(f"Successfully removed old data for product with id: {prod_id}")
 
         elif fetch_prod_ids_from_db:
-            mongo_product_column = db[GlobalVariables.mongoColumn]
+            mongo_product_column = self.db[GlobalVariables.mongoColumn]
             # db[GlobalVariables.mongo_column_reviews].delete_many({})
             # logging.info("Successfully removed old data for all products")
             prod_ids = mongo_product_column.distinct("product_id")
@@ -48,7 +48,6 @@ class AmazonReviewsSpider(scrapy.Spider):
         else:
             raise ValueError("You must pass either a product id or set fetch_prod_ids_from_db=True")
 
-        client.close()
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
@@ -119,6 +118,8 @@ class AmazonReviewsSpider(scrapy.Spider):
                 product_rating_date=date_formatted,
                 mongo_db_column_name=GlobalVariables.mongo_column_reviews if self.insert_one_product_to_db else None
             )
+            if(self.insert_one_product_to_db):
+                self.db[GlobalVariables.mongo_column_reviews].replace_one({"product_id":item["product_id"],"product_rating_id":item["product_rating_id"]},item,upsert=True)
             yield item
             
     

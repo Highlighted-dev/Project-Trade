@@ -49,10 +49,7 @@ class AmazonscraperPipeline:
                                 item["product_price"] = i["product_price"]
                                 break
                             
-                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_price_date":item["product_price_date"]},item,upsert=True)
-                case 'amazonProductReviews':
-                    del item['mongo_db_column_name']
-                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_rating_id":item["product_rating_id"]},item,upsert=True)
+                    mongo_db_column_name.replace_one({"product_id":item["product_id"],"product_price_date":item["product_price_date"]},item,upsert=True)                 
                 case 'None': #TODO add case for AmazonProductSpider
                     del item['mongo_db_column_name']
         except Exception as e:
