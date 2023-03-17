@@ -20,9 +20,9 @@ class AmazonProductPricesTest(unittest.TestCase):
         self.spider = AmazonProductPrices("any")
         self.expected_output = {\
             "item1": \
-                {'product_id': 'None', 'product_price': '239.00', 'product_price_date': str(date.today()), 'mongo_db_column_name': 'amazonProductPrices'},\
+                {'product_id': 'None', 'product_price': '239.00', 'product_price_date': str(date.today())},\
             "item2": \
-                {'product_id': 'None', 'product_price': '24.99', 'product_price_date': str(date.today()), 'mongo_db_column_name': 'amazonProductPrices'}\
+                {'product_id': 'None', 'product_price': '24.99', 'product_price_date': str(date.today())}\
             }
 
     def _test_item_results(self, results, item_name):
@@ -31,7 +31,6 @@ class AmazonProductPricesTest(unittest.TestCase):
             self.assertEqual(item['product_id'], self.expected_output[item_name]['product_id'])
             self.assertEqual(item['product_price'], self.expected_output[item_name]['product_price'])
             self.assertEqual(item['product_price_date'], self.expected_output[item_name]['product_price_date'])
-            self.assertEqual(item['mongo_db_column_name'], self.expected_output[item_name]['mongo_db_column_name'])
             
     def test_parse(self):
         #Get results from spider
