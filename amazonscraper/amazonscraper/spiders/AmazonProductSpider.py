@@ -6,20 +6,29 @@ import pymongo
 import json
 from .. import GlobalVariables
 from pathlib import Path
+from scrapy_splash import SplashFormRequest, SplashRequest 
 class AmazonProductSpider(scrapy.Spider):
-    def __init__(self, consoleNumber, maxConsoleNumber):
-        #For improving performance program will split start urls depending on how many consoles will be running
-        self.start_urls = GlobalVariables.start_urls[int(consoleNumber)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber)):(int(consoleNumber)+1)*int(len(GlobalVariables.start_urls)/int(maxConsoleNumber))] 
-
+    #vm_id = Virtual machine id, max_vm = Max virtual machines working at the same time
+    def __init__(self, vm_id, max_vm):
+        #For improving performance program will split start urls depending on how many virtual machines are working at the same time
+        self.start_urls = GlobalVariables.start_urls[int(vm_id)*int(len(GlobalVariables.start_urls)/int(max_vm)):(int(vm_id)+1)*int(len(GlobalVariables.start_urls)/int(max_vm))] 
         if os.path.exists("amazon_product_data.json"):
                 os.remove("amazon_product_data.json")
+    
     name = 'AmazonProductSpider'
     allowed_domains = GlobalVariables.allowed_domains
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SplashRequest(url, self.parse)
+            
+        
     def parse(self, response):
         try:
             items = AmazonscraperItem()
             #Getting data from amazon
-            prod_id = response.xpath('//div[@class="sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20"]/@data-asin').extract()
+           
+            prod_id = response.xpath('//div[@class="sg-col-4-of-24 sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20"]/@data-asin').extract()
             title = response.xpath('//div[@class="a-section a-spacing-none a-spacing-top-small s-title-instructions-style"]//span[@class="a-size-base-plus a-color-base a-text-normal"]/text()').extract()
             sale_price = response.xpath('//div[@class="a-section a-spacing-none a-spacing-top-small s-price-instructions-style"]//span[@class="a-price-whole"]/text()').extract()
             prod_image = response.xpath('//div[@class="a-section aok-relative s-image-square-aspect"]//img[@class="s-image"]/@src').extract()      
@@ -32,7 +41,6 @@ class AmazonProductSpider(scrapy.Spider):
                 except:
                     items['product_sale_price'] = None
                 items['product_image'] = ''.join(prod_image[i]).strip()
-                items['mongo_db_column_name'] = 'None'
                 yield items
         except Exception as e:
             logging.error("Something went wrong when extracting items\n")
@@ -43,7 +51,7 @@ class AmazonProductSpider(scrapy.Spider):
         next_page=current_amazon+"".join(response.xpath('//div[@class="a-section a-text-center s-pagination-container"]//a[@class="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator"]/@href').extract())
         #If the page number equals maxPagesPerCategoryString, we don't want to go to the next page.
         if str(next_page[-2:len(next_page)]) != GlobalVariables.max_pages_per_category_string and str(next_page[-2:len(next_page)]) != "_"+GlobalVariables.max_pages_per_category_string:
-            yield scrapy.Request(next_page, callback=self.parse)
+            yield SplashFormRequest(next_page, callback=self.parse)
     
     #Send file.json to database when finished scraping
     def closed(self, reason):

@@ -18,9 +18,10 @@ start_urls = [
         'https://www.amazon.de/s?rh=n%3A389968011&s=review-count-rank&language=en',
         'https://www.amazon.de/s?rh=n%3A3517801&s=review-count-rank&language=en',
         'https://www.amazon.de/s?rh=n%3A2864212031&s=review-count-rank&language=en'
+        
 
     ]
-allowed_domains = ['amazon.de','amazon.fr']
+allowed_domains = ['amazon.de']
 max_pages_per_category_string = "10" #Up to 99
 items_per_page = 24
 
