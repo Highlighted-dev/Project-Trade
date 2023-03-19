@@ -9,6 +9,7 @@
   left: 72px;
   background-color: #0e1011;
   color: #fff;
+  overflow-x: auto;
 }
 @media screen and (max-width: 680px) {
   #home {

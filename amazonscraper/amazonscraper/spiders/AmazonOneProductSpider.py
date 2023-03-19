@@ -7,11 +7,15 @@ from ..items import AmazonItemThumbImages, AmazonItemDetails, AmazonItemTechnica
 from amazoncaptcha import AmazonCaptcha
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
+import pymongo
 class AmazonOneProductSpider(scrapy.Spider):
     def __init__(self, prod_id):
         global product_id
         product_id = prod_id
         self.start_urls = ["https://www.amazon.de/-/en/dp/"+product_id]
+        
+        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
+        self.db = self.client[GlobalVariables.mongoDatabase]
     #Change every request from ScrapyRequest to SplashRequest for javascript load
     def start_requests(self):
         for url in self.start_urls:
@@ -39,7 +43,7 @@ class AmazonOneProductSpider(scrapy.Spider):
                 for image in product_images:
                     images['product_id'] = product_id
                     images['product_thumb_image'] = image
-                    images['mongo_db_column_name'] = GlobalVariables.mongo_column_thumb_images
+                    self.db[GlobalVariables.mongo_column_thumb_images].replace_one({"product_id":images["product_id"],"product_thumb_image":images["product_thumb_image"]},images,upsert=True)
                     yield images
                 #Sometimes there aren't any product details
                 if len(product_details) < 1:
@@ -47,7 +51,7 @@ class AmazonOneProductSpider(scrapy.Spider):
                     for about in product_abouts:
                         abouts['product_id'] = product_id
                         abouts['product_about'] = about
-                        abouts['mongo_db_column_name'] = GlobalVariables.mongo_column_about
+                        self.db[GlobalVariables.mongo_column_about].replace_one({"product_id":abouts["product_id"],"product_about":abouts["product_about"]},abouts,upsert=True) 
                         yield abouts
                 else:
                     for pdn,pd in zip(product_details_name,product_details):
@@ -55,7 +59,7 @@ class AmazonOneProductSpider(scrapy.Spider):
                         details['product_id'] = product_id
                         details['product_detail_name'] = pdn
                         details['product_detail'] = pd
-                        details['mongo_db_column_name'] = GlobalVariables.mongo_column_details
+                        self.db[GlobalVariables.mongo_column_details].replace_one({"product_id":details["product_id"],"product_detail_name":details["product_detail_name"]},details,upsert=True)
                         yield details
 
                 #Sometimes there aren't any technical details
@@ -64,7 +68,7 @@ class AmazonOneProductSpider(scrapy.Spider):
                     for about in product_abouts:
                         abouts['product_id'] = product_id
                         abouts['product_about'] = about
-                        abouts['mongo_db_column_name'] = GlobalVariables.mongo_column_about
+                        self.db[GlobalVariables.mongo_column_about].replace_one({"product_id":abouts["product_id"],"product_about":abouts["product_about"]},abouts,upsert=True) 
                         yield abouts
                 else:
                     for ptd,ptdn in zip(product_technical_details,product_technical_details_name):   
@@ -75,7 +79,9 @@ class AmazonOneProductSpider(scrapy.Spider):
                         ptd_encode = ptd.encode("ascii","ignore")
                         ptd = ptd_encode.decode()
                         technical_details['product_technical_detail'] = "".join(ptd).strip()
-                        technical_details['mongo_db_column_name'] = GlobalVariables.mongo_column_technical_details
+                        self.db[GlobalVariables.mongo_column_technical_details].replace_one({"product_id":technical_details["product_id"],
+                                                                                             "product_technical_detail_name":technical_details["product_technical_detail_name"]},
+                                                                                             technical_details,upsert=True)
                         yield technical_details
         except Exception as e:
             logging.error("Something went wrong while extracting items\n")

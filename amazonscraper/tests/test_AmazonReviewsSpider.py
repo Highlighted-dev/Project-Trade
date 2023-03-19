@@ -6,7 +6,8 @@ import os
 #Add parent folder to sys paths
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tests.setup.__init__ import fake_response_from_file
-#Second import is when you won't use python -m unittest discover
+import json
+#Second import is needed when you won't use python -m unittest discover
 try:
     from amazonscraper.amazonscraper.spiders.AmazonReviewsSpider import AmazonReviewsSpider
 except ImportError:
@@ -17,37 +18,31 @@ class AmazonProductReviewsTest(unittest.TestCase):
     #Scrapy spider setup
     def setUp(self):
         #Create spider object
-        self.spider = AmazonReviewsSpider("any")
+        self.spider = AmazonReviewsSpider("any", False, True)
 
+    def get_expected_output(self, file_name):
+        return json.load(open(os.path.abspath(os.path.join(os.path.dirname(__file__))) + f"\setup\Expected_results\{file_name}.json"))
 
-    def _test_item_results(self, results, expected_length):
+    def _test_item_results(self, results, expected_length, expected_output):
         count=0
-        for item in results:
+        for item,expected_item in zip(results,expected_output):
+            logging.info(item)
+            logging.info(count)
             #Comapre item with expected output 
-            self.assertIsNotNone(item['product_id'])
-            self.assertIsNotNone(item['product_rating'])
-            self.assertIsNotNone(item['product_rating_id'])
-            self.assertIsNotNone(item['product_rating_date'])
+            self.assertEqual(item['product_id'], expected_item['product_id'])
+            self.assertEqual(item['product_rating'], expected_item['product_rating'])
+            self.assertEqual(item['product_rating_id'], expected_item['product_rating_id'])
+            self.assertEqual(item['product_rating_date'], expected_item['product_rating_date'])
             count+=1
         self.assertEqual(count, expected_length)
             
     def test_parse(self):
         #Get results from spider
-        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittest_reviews1.html'))
-        self._test_item_results(results, 10)
-        logging.info("log: Test 1 passed")  
-        
-        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittest_reviews2.html'))
-        self._test_item_results(results, 10)
-        logging.info("log: Test 2 passed") 
+        for which_test_is_it in range(1,5):
 
-        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittest_reviews3.html'))
-        self._test_item_results(results, 10)
-        logging.info("log: Test 3 passed") 
-
-        results = self.spider.parse(fake_response_from_file('offline_test_pages/unittest_reviews4.html'))
-        self._test_item_results(results, 10)
-        logging.info("log: Test 4 passed") 
+            results = self.spider.parse(fake_response_from_file(f'offline_test_pages/unittest_reviews{which_test_is_it}.html'))
+            self._test_item_results(results, 10, self.get_expected_output(f"AmazonReviews_{which_test_is_it}")['data'])
+            logging.info(f"log: Test {which_test_is_it} passed")  
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

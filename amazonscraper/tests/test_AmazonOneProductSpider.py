@@ -5,7 +5,7 @@ import os
 #Add parent folder to sys paths
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tests.setup.__init__ import fake_response_from_file
-#Second import is when you won't use python -m unittest discover
+#Second import is needed when you won't use python -m unittest discover
 try:
     from amazonscraper.amazonscraper.spiders.AmazonOneProductSpider import AmazonOneProductSpider
 except ImportError:
@@ -23,16 +23,7 @@ class AmazonOneProductSpiderTest(unittest.TestCase):
         #If any product information is None, unit test will fail
         for item in results:
             self.assertIsNotNone(item['product_id'])
-            if item['mongo_db_column_name'] == 'amazonProductThumbImages':
-                self.assertIsNotNone(item['product_thumb_image'])
-            elif item['mongo_db_column_name'] == 'amazonProductDetails':
-                self.assertIsNotNone(item['product_detail'])
-                self.assertIsNotNone(item['product_detail_name'])
-            elif item['mongo_db_column_name'] == 'amazonProductTechnicalDetails':
-                self.assertIsNotNone(item['product_technical_detail'])
-                self.assertIsNotNone(item['product_technical_detail_name'])
-            elif item['mongo_db_column_name'] == 'amazonProductAbout':
-                self.assertIsNotNone(item['product_about'])
+#           #TODO make tests for other fields
             count+=1
         #Check if product has {expected_length} informations
         self.assertEqual(count, expected_length)

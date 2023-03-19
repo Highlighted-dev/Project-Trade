@@ -1,0 +1,66 @@
+{
+    "data": [
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R398Q94QXSDR9Z",
+              "product_rating_date": "2023-02-08"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R389TIS6BAAXN2",
+              "product_rating_date": "2023-02-07"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "RSFQAFW1BGA0E",
+              "product_rating_date": "2023-02-07"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R2EJMD18MVRC4A",
+              "product_rating_date": "2023-02-07"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "RZ1GTY9DC1M3X",
+              "product_rating_date": "2023-02-05"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R10ORPFR7GW3HC",
+              "product_rating_date": "2023-02-05"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 3,
+              "product_rating_id": "R2ZHYZDSVS1TXA",
+              "product_rating_date": "2023-02-05"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R35NIO65J8JM23",
+              "product_rating_date": "2023-02-04"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R15BXHBYQMBY4V",
+              "product_rating_date": "2023-02-04"
+          },
+          {
+              "product_id": "None",
+              "product_rating": 5,
+              "product_rating_id": "R2U2DKL0TO6G00",
+              "product_rating_date": "2023-02-02"
+          }
+          
+      ]
+  }
+  
