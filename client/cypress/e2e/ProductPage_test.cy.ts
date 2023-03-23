@@ -5,6 +5,7 @@ describe('Product page test', () => {
       password: 'Test1@gmail.com',
     }).its('body');
     cy.visit('http://localhost:3000/Product/B09JQZ5DYM');
+    cy.wait(4000);
     cy.findByText('Apple AirPods Pro with MagSafe charging case (2021)').should('exist');
     cy.get('#images')
       .find('img')
@@ -22,7 +23,6 @@ describe('Product page test', () => {
       );
     cy.findByText('DETAILS').should('exist');
     cy.findByText('ABOUT').should('exist');
-    cy.wait(2000);
     cy.get('#productPricesDiv').within(() => {
       cy.get('canvas');
     });
