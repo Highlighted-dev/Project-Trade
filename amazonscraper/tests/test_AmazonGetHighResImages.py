@@ -15,7 +15,7 @@ class AmazonGetHighResImagesrTest(unittest.TestCase):
 
     #Scrapy spider setup
     def setUp(self):
-        self.spider = AmazonGetHighResImages("any")
+        self.spider = AmazonGetHighResImages("any",True)
 
     def _test_item_results(self, results, expected_length):
         count=0
