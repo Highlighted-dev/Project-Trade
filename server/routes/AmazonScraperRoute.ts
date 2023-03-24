@@ -58,7 +58,7 @@ router.get('/highres/id/:id', async (req: Request, res: Response) => {
     getDirectoryBasedOnSystem() +
     ' scrapy crawl AmazonGetHighResImages -a prod_id="' +
     id +
-    '"';
+    '" -o AmazonGetHighResImages.json';
   runAProductScraper(req, res, command);
 });
 router.get('/prices/id/:id', async (req: Request, res: Response) => {

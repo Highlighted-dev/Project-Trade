@@ -9,6 +9,7 @@ import re
 import pymongo
 import os
 import json
+import time
 class AmazonGetHighResImages(scrapy.Spider):
     name = 'AmazonGetHighResImages'
     allowed_domains = GlobalVariables.allowed_domains
@@ -77,10 +78,11 @@ class AmazonGetHighResImages(scrapy.Spider):
             return None
         
     def closed(self, reason):
-        pathToJson = (str(Path(__file__).parents[2])+'/amazon_product_data.json').replace(os.sep, '/')
+        pathToJson = (str(Path(__file__).parents[2])+'/AmazonGetHighResImages.json').replace(os.sep, '/')
         assert os.path.isfile(pathToJson)
         with open(pathToJson) as f:
             items = json.load(f)
         bulk_operations = [pymongo.InsertOne(item) for item in items]
         self.db[GlobalVariables.mongo_column_highres_images].bulk_write(bulk_operations)
+        os.remove(pathToJson)
         
