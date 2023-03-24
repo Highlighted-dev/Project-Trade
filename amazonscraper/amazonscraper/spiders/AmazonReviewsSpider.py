@@ -116,13 +116,17 @@ class AmazonReviewsSpider(scrapy.Spider):
                 product_rating_id=rating_id,
                 product_rating_date=date_formatted,
             )
-            if(self.insert_one_product_to_db):
-                self.db[GlobalVariables.mongo_column_reviews].replace_one({"product_id":item["product_id"],"product_rating_id":item["product_rating_id"]},item,upsert=True)
             yield item
             
     
-    def closed(self, reason):  
+    def closed(self, reason):
+        pathToJson = (str(Path(__file__).parents[2])+f'/AmazonReviews.json').replace(os.sep, '/')
+        with open(pathToJson) as f:
+            file_data = json.load(f)
         if(self.insert_one_product_to_db):
+            bulk_operations = [pymongo.InsertOne(item) for item in file_data]
+            self.db[GlobalVariables.mongo_column_reviews].bulk_write(bulk_operations)
+            os.remove(pathToJson)
             return
             
         logging.info("Finished scraping Amazon reviews")
@@ -137,12 +141,7 @@ class AmazonReviewsSpider(scrapy.Spider):
         Ex. (07/07/2022 - 07/05/2021) + (09/07/2022 - 07/07/2022) = 50 / 63 * 10 = 7,93
         */
         """
-        client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        db = client[GlobalVariables.mongoDatabase]
-        column = db[GlobalVariables.mongo_column_reviews]
-        # pathToJson = (str(Path(__file__).parents[2])+f'/file.json').replace(os.sep, '/')
-        # with open(pathToJson) as f:
-        #     file_data = json.load(f)
+        column = self.db[GlobalVariables.mongo_column_reviews]
         # #Try inserting files to mongoDB
         # try:
         #     for obj in file_data:
@@ -178,5 +177,5 @@ class AmazonReviewsSpider(scrapy.Spider):
             logging.info("Number of days between reviews: " + str(number_of_days_between_reviews))
             sales_per_day = round(50 / number_of_days_between_reviews * 10, 2)
             logging.info("Estimated sales for product with id: " + product_id + " is: " + str(sales_per_day))
-            sales_column = db[GlobalVariables.mongo_column_sales]
+            sales_column = self.db[GlobalVariables.mongo_column_sales]
             sales_column.replace_one({"product_id":product_id,"product_sales_date":current_date.strftime('%Y-%m-%d')},{"product_id":product_id,"sales_per_day":sales_per_day,'product_sales_date':current_date.strftime('%Y-%m-%d')},upsert=True)

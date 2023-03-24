@@ -87,7 +87,7 @@ router.get('/reviews/id/:id', async (req: Request, res: Response) => {
     getDirectoryBasedOnSystem() +
     ' scrapy crawl AmazonReviewsSpider -a prod_id="' +
     id +
-    '"';
+    '" -o AmazonReviews.json';
   runAProductScraper(req, res, command);
 });
 
