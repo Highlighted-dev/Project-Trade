@@ -18,8 +18,6 @@ jobs:
         run: pm2 kill
       - name: Run server
         run: cd server && pm2 start --interpreter none "ts-node-esm index.ts"
-      - name: Wait 3 seconds for server
-        run: sleep 3
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.0
         env:
