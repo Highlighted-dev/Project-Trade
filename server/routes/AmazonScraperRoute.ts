@@ -69,7 +69,7 @@ router.get('/prices/id/:id', async (req: Request, res: Response) => {
     getDirectoryBasedOnSystem() +
     ' scrapy crawl AmazonProductPrices -a prod_id="' +
     id +
-    '"';
+    '" -o AmazonPrices.json';
   runAProductScraper(req, res, command);
 });
 router.get('/prices/', jsonParser, async (req: Request, res: Response) => {

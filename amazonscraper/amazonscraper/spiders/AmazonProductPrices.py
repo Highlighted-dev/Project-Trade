@@ -1,23 +1,27 @@
+import json
+import os
+from pathlib import Path
 import re
 import scrapy
-from .. import GlobalVariables
-from amazoncaptcha import AmazonCaptcha
-from ..items import AmazonItemPrice
+from datetime import date
 import logging
-from scrapy_splash import SplashFormRequest
-from datetime import date, datetime
 import pymongo
-from json import dumps
+from scrapy_splash import SplashFormRequest, SplashRequest
+
+from .. import GlobalVariables
+from ..items import AmazonItemPrice
+from amazoncaptcha import AmazonCaptcha
 #TODO If you can buy used product instead of new, product prices will scrape the used one | Change to the new one price ex.https://www.amazon.de/dp/B09JQZ5DYM?th=1
 class AmazonProductPrices(scrapy.Spider):
+    name = 'AmazonProductPrices'
+    allowed_domains = GlobalVariables.allowed_domains
+
     def __init__(self, prod_id=None, fetch_prod_ids_from_db = False):
         self.start_urls = []
-        self.insert_one_product_to_db = False
         self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
         self.db = self.client[GlobalVariables.mongoDatabase]
         #If we want to scrape only one product, we can this by passing the product id as an argument.
         if(prod_id):
-            self.insert_one_product_to_db = True
             self.start_urls = ["https://www.amazon.de/-/en/dp/"+prod_id]
         elif(fetch_prod_ids_from_db):
             mongo_db_column_name = self.db[GlobalVariables.mongoColumn]
@@ -28,9 +32,10 @@ class AmazonProductPrices(scrapy.Spider):
         else:
             raise ValueError('No product id found')
                     
-    name = 'AmazonProductPrices'
-    allowed_domains = GlobalVariables.allowed_domains
-    
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SplashRequest(url, self.parse)
+
     def parse(self, response):
         try:
             prices = AmazonItemPrice()
@@ -39,28 +44,20 @@ class AmazonProductPrices(scrapy.Spider):
                 yield from self.solveCaptcha(response, self.parse)
             else:
                 current_price = response.xpath('//div[@id="corePrice_feature_div"]//span[@class="a-price aok-align-center"]//span[@class="a-offscreen"]/text()').extract()
-                #Sometimes the are two prices: for used item, and for new item. We only want the new item price.
                 if not current_price:
                     current_price = response.xpath('//div[@id="corePriceDisplay_desktop_feature_div"]//span[@class="a-price aok-align-center reinventPricePriceToPayMargin priceToPay"]//span[@class="a-offscreen"]/text()').extract_first()
                 current_date = date.today()
                 prices['product_id'] = self.product_id
-                prices['product_price'] = re.sub(r"[\'\[\]\€]|\bname\b", '', str(current_price)) if current_price else None # remove "/", " ' " and "€" from current price with regex.
+                prices['product_price'] = re.sub(r"[\'\[\]\€]|\bname\b", '', str(current_price)) if current_price else None
                 prices['product_price_date'] = str(current_date)
                 if not prices["product_price"]:
                     logging.warning("Unable to get price from url: %s", response.url)
-                    # Get the last price from the database
-                    last_price = list(self.db[GlobalVariables.mongo_column_prices]
-                                      .find({"product_id":prices["product_id"]})
-                                      .sort("product_price_date", pymongo.DESCENDING)
-                                      .limit(1))[0] 
-                    #! Sometimes the price is not available, so we need to get the price from the previous day/days and make it as current price
+                    last_price = list(self.db[GlobalVariables.mongo_column_prices].find({"product_id": prices["product_id"]}).sort("product_price_date", pymongo.DESCENDING).limit(1))[0]
                     prices["product_price"] = last_price["product_price"]
-                if(self.insert_one_product_to_db):
-                    self.db[GlobalVariables.mongo_column_prices].insert_one(dict(prices))
                 yield prices
         except Exception as e:
-            logging.error("Something went wrong while extracting items\n")
-            logging.error(e)    
+            logging.error("Something went wrong while extracting items")
+            logging.error(e)  
 
     def getProductId(self, response):
         try:
@@ -77,6 +74,7 @@ class AmazonProductPrices(scrapy.Spider):
             return True
         else:
             return False
+    
     def solveCaptcha(self, response, origin_method):
         logging.info("Trying to solve captcha...")
         try:
@@ -86,11 +84,19 @@ class AmazonProductPrices(scrapy.Spider):
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
             logging.info("Captcha solved!")
-            yield scrapy.FormRequest.from_response(response,
+            yield SplashFormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
                                         callback=origin_method)
         except Exception as e:
             logging.error("Something went wrong while solving captcha\n")
             logging.error(e)
             return None
+    
+    def closed(self, reason):
+        pathToJson = (str(Path(__file__).parents[2])+f'/AmazonPrices.json').replace(os.sep, '/')
+        with open(pathToJson) as f:
+            file_data = json.load(f)
+        bulk_operations = [pymongo.ReplaceOne(filter=({"product_id":item["product_id"],"product_price_date":item["product_price_date"]}),replacement=item,upsert=True) for item in file_data]
+        self.db[GlobalVariables.mongo_column_prices].bulk_write(bulk_operations)
+        os.remove(pathToJson)
         
