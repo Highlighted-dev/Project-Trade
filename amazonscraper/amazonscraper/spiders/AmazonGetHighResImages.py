@@ -82,7 +82,7 @@ class AmazonGetHighResImages(scrapy.Spider):
         assert os.path.isfile(pathToJson)
         with open(pathToJson) as f:
             items = json.load(f)
-        bulk_operations = [pymongo.InsertOne(item) for item in items]
+        bulk_operations = [pymongo.ReplaceOne(filter=({"product_id":item["product_id"],"product_highres_image":item["product_highres_image"]}),replacement=item,upsert=True) for item in items]
         self.db[GlobalVariables.mongo_column_highres_images].bulk_write(bulk_operations)
         os.remove(pathToJson)
         
