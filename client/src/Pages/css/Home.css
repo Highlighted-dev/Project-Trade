@@ -3,8 +3,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(100vw - 72px);
-  height: calc(100vh - 60px);
+  width: calc(100% - 72px);
+  height: calc(100% - 60px);
   top: 60px;
   left: 72px;
   background-color: #0e1011;
@@ -13,7 +13,7 @@
 }
 @media screen and (max-width: 680px) {
   #home {
-    width: 100vw;
+    width: 100%;
     left: 0;
     top: 8%;
     height: 84%;
