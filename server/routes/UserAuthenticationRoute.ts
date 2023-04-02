@@ -75,12 +75,6 @@ router.post('/register', jsonParser, async (req: Request, res: Response) => {
       });
     }
   }
-  return res.status(400).json({
-    status: 'error',
-    error: 'BAD REQUEST',
-    message:
-      'Request values cannot be null. Password must contain at least one number and one uppercase letter and email must be valid(by rfc822 standard)',
-  });
 });
 
 router.post('/login', jsonParser, async (req: Request, res: Response) => {
@@ -124,11 +118,6 @@ router.post('/login', jsonParser, async (req: Request, res: Response) => {
       message: 'Something went wrong when trying to sign in User',
     });
   }
-  return res.status(400).json({
-    status: 'error',
-    error: 'BAD REQUEST',
-    message: 'Something went wrong when trying to sign in User',
-  });
 });
 
 // logout user by deleting cookie.
@@ -179,11 +168,6 @@ router.get('/isAuthenticated', jsonParser, async (req: Request, res: Response) =
       return res.status(200).json({ user: { _id, username, email, birthdate, sex, role } });
     });
   }
-  return res.status(400).json({
-    status: 'error',
-    error: 'BAD REQUEST',
-    message: 'User not found',
-  });
 });
 router.put('/update', jsonParser, async (req: Request, res: Response) => {
   await userModel.updateOne(
