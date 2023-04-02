@@ -14,19 +14,18 @@ const router: Router = express.Router();
  */
 const getTheAverageDate = (array: any, start_from: number) => {
   let average_date_as_number = 0;
-  for (let i = start_from; i < array.length / 2 + start_from; i++) {
+  for (let i = start_from; i < array.length / 2 + start_from; i += 1) {
     average_date_as_number += new Date(array[i].product_rating_date).getTime();
   }
   const one_day = 1000 * 60 * 60 * 24;
   const average_date = new Date(
-    Math.round(average_date_as_number / (array.length / 2) / one_day) * one_day
+    Math.round(average_date_as_number / (array.length / 2) / one_day) * one_day,
   );
   return average_date;
 };
 
 const getDateWithCorrectOffset = (date: Date) => {
-  date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-  return date;
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 };
 
 const formatCurrentDate = (date: Date) => {
@@ -37,13 +36,10 @@ const formatCurrentDate = (date: Date) => {
 const calculateDifferenceBetweenDates = (
   latest_date: Date,
   last_date: Date,
-  current_date: Date
+  current_date: Date,
 ) => {
   const difference_between_dates =
-    (last_date.getTime() -
-      latest_date.getTime() +
-      current_date.getTime() -
-      last_date.getTime()) /
+    (last_date.getTime() - latest_date.getTime() + current_date.getTime() - last_date.getTime()) /
     (1000 * 3600 * 24);
   return difference_between_dates;
 };
@@ -54,8 +50,8 @@ const calculateSalesPerDay = (difference_between_dates: number) => {
 };
 
 router.get('/id/:id', async (req: Request, res: Response) => {
-  //Get current date
-  var yourDate = getDateWithCorrectOffset(new Date());
+  // Get current date
+  const yourDate = getDateWithCorrectOffset(new Date());
   const formatted_current_date = formatCurrentDate(yourDate);
   yourDate.setHours(0, 0, 0, 0);
 
@@ -64,8 +60,7 @@ router.get('/id/:id', async (req: Request, res: Response) => {
   });
   if (
     amazon_sales.length > 0 &&
-    amazon_sales[amazon_sales.length - 1].product_sales_date ===
-      formatted_current_date
+    amazon_sales[amazon_sales.length - 1].product_sales_date === formatted_current_date
   ) {
     return res.status(200).json({
       status: 'ok',
@@ -73,12 +68,10 @@ router.get('/id/:id', async (req: Request, res: Response) => {
       data: amazon_sales,
     });
   }
-  //If there is no data for today, program will firstly scrape new reviews data from amazon, then update sales data
-  getRequestWithAxios(
-    'http://localhost:5000/api/as/reviews/id/' + req.params.id
-  )
+  // If there is no data for today, program will firstly scrape new reviews data from amazon, then update sales data
+  getRequestWithAxios(`http://localhost:5000/api/as/reviews/id/${req.params.id}`)
     .then(response => response.data)
-    .then(responseData => {
+    .then(response_data => {
       /*
         Becouse we don't have direct data about sales on Amazon, we will estimate it by using their reviews. 
         By different sources, we can estimate that 10% of customers who bought product will leave a review.
@@ -89,38 +82,35 @@ router.get('/id/:id', async (req: Request, res: Response) => {
         Formula: 50 / number_of_days_beetween_dates * 10 = sales_per_day
         Ex. (07/07/2022 - 07/05/2021) + (09/07/2022 - 07/07/2022) = 50 / 63 * 10 = 7,93
         */
-      if (responseData.status === 'ok') {
+      if (response_data.status === 'ok') {
         axios
-          .get('http://localhost:5000/api/ap/reviews/id/' + req.params.id)
+          .get(`http://localhost:5000/api/ap/reviews/id/${req.params.id}`)
           .then(response => response.data)
-          .then(async responseData => {
-            if (!responseData.data) {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          .then(async response_data => {
+            if (!response_data.data) {
               return res.status(200).json({
                 status: 'ok',
                 message: 'No reviews found',
               });
             }
-            //sort json object by date
+            // sort json object by date
             const sortJsonObject = (a: any, b: any) => {
               return (
                 new Date(a.product_rating_date).getTime() -
                 new Date(b.product_rating_date).getTime()
               );
             };
-            responseData.data.sort(sortJsonObject);
+            response_data.data.sort(sortJsonObject);
 
-            const latest_average_date = getTheAverageDate(responseData.data, 0);
+            const latest_average_date = getTheAverageDate(response_data.data, 0);
             const last_average_date = getTheAverageDate(
-              responseData.data,
-              responseData.data.length / 2
+              response_data.data,
+              response_data.data.length / 2,
             );
 
             const sales_per_day = calculateSalesPerDay(
-              calculateDifferenceBetweenDates(
-                latest_average_date,
-                last_average_date,
-                yourDate
-              )
+              calculateDifferenceBetweenDates(latest_average_date, last_average_date, yourDate),
             );
 
             await amazonProductSalesModel.updateOne(
@@ -133,12 +123,11 @@ router.get('/id/:id', async (req: Request, res: Response) => {
                 product_sales: sales_per_day,
                 product_sales_date: formatted_current_date,
               },
-              { new: true, upsert: true }
+              { new: true, upsert: true },
             );
             amazon_sales = await amazonProductSalesModel.find({
               product_id: req.params.id,
             });
-
             return checkIfItemsExistInDbAndReturnResponse({
               res,
               searched_items_in_db_model: amazon_sales,
@@ -148,5 +137,10 @@ router.get('/id/:id', async (req: Request, res: Response) => {
           });
       }
     });
+  return res.status(200).json({
+    status: 'ok',
+    message: 'Sales data was found in database',
+    data: amazon_sales,
+  });
 });
 export default router;

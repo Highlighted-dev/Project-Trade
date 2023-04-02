@@ -1,10 +1,10 @@
 import express, { Request, Response, Router } from 'express';
-import * as stream from 'stream';
 import os from 'os';
 import bodyParser from 'body-parser';
+import { exec, ExecException } from 'child_process';
 
 const router: Router = express.Router();
-const { exec } = require('child_process');
+
 const jsonParser = bodyParser.json();
 
 const getDirectoryBasedOnSystem = () => {
@@ -16,15 +16,12 @@ const getDirectoryBasedOnSystem = () => {
   }
 };
 
-const runAProductScraper = async (
-  req: Request,
-  res: Response,
-  command: string
-) => {
-  //Execute the command in the child process
+const runAProductScraper = async (req: Request, res: Response, command: string) => {
+  // Execute the command in the child process
   exec(
     command,
-    function (error: Error, stderr: stream.Readable, stdout: stream.Readable) {
+    { maxBuffer: 50 * 1024 * 1024 },
+    function (error: ExecException | null, stderr: string, stdout: string) {
       if (error) {
         console.log(error);
         res.status(500).json({
@@ -35,59 +32,36 @@ const runAProductScraper = async (
       } else {
         res.status(200).json({ status: 'ok', logs: stdout });
       }
-    }
+    },
   );
 };
 
 router.get('/id/:id', async (req: Request, res: Response) => {
-  //Get the product id from the url
+  // Get the product id from the url
   const { id } = req.params;
-  const command =
-    'cd ' +
-    getDirectoryBasedOnSystem() +
-    ' scrapy crawl AmazonOneProductSpider -a prod_id="' +
-    id +
-    '"';
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonOneProductSpider -a prod_id="${id}"`;
   runAProductScraper(req, res, command);
 });
 router.get('/highres/id/:id', async (req: Request, res: Response) => {
-  //Get the product id from the url
+  // Get the product id from the url
   const { id } = req.params;
-  const command =
-    'cd ' +
-    getDirectoryBasedOnSystem() +
-    ' scrapy crawl AmazonGetHighResImages -a prod_id="' +
-    id +
-    '" -o AmazonGetHighResImages.json';
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonGetHighResImages -a prod_id="${id}" -o AmazonGetHighResImages.json`;
   runAProductScraper(req, res, command);
 });
 router.get('/prices/id/:id', async (req: Request, res: Response) => {
-  //Get the product id from the url
+  // Get the product id from the url
   const { id } = req.params;
-  const command =
-    'cd ' +
-    getDirectoryBasedOnSystem() +
-    ' scrapy crawl AmazonProductPrices -a prod_id="' +
-    id +
-    '" -o AmazonPrices.json';
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonProductPrices -a prod_id="${id}" -o AmazonPrices.json`;
   runAProductScraper(req, res, command);
 });
 router.get('/prices/', jsonParser, async (req: Request, res: Response) => {
-  const command =
-    'cd ' +
-    getDirectoryBasedOnSystem() +
-    ' scrapy crawl AmazonProductPrices -a fetch_prod_ids_from_db=True';
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonProductPrices -a fetch_prod_ids_from_db=True`;
   runAProductScraper(req, res, command);
 });
 router.get('/reviews/id/:id', async (req: Request, res: Response) => {
-  //Get the product id from the url
+  // Get the product id from the url
   const { id } = req.params;
-  const command =
-    'cd ' +
-    getDirectoryBasedOnSystem() +
-    ' scrapy crawl AmazonReviewsSpider -a prod_id="' +
-    id +
-    '" -o AmazonReviews.json';
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonReviewsSpider -a prod_id="${id}" -o AmazonReviews.json`;
   runAProductScraper(req, res, command);
 });
 
