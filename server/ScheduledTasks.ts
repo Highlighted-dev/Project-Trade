@@ -7,12 +7,12 @@ interface IResponse {
   data: string;
 }
 
-const schedulePriceUpdate = schedule.scheduleJob('00 22 * * *', () => {
+const schedulePriceUpdate = schedule.scheduleJob('00 00 01 * *', () => {
   axios
     .get('http://localhost:5000/api/ap/updatePrices')
     .then((response: AxiosResponse) => response.data)
-    .then((responesData: IResponse) => {
-      console.log(responesData.message);
+    .then((response_data: IResponse) => {
+      console.log(response_data.message);
     })
     .catch((error: Error) => {
       console.log(error.message);

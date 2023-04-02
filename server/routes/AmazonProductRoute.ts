@@ -52,9 +52,9 @@ const getAmazonProductData = async (
       .catch((err: AxiosError) => {
         axiosErrorHandler(err, res);
       });
+  } else {
+    return res.status(200).json({ status: 'ok', message: 'Couldnt find the data' });
   }
-
-  return res.status(200).json({ status: 'ok', message: 'Couldnt find the data' });
 };
 
 const getAmazonSpecificDataOrUpdateIfNeeded = async (

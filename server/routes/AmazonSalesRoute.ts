@@ -137,10 +137,5 @@ router.get('/id/:id', async (req: Request, res: Response) => {
           });
       }
     });
-  return res.status(200).json({
-    status: 'ok',
-    message: 'Sales data was found in database',
-    data: amazon_sales,
-  });
 });
 export default router;
