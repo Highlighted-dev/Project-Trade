@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 import AmazonProductRoute from './routes/AmazonProductRoute';
 import AmazonScraperRoute from './routes/AmazonScraperRoute';
 import UserAuthenticationRoute from './routes/UserAuthenticationRoute';
@@ -28,6 +29,7 @@ mongoose
   )
   .catch(error => console.log(error.message));
 
+app.use(helmet());
 app.use(cookieParser());
 app.use(
   session({
