@@ -1,21 +1,22 @@
-import { ObjectId } from 'mongodb';
-import mongoose, { Model, Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface IProductThumbImages {
-  _id: ObjectId;
   product_id: string;
   product_thumb_image: string;
 }
 
 const amazonProductThumbImagesSchema = new Schema<IProductThumbImages>(
   {
-    product_id: String,
-    product_thumb_image: String,
+    product_id: { type: String, required: true },
+    product_thumb_image: { type: String, required: true },
   },
-  { collection: 'amazonProductThumbImages' }
+  { versionKey: false },
 );
-var amazonProductThumbImagesModel: Model<IProductThumbImages> = mongoose.model(
+
+const amazonProductThumbImagesModel = model<IProductThumbImages>(
+  'ProductThumbImages',
+  amazonProductThumbImagesSchema,
   'amazonProductThumbImages',
-  amazonProductThumbImagesSchema
 );
+
 export default amazonProductThumbImagesModel;

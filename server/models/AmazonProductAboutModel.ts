@@ -1,22 +1,22 @@
-import { ObjectId } from 'mongodb';
-import mongoose, { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 interface IProductAbout {
-  _id: ObjectId;
   product_id: string;
   product_about: string;
 }
 
 const amazonProductAboutSchema = new Schema<IProductAbout>(
   {
-    _id: ObjectId,
     product_id: String,
     product_about: String,
   },
-  { collection: 'amazonProductAbout' }
+  { versionKey: false },
 );
-let amazonProductAboutModel: Model<IProductAbout> = mongoose.model(
+
+const amazonProductAboutModel = model<IProductAbout>(
+  'Amazon Product About',
+  amazonProductAboutSchema,
   'amazonProductAbout',
-  amazonProductAboutSchema
 );
+
 export default amazonProductAboutModel;

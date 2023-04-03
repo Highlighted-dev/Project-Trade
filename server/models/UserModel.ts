@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 interface IUserModel {
   username: string;
@@ -9,16 +9,16 @@ interface IUserModel {
   role: string;
 }
 
-const userModelSchema = new Schema<IUserModel>(
+const userSchema = new Schema<IUserModel>(
   {
-    username: String,
-    email: { type: String, unique: true },
-    password: String,
-    birthdate: String,
-    sex: String,
-    role: String,
+    username: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    birthdate: { type: String, required: true },
+    sex: { type: String, required: true },
+    role: { type: String, required: true },
   },
-  { collection: 'userData' }
+  { versionKey: false },
 );
-var userModel: Model<IUserModel> = mongoose.model('userModel', userModelSchema);
+const userModel = model<IUserModel>('Users', userSchema, 'userData');
 export default userModel;

@@ -12,7 +12,7 @@ const getDirectoryBasedOnSystem = () => {
     case 'win32':
       return '../amazonscraper &';
     default:
-      return '& cd amazonscraper &&';
+      return '&& cd amazonscraper &&';
   }
 };
 

@@ -1,25 +1,24 @@
-import { ObjectId } from 'mongodb';
-import mongoose, { Model, Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface IProductTechnicalDetails {
-  _id: ObjectId;
   product_id: string;
   product_technical_detail_name: string;
   product_technical_detail: string;
 }
 
-const amazonProductTechnicalDetailsSchema =
-  new Schema<IProductTechnicalDetails>(
-    {
-      product_id: String,
-      product_technical_detail_name: String,
-      product_technical_detail: String,
-    },
-    { collection: 'amazonProductTechnicalDetails' }
-  );
-var amazonProductTechnicalDetailsModel: Model<IProductTechnicalDetails> =
-  mongoose.model(
-    'amazonProductTechnicalDetails',
-    amazonProductTechnicalDetailsSchema
-  );
+const amazonProductTechnicalDetailsSchema = new Schema<IProductTechnicalDetails>(
+  {
+    product_id: { type: String, required: true },
+    product_technical_detail_name: { type: String, required: true },
+    product_technical_detail: { type: String, required: true },
+  },
+  { versionKey: false },
+);
+
+const amazonProductTechnicalDetailsModel = model<IProductTechnicalDetails>(
+  'Product Technical Details',
+  amazonProductTechnicalDetailsSchema,
+  'amazonProductTechnicalDetails',
+);
+
 export default amazonProductTechnicalDetailsModel;
