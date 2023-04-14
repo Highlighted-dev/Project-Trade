@@ -21,8 +21,8 @@ class AmazonGetHighResImages(scrapy.Spider):
         if(testing):
             return
     
-        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        self.db = self.client[GlobalVariables.mongoDatabase]
+        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.db = self.client[GlobalVariables.mongo_db]
 
     def start_requests(self):
         for url in self.start_urls:

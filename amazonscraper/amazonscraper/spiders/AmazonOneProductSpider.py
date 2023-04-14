@@ -14,8 +14,8 @@ class AmazonOneProductSpider(scrapy.Spider):
         product_id = prod_id
         self.start_urls = ["https://www.amazon.de/-/en/dp/"+product_id]
         
-        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        self.db = self.client[GlobalVariables.mongoDatabase]
+        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.db = self.client[GlobalVariables.mongo_db]
     #Change every request from ScrapyRequest to SplashRequest for javascript load
     def start_requests(self):
         for url in self.start_urls:

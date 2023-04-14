@@ -15,16 +15,15 @@ from amazoncaptcha import AmazonCaptcha
 class AmazonProductPrices(scrapy.Spider):
     name = 'AmazonProductPrices'
     allowed_domains = GlobalVariables.allowed_domains
-
     def __init__(self, prod_id=None, fetch_prod_ids_from_db = False):
         self.start_urls = []
-        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        self.db = self.client[GlobalVariables.mongoDatabase]
+        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.db = self.client[GlobalVariables.mongo_db]
         #If we want to scrape only one product, we can this by passing the product id as an argument.
         if(prod_id):
             self.start_urls = ["https://www.amazon.de/-/en/dp/"+prod_id]
         elif(fetch_prod_ids_from_db):
-            mongo_db_column_name = self.db[GlobalVariables.mongoColumn]
+            mongo_db_column_name = self.db[GlobalVariables.mongo_column_products]
             prod_ids = mongo_db_column_name.find({}).distinct("product_id")
             if prod_ids:
                 for prod_id in prod_ids:
@@ -35,6 +34,7 @@ class AmazonProductPrices(scrapy.Spider):
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
+
 
     def parse(self, response):
         try:
@@ -62,8 +62,13 @@ class AmazonProductPrices(scrapy.Spider):
     def getProductId(self, response):
         try:
             return response.url.split("/dp/")[1].split("/")[0]
-        except IndexError:
+        except Exception:
             logging.warning("Unable to get product id from url: %s", response.url)
+            product_id = response.xpath('//input[@id="ASIN"]/@value').extract_first()
+            if not product_id:
+                product_id = response.xpath('//input[@id="deliveryBlockSelectAsin"]/@value').extract_first() 
+            if product_id:
+                return product_id
             return "None"
         
     def checkForCaptcha(self, response):
@@ -75,7 +80,7 @@ class AmazonProductPrices(scrapy.Spider):
         else:
             return False
     
-    def solveCaptcha(self, response, origin_method):
+    def solveCaptcha(self, response):
         logging.info("Trying to solve captcha...")
         try:
             # Get the captcha image url from website
@@ -86,7 +91,7 @@ class AmazonProductPrices(scrapy.Spider):
             logging.info("Captcha solved!")
             yield SplashFormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
-                                        callback=origin_method)
+                                        callback=self.parse)
         except Exception as e:
             logging.error("Something went wrong while solving captcha\n")
             logging.error(e)
@@ -95,8 +100,9 @@ class AmazonProductPrices(scrapy.Spider):
     def closed(self, reason):
         pathToJson = (str(Path(__file__).parents[2])+f'/AmazonPrices.json').replace(os.sep, '/')
         with open(pathToJson) as f:
-            file_data = json.load(f)
-        bulk_operations = [pymongo.ReplaceOne(filter=({"product_id":item["product_id"],"product_price_date":item["product_price_date"]}),replacement=item,upsert=True) for item in file_data]
-        self.db[GlobalVariables.mongo_column_prices].bulk_write(bulk_operations)
+            if(os.stat(pathToJson).st_size > 0):
+                file_data = json.load(f)
+                bulk_operations = [pymongo.ReplaceOne(filter=({"product_id":item["product_id"],"product_price_date":item["product_price_date"]}),replacement=item,upsert=True) for item in file_data]
+                self.db[GlobalVariables.mongo_column_prices].bulk_write(bulk_operations)
         os.remove(pathToJson)
         

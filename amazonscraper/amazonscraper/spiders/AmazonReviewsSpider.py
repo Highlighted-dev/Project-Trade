@@ -23,8 +23,8 @@ class AmazonReviewsSpider(scrapy.Spider):
         if testing:
             return
 
-        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        self.db = self.client[GlobalVariables.mongoDatabase]
+        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.db = self.client[GlobalVariables.mongo_db]
 
         if prod_id:
             self.insert_one_product_to_db = True
@@ -36,7 +36,7 @@ class AmazonReviewsSpider(scrapy.Spider):
             logging.info(f"Successfully removed old data for product with id: {prod_id}")
 
         elif fetch_prod_ids_from_db:
-            mongo_product_column = self.db[GlobalVariables.mongoColumn]
+            mongo_product_column = self.db[GlobalVariables.mongo_column_products]
             # db[GlobalVariables.mongo_column_reviews].delete_many({})
             # logging.info("Successfully removed old data for all products")
             prod_ids = mongo_product_column.distinct("product_id")
@@ -159,7 +159,6 @@ class AmazonReviewsSpider(scrapy.Spider):
                 continue
             first_10_reviews = column.find({"product_id":product_id}).sort("product_rating_date", 1)[counted_reviews/2:]
             last_10_reviews = column.find({"product_id":product_id}).sort("product_rating_date", 1)[:counted_reviews/2]
-            logging.info("Number of reviews: " + str(counted_reviews))
             newest_reviews, oldest_reviews = [],[]
             for newest_review,oldest_review in zip(first_10_reviews,last_10_reviews):
                 newest_reviews.append(datetime.strptime(newest_review.get("product_rating_date"),'%Y-%m-%d'))
@@ -174,7 +173,6 @@ class AmazonReviewsSpider(scrapy.Spider):
 
             current_date = datetime.now()
             number_of_days_between_reviews = (number_of_days_between_oldest_reviews.days - number_of_days_between_newest_reviews.days) + ((current_date - oldest_reviews[len(oldest_reviews)-1]).days)
-            logging.info("Number of days between reviews: " + str(number_of_days_between_reviews))
             sales_per_day = round(50 / number_of_days_between_reviews * 10, 2)
             logging.info("Estimated sales for product with id: " + product_id + " is: " + str(sales_per_day))
             sales_column = self.db[GlobalVariables.mongo_column_sales]
