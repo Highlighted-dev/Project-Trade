@@ -80,18 +80,19 @@ class AmazonProductPrices(scrapy.Spider):
         else:
             return False
     
-    def solveCaptcha(self, response):
+    def solveCaptcha(self, response, origin_method):
         logging.info("Trying to solve captcha...")
         try:
             # Get the captcha image url from website
             captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
             # Solve Captcha with AmazonCaptcha
+            logging.info(str(captcha_url))
             captcha = AmazonCaptcha.fromlink(captcha_url)
             captcha_solution = captcha.solve()
             logging.info("Captcha solved!")
             yield SplashFormRequest.from_response(response,
                                         formdata={'field-keywords': captcha_solution},
-                                        callback=self.parse)
+                                        callback=origin_method)
         except Exception as e:
             logging.error("Something went wrong while solving captcha\n")
             logging.error(e)
