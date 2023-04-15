@@ -1,8 +1,6 @@
-import { ObjectId } from 'mongodb';
-import mongoose, { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 interface IProductPrices {
-  _id: ObjectId;
   product_id: string;
   product_price: string;
   product_price_date: string;
@@ -14,10 +12,13 @@ const amazonProductPricesSchema = new Schema<IProductPrices>(
     product_price: String,
     product_price_date: String,
   },
-  { collection: 'amazonProductPrices' }
+  { versionKey: false },
 );
-var amazonProductPricesModel: Model<IProductPrices> = mongoose.model(
+
+const amazonProductPricesModel = model<IProductPrices>(
+  'Amazon Product Prices',
+  amazonProductPricesSchema,
   'amazonProductPrices',
-  amazonProductPricesSchema
 );
+
 export default amazonProductPricesModel;

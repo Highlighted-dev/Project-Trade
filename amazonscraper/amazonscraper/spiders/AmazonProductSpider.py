@@ -59,9 +59,9 @@ class AmazonProductSpider(scrapy.Spider):
         #Get current path -> 2 directories up -> add file name -> replace "\" for "/"
         pathToJson = (str(Path(__file__).parents[2])+'/amazon_product_data.json').replace(os.sep, '/')
         assert os.path.isfile(pathToJson)
-        myclient = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        mydb = myclient[GlobalVariables.mongoDatabase]
-        mycol = mydb[GlobalVariables.mongoColumn]
+        myclient = pymongo.MongoClient(GlobalVariables.mongo_url)
+        mydb = myclient[GlobalVariables.mongo_db]
+        mycol = mydb[GlobalVariables.mongo_column_products]
         with open(pathToJson) as f:
             file_data = json.load(f)
         #Try inserting files to mongoDB

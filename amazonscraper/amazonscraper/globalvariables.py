@@ -27,9 +27,9 @@ items_per_page = 24
 
 
 #MongoDb related variables
-mongoUrl = 'mongodb+srv://root:root@project-trade.d28vx.mongodb.net/project-trade'
-mongoDatabase = 'project-trade'
-mongoColumn = 'amazonProductData'
+mongo_url = 'mongodb+srv://root:root@project-trade.d28vx.mongodb.net/project-trade'
+mongo_db = 'project-trade'
+mongo_column_products = 'amazonProductData'
 mongo_column_thumb_images = 'amazonProductThumbImages'
 mongo_column_details = 'amazonProductDetails'
 mongo_column_technical_details = 'amazonProductTechnicalDetails'

@@ -1,15 +1,14 @@
-import { ObjectId } from 'mongodb';
-import mongoose, { Model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 interface IProductData {
-  _id: ObjectId;
+  _id: string;
   product_id: string;
   product_name: string;
   product_sale_price: string;
   product_image: string;
 }
 
-const amazonProductDataSchema = new Schema<IProductData>(
+const productDataSchema = new Schema<IProductData>(
   {
     _id: String,
     product_id: String,
@@ -17,10 +16,13 @@ const amazonProductDataSchema = new Schema<IProductData>(
     product_sale_price: String,
     product_image: String,
   },
-  { collection: 'amazonProductData' }
+  { versionKey: false },
 );
-let amazonProductDataModel: Model<IProductData> = mongoose.model(
+
+const amazonProductDataModel = model<IProductData>(
+  'Amazon Product Data',
+  productDataSchema,
   'amazonProductData',
-  amazonProductDataSchema
 );
+
 export default amazonProductDataModel;

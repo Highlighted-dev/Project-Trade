@@ -23,8 +23,8 @@ class AmazonReviewsSpider(scrapy.Spider):
         if testing:
             return
 
-        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        self.db = self.client[GlobalVariables.mongoDatabase]
+        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.db = self.client[GlobalVariables.mongo_db]
 
         if prod_id:
             self.insert_one_product_to_db = True
@@ -36,7 +36,7 @@ class AmazonReviewsSpider(scrapy.Spider):
             logging.info(f"Successfully removed old data for product with id: {prod_id}")
 
         elif fetch_prod_ids_from_db:
-            mongo_product_column = self.db[GlobalVariables.mongoColumn]
+            mongo_product_column = self.db[GlobalVariables.mongo_column_products]
             # db[GlobalVariables.mongo_column_reviews].delete_many({})
             # logging.info("Successfully removed old data for all products")
             prod_ids = mongo_product_column.distinct("product_id")
@@ -116,13 +116,17 @@ class AmazonReviewsSpider(scrapy.Spider):
                 product_rating_id=rating_id,
                 product_rating_date=date_formatted,
             )
-            if(self.insert_one_product_to_db):
-                self.db[GlobalVariables.mongo_column_reviews].replace_one({"product_id":item["product_id"],"product_rating_id":item["product_rating_id"]},item,upsert=True)
             yield item
             
     
-    def closed(self, reason):  
+    def closed(self, reason):
+        pathToJson = (str(Path(__file__).parents[2])+f'/AmazonReviews.json').replace(os.sep, '/')
+        with open(pathToJson) as f:
+            file_data = json.load(f)
         if(self.insert_one_product_to_db):
+            bulk_operations = [pymongo.InsertOne(item) for item in file_data]
+            self.db[GlobalVariables.mongo_column_reviews].bulk_write(bulk_operations)
+            os.remove(pathToJson)
             return
             
         logging.info("Finished scraping Amazon reviews")
@@ -137,12 +141,7 @@ class AmazonReviewsSpider(scrapy.Spider):
         Ex. (07/07/2022 - 07/05/2021) + (09/07/2022 - 07/07/2022) = 50 / 63 * 10 = 7,93
         */
         """
-        client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        db = client[GlobalVariables.mongoDatabase]
-        column = db[GlobalVariables.mongo_column_reviews]
-        # pathToJson = (str(Path(__file__).parents[2])+f'/file.json').replace(os.sep, '/')
-        # with open(pathToJson) as f:
-        #     file_data = json.load(f)
+        column = self.db[GlobalVariables.mongo_column_reviews]
         # #Try inserting files to mongoDB
         # try:
         #     for obj in file_data:
@@ -160,7 +159,6 @@ class AmazonReviewsSpider(scrapy.Spider):
                 continue
             first_10_reviews = column.find({"product_id":product_id}).sort("product_rating_date", 1)[counted_reviews/2:]
             last_10_reviews = column.find({"product_id":product_id}).sort("product_rating_date", 1)[:counted_reviews/2]
-            logging.info("Number of reviews: " + str(counted_reviews))
             newest_reviews, oldest_reviews = [],[]
             for newest_review,oldest_review in zip(first_10_reviews,last_10_reviews):
                 newest_reviews.append(datetime.strptime(newest_review.get("product_rating_date"),'%Y-%m-%d'))
@@ -175,8 +173,7 @@ class AmazonReviewsSpider(scrapy.Spider):
 
             current_date = datetime.now()
             number_of_days_between_reviews = (number_of_days_between_oldest_reviews.days - number_of_days_between_newest_reviews.days) + ((current_date - oldest_reviews[len(oldest_reviews)-1]).days)
-            logging.info("Number of days between reviews: " + str(number_of_days_between_reviews))
             sales_per_day = round(50 / number_of_days_between_reviews * 10, 2)
             logging.info("Estimated sales for product with id: " + product_id + " is: " + str(sales_per_day))
-            sales_column = db[GlobalVariables.mongo_column_sales]
+            sales_column = self.db[GlobalVariables.mongo_column_sales]
             sales_column.replace_one({"product_id":product_id,"product_sales_date":current_date.strftime('%Y-%m-%d')},{"product_id":product_id,"sales_per_day":sales_per_day,'product_sales_date':current_date.strftime('%Y-%m-%d')},upsert=True)

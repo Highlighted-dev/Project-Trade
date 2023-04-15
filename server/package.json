@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon index.ts"
+    "test": "jest",
+    "start": "ts-node-esm index.ts",
+    "dev": "nodemon index.ts"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
   },
   "author": "",
   "license": "ISC",
@@ -17,17 +24,38 @@
     "dotenv": "^16.0.1",
     "express": "^4.17.2",
     "express-session": "^1.17.3",
+    "helmet": "^6.0.1",
     "json-loader": "^0.5.7",
     "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.1.0",
     "mongoose": "^6.1.5",
     "node-schedule": "^2.1.0",
     "nodemon": "^2.0.15"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-typescript": "^7.21.4",
     "@types/bcryptjs": "^2.4.2",
+    "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
+    "@types/jest": "^29.5.0",
     "@types/jsonwebtoken": "^8.5.8",
-    "@types/node-schedule": "^2.1.0"
+    "@types/node-schedule": "^2.1.0",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "babel-jest": "^29.5.0",
+    "eslint": "^8.37.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3"
   }
 }

@@ -1,3 +1,4 @@
+from pathlib import Path
 import scrapy
 from .. import GlobalVariables
 from amazoncaptcha import AmazonCaptcha
@@ -6,19 +7,27 @@ import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
 import re
 import pymongo
+import os
+import json
+import time
 class AmazonGetHighResImages(scrapy.Spider):
-    def __init__(self, prod_id):
+    name = 'AmazonGetHighResImages'
+    allowed_domains = GlobalVariables.allowed_domains
+
+    def __init__(self, prod_id, testing = False):
         self.product_id = prod_id
         self.start_urls = ["https://www.amazon.de/-/en/dp/"+self.product_id]
 
-        self.client = pymongo.MongoClient(GlobalVariables.mongoUrl)
-        self.db = self.client[GlobalVariables.mongoDatabase]
+        if(testing):
+            return
+    
+        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.db = self.client[GlobalVariables.mongo_db]
 
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
-    name = 'AmazonGetHighResImages'
-    allowed_domains = GlobalVariables.allowed_domains
+
     def parse(self, response):
         try:
             images = AmazonItemHighResImages()
@@ -38,7 +47,6 @@ class AmazonGetHighResImages(scrapy.Spider):
                         images['product_highres_image'] = highres_image[1:-1]
                     else:
                         images['product_highres_image'] = highres_image
-                    self.db[GlobalVariables.mongo_column_highres_images].replace_one({"product_id":images["product_id"],"product_highres_image":images["product_highres_image"]},images,upsert=True)     
                     yield images
 
         except Exception as e:
@@ -53,6 +61,7 @@ class AmazonGetHighResImages(scrapy.Spider):
             return True
         else:
             return False
+    
     def solveCaptcha(self, response, origin_method):
         logging.info("Trying to solve captcha...")
         try:
@@ -67,4 +76,13 @@ class AmazonGetHighResImages(scrapy.Spider):
             logging.error("Something went wrong while solving captcha\n")
             logging.error(e)
             return None
+        
+    def closed(self, reason):
+        pathToJson = (str(Path(__file__).parents[2])+'/AmazonGetHighResImages.json').replace(os.sep, '/')
+        assert os.path.isfile(pathToJson)
+        with open(pathToJson) as f:
+            items = json.load(f)
+        bulk_operations = [pymongo.ReplaceOne(filter=({"product_id":item["product_id"],"product_highres_image":item["product_highres_image"]}),replacement=item,upsert=True) for item in items]
+        self.db[GlobalVariables.mongo_column_highres_images].bulk_write(bulk_operations)
+        os.remove(pathToJson)
         
