@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
+import { AiOutlineEuroCircle, AiOutlineCalendar, AiOutlineHeart } from 'react-icons/ai';
 import { authContext } from '../../components/ts/AuthContext';
 import { IUser, AuthContextType } from '../../@types/AuthContext';
 import { IProduct } from '../../@types/ProductPageTemplate';
@@ -48,30 +49,52 @@ function Favourites() {
     // authState._id  makes it re-render when authState changes. This is because authState._id changes to null when user refreshes the page.
     authState._id,
   ]);
-
   return (
-    <div className="center">
-      <div id="favouritesPanel">
-        <h1>Favourites</h1>
-        <ul>
-          {loading ? (
-            <li>loading data...</li>
-          ) : (
-            favouritesData.map((product: IProduct) => (
-              <li key={product.product_id} className="favourite">
+    <div id="favouritesPanel">
+      <ul>
+        <h1 className="favourites_header">Favourites</h1>
+        {loading ? (
+          <li>loading data...</li>
+        ) : (
+          favouritesData.map((product: IProduct) => (
+            <li key={product.product_id} className="product_tile">
+              <div className="column">
                 <Link to={`/Product/${product.product_id}`}>
-                  <div className="image">
-                    <img src={product.product_image} alt="product_image" />
+                  <div className="product_containter">
+                    <div className="paneltile">
+                      <div className="image">
+                        <div className="image_scaling">
+                          <img src={product.product_image} alt="product_image" />
+                        </div>
+                      </div>
+                      <div className="product_name">
+                        <div className="favourite_button">
+                          <a href="#">
+                            <AiOutlineHeart size="40" />
+                          </a>
+                        </div>
+                        {product.product_name.length < 100
+                          ? product.product_name
+                          : `${product.product_name.substring(0, 100)}...`}
+                      </div>
+                      <div className="prices">
+                        <div className="price">
+                          <AiOutlineEuroCircle className="icon" />
+                          100
+                        </div>
+                        <div className="lowest_price_past_month">
+                          <AiOutlineCalendar className="icon" /> 120
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h2 className="text">{product.product_name}</h2>
                 </Link>
-              </li>
-            ))
-          )}
-        </ul>
-      </div>
+              </div>
+            </li>
+          ))
+        )}
+      </ul>
     </div>
   );
 }
-
 export default Favourites;
