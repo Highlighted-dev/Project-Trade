@@ -1,4 +1,5 @@
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -15,7 +16,8 @@ from amazoncaptcha import AmazonCaptcha
 class AmazonProductPrices(scrapy.Spider):
     name = 'AmazonProductPrices'
     allowed_domains = GlobalVariables.allowed_domains
-    def __init__(self, prod_id=None, fetch_prod_ids_from_db = False):
+    # Instance id is used to divide the product ids between the instances. Max instances is the total number of instances that will be running
+    def __init__(self, prod_id=None, fetch_prod_ids_from_db = False, instance_id=1, max_instances=1):
         self.start_urls = []
         self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
         self.db = self.client[GlobalVariables.mongo_db]
@@ -23,14 +25,24 @@ class AmazonProductPrices(scrapy.Spider):
         if(prod_id):
             self.start_urls = ["https://www.amazon.de/-/en/dp/"+prod_id]
         elif(fetch_prod_ids_from_db):
-            mongo_db_column_name = self.db[GlobalVariables.mongo_column_products]
-            prod_ids = mongo_db_column_name.find({}).distinct("product_id")
-            if prod_ids:
-                for prod_id in prod_ids:
+            # Get the product IDs from the database
+            products_collection = self.db[GlobalVariables.mongo_column_products]
+            product_ids = products_collection.find({}).distinct("product_id")
+
+            # Calculate the start and end indexes for the sliced list
+            start_index = self.calculate_start_index(product_ids, instance_id, max_instances)
+            end_index = self.calculate_end_index(product_ids, instance_id, max_instances)
+
+            # Slice the list of product IDs for the current instance
+            instance_product_ids = product_ids[start_index:end_index]
+
+            # Add the product URLs to the start URLs list
+            if instance_product_ids:
+                for prod_id in instance_product_ids:
                     self.start_urls.append("https://www.amazon.de/-/en/dp/"+prod_id)
         else:
             raise ValueError('No product id found')
-                    
+                            
     def start_requests(self):
         for url in self.start_urls:
             yield SplashRequest(url, self.parse)
@@ -98,6 +110,19 @@ class AmazonProductPrices(scrapy.Spider):
             logging.error(e)
             return None
     
+    def calculate_start_index(self, product_ids, instance_id, max_instances):
+        #Calculate the start index for the sliced list of product IDs.
+        num_product_ids = len(product_ids)
+        start_index = math.ceil(num_product_ids - (num_product_ids / max_instances) * instance_id)
+        return start_index
+
+
+    def calculate_end_index(self, product_ids, instance_id, max_instances):
+        #Calculate the end index for the sliced list of product IDs.
+        num_product_ids = len(product_ids)
+        end_index = math.ceil(num_product_ids / max_instances * instance_id) - 1
+        return end_index
+
     def closed(self, reason):
         pathToJson = (str(Path(__file__).parents[2])+f'/AmazonPrices.json').replace(os.sep, '/')
         with open(pathToJson) as f:
