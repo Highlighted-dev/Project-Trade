@@ -20,9 +20,9 @@ class AmazonProductPricesTest(unittest.TestCase):
         self.spider = AmazonProductPrices("any")
         self.expected_output = {\
             "item1": \
-                {'product_id': 'None', 'product_price': '239.00', 'product_price_date': str(date.today())},\
+                {'product_id': 'B08DLC9HBG', 'product_price': '239.00', 'product_price_date': str(date.today())},\
             "item2": \
-                {'product_id': 'None', 'product_price': '24.99', 'product_price_date': str(date.today())}\
+                {'product_id': 'B07RGZ5NKS', 'product_price': '24.99', 'product_price_date': str(date.today())}\
             }
 
     def _test_item_results(self, results, item_name):
