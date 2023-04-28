@@ -30,12 +30,12 @@ class AmazonProductPrices(scrapy.Spider):
             product_ids = products_collection.find({}).distinct("product_id")
 
             # Calculate the start and end indexes for the sliced list
-            start_index = self.calculate_start_index(product_ids, instance_id, max_instances)
-            end_index = self.calculate_end_index(product_ids, instance_id, max_instances)
-
+            start_index = self.calculate_start_index(product_ids, int(instance_id), int(max_instances))
+            end_index = self.calculate_end_index(product_ids, int(instance_id), int(max_instances))
+            
             # Slice the list of product IDs for the current instance
             instance_product_ids = product_ids[start_index:end_index]
-
+            
             # Add the product URLs to the start URLs list
             if instance_product_ids:
                 for prod_id in instance_product_ids:
@@ -113,14 +113,14 @@ class AmazonProductPrices(scrapy.Spider):
     def calculate_start_index(self, product_ids, instance_id, max_instances):
         #Calculate the start index for the sliced list of product IDs.
         num_product_ids = len(product_ids)
-        start_index = math.ceil(num_product_ids - (num_product_ids / max_instances) * instance_id)
+        start_index = math.ceil(num_product_ids / max_instances * (instance_id - 1))
         return start_index
 
 
     def calculate_end_index(self, product_ids, instance_id, max_instances):
         #Calculate the end index for the sliced list of product IDs.
         num_product_ids = len(product_ids)
-        end_index = math.ceil(num_product_ids / max_instances * instance_id) - 1
+        end_index = math.ceil(num_product_ids / max_instances * instance_id)
         return end_index
 
     def closed(self, reason):
