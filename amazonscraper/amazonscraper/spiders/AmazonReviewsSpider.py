@@ -1,5 +1,6 @@
 import logging
 import json
+import math
 import os
 from datetime import datetime
 from pathlib import Path
@@ -15,7 +16,7 @@ class AmazonReviewsSpider(scrapy.Spider):
     name = 'AmazonReviewsSpider'
     allowed_domains = GlobalVariables.allowed_domains
 
-    def __init__(self, prod_id = None,fetch_prod_ids_from_db = False,testing = False):
+    def __init__(self, prod_id = None,fetch_prod_ids_from_db = False,testing = False, instance_id=1, max_instances=1):
         super().__init__()
         logging.getLogger('scrapy').propagate = False
         self.insert_one_product_to_db = False
@@ -40,8 +41,16 @@ class AmazonReviewsSpider(scrapy.Spider):
             # db[GlobalVariables.mongo_column_reviews].delete_many({})
             # logging.info("Successfully removed old data for all products")
             prod_ids = mongo_product_column.distinct("product_id")
+            
             if prod_ids:
-                for prod_id in prod_ids:
+                 # Calculate the start and end indexes for the sliced list
+                start_index = self.calculate_start_index(prod_ids, int(instance_id), int(max_instances))
+                end_index = self.calculate_end_index(prod_ids, int(instance_id), int(max_instances))
+            
+                # Slice the list of product IDs for the current instance
+                instance_product_ids = prod_ids[start_index:end_index]
+                logging.info(f"Instance {instance_id} of {max_instances} will scrape {len(instance_product_ids)} products")
+                for prod_id in instance_product_ids:
                     self.start_urls.append(f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent")
                     self.start_urls.append(f"https://www.amazon.de/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5")
         else:
@@ -71,6 +80,19 @@ class AmazonReviewsSpider(scrapy.Spider):
         except IndexError:
             logging.warning("Unable to get product id from url: %s", response.url)
             return "None"
+        
+    def calculate_start_index(self, product_ids, instance_id, max_instances):
+        #Calculate the start index for the sliced list of product IDs.
+        num_product_ids = len(product_ids)
+        start_index = math.ceil(num_product_ids / max_instances * (instance_id - 1))
+        return start_index
+
+
+    def calculate_end_index(self, product_ids, instance_id, max_instances):
+        #Calculate the end index for the sliced list of product IDs.
+        num_product_ids = len(product_ids)
+        end_index = math.ceil(num_product_ids / max_instances * instance_id)
+        return end_index
         
     def checkForCaptcha(self, response):
         captcha_url = response.xpath('//div[@class="a-row a-text-center"]/img/@src').extract_first()
@@ -139,7 +161,6 @@ class AmazonReviewsSpider(scrapy.Spider):
         (number_of_days_between_oldest_reviews - number_of_days_between_newest_reviews) + (current_date - number_of_days_between_oldest_reviews) = number_of_days_between_reviews
         Formula: 50 / number_of_days_beetween_dates * 10 = sales_per_day
         Ex. (07/07/2022 - 07/05/2021) + (09/07/2022 - 07/07/2022) = 50 / 63 * 10 = 7,93
-        */
         """
         column = self.db[GlobalVariables.mongo_column_reviews]
         # #Try inserting files to mongoDB
