@@ -8,8 +8,8 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko
 ACCEPT_LANGUAGE = 'en-US,en;q=0.5,de;q=0.3'
 ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
 ROBOTSTXT_OBEY = True
-CONCURRENT_REQUESTS = 64
-CONCURRENT_REQUESTS_PER_IP = 64
+CONCURRENT_REQUESTS = 16
+CONCURRENT_REQUESTS_PER_IP = 16
 
 SPIDER_MIDDLEWARES = {
     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
@@ -34,8 +34,4 @@ FAKEUSERAGENT_PROVIDERS = [
     'scrapy_fake_useragent.providers.FakerProvider',  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
     'scrapy_fake_useragent.providers.FixedUserAgentProvider',  # fall back to USER_AGENT value
 ]
-
-ITEM_PIPELINES = {
-    'amazonscraper.pipelines.AmazonscraperPipeline': 300,
-}
 
