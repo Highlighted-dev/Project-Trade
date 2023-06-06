@@ -21,7 +21,7 @@ start_urls = [
         
 
     ]
-allowed_domains = ['amazon.de']
+allowed_domains = ['amazon.com','amazon.de']
 max_pages_per_category_string = "10" #Up to 99
 items_per_page = 24
 
