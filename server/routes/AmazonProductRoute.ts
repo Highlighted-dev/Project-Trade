@@ -53,7 +53,7 @@ const getAmazonProductData = async (
         axiosErrorHandler(err, res);
       });
   } else {
-    return res.status(200).json({ status: 'ok', message: 'Couldnt find the data' });
+    return res.status(204).json({ status: 'error', message: 'Couldnt find the data' });
   }
 };
 
@@ -131,7 +131,7 @@ router.get('/array', async (req: Request, res: Response) => {
   const { array }: any = req.query;
   if (!array) {
     return res.status(400).json({
-      error: '400 Bad Request',
+      status: 'error',
       message: 'Missing array parameter',
     });
   }

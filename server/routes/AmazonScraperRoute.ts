@@ -57,7 +57,7 @@ router.get('/prices/', jsonParser, async (req: Request, res: Response) => {
   const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonProductPrices -a fetch_prod_ids_from_db=True -o AmazonPrices.json`;
   runAProductScraper(req, res, command);
 });
-router.get('/reviews/id/:id', async (req: Request, res: Response) => {
+router.get('/sales/id/:id', async (req: Request, res: Response) => {
   // Get the product id from the url
   const { id } = req.params;
   const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonReviewsSpider -a prod_id="${id}" -o AmazonReviews.json`;

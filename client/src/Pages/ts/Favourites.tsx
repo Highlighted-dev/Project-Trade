@@ -69,9 +69,9 @@ function Favourites() {
                       </div>
                       <div className="product_name">
                         <div className="favourite_button">
-                          <a href="#">
+                          <Link to="#">
                             <AiOutlineHeart size="40" />
-                          </a>
+                          </Link>
                         </div>
                         {product.product_name.length < 100
                           ? product.product_name
@@ -80,7 +80,7 @@ function Favourites() {
                       <div className="prices">
                         <div className="price">
                           <AiOutlineEuroCircle className="icon" />
-                          100
+                          {product.product_sale_price}
                         </div>
                         <div className="lowest_price_past_month">
                           <AiOutlineCalendar className="icon" /> 120

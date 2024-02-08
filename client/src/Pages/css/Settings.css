@@ -12,6 +12,9 @@
   font-weight: 600;
   font-size: 1.8rem;
   padding-bottom: 25px;
+  float: right;
+  position: relative;
+  top: -3%;
 }
 #Settings .settingsNavBar {
   width: 100%;
@@ -39,6 +42,15 @@
 }
 #Settings .settingsNavBar li.selected {
   border-bottom: 2px solid #0358eb;
+}
+@media screen and (max-width: 800px) {
+  #Settings .headerText {
+    font-weight: 600;
+    font-size: 1.6rem;
+    padding-bottom: 15px;
+    text-align: center;
+    float: none;
+  }
 }
 @media screen and (max-width: 500px) {
   #Settings {

@@ -26,23 +26,6 @@ describe('GET /api/ap/id', () => {
   });
 });
 
-describe('GET /api/ap/id/*', () => {
-  test('should return basic product informations from "Amazon Product Column" in db', async () => {
-    const res = await request(app).get('/api/ap/id/B073JYVKNX');
-    expect(res.statusCode).toBe(200);
-
-    const response_data = res.body.data[0];
-    expect(response_data.product_id).toBe('B073JYVKNX');
-    expect(response_data.product_name).toBe(
-      'SanDisk Ultra 64GB (SDSQUAR-064G-GN6MA) microSDXC Memory Card + Adapter up to 100 MB / s, Class 10, U1, A1, Gray, Red',
-    );
-    expect(response_data.product_sale_price).toBe('15.54');
-    expect(response_data.product_image).toBe(
-      'https://m.media-amazon.com/images/I/7180ZAZmERL._AC_UL320_.jpg',
-    );
-  });
-});
-
 describe('GET /api/ap/array', () => {
   test('returns the correct products for valid input', async () => {
     const response = await request(app)
@@ -76,8 +59,55 @@ describe('GET /api/ap/array', () => {
     const response = await request(app).get('/api/ap/array');
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
-      error: '400 Bad Request',
+      status: 'error',
       message: 'Missing array parameter',
+    });
+  });
+});
+
+describe('GET /name/:name', () => {
+  it('should return an array of matching product data', async () => {
+    const name = 'iPhone';
+    const response = await request(app).get(`/api/ap/name/${name}`);
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(expect.any(Array));
+    expect(response.body.length).toBeGreaterThan(0);
+    response.body.forEach((item: any) => {
+      expect(item.product_name.toLowerCase()).toContain(name.toLowerCase());
+    });
+  });
+
+  it('should return an empty array when there are no matches', async () => {
+    const name = 'xyz';
+    const response = await request(app).get(`/api/ap/name/${name}`);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+  });
+});
+
+describe('GET /api/ap/id/*', () => {
+  test('should return basic product informations from "Amazon Product Column" in db', async () => {
+    const res = await request(app).get('/api/ap/id/B073JYVKNX');
+    expect(res.statusCode).toBe(200);
+
+    const response_data = res.body.data[0];
+    expect(response_data.product_id).toBe('B073JYVKNX');
+    expect(response_data.product_name).toBe(
+      'SanDisk Ultra 64GB (SDSQUAR-064G-GN6MA) microSDXC Memory Card + Adapter up to 100 MB / s, Class 10, U1, A1, Gray, Red',
+    );
+    expect(response_data.product_sale_price).toBe('15.54');
+    expect(response_data.product_image).toBe(
+      'https://m.media-amazon.com/images/I/7180ZAZmERL._AC_UL320_.jpg',
+    );
+  });
+
+  test('should return 404 error when product id is not found', async () => {
+    const res = await request(app).get('/api/ap/id/123');
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toEqual({
+      status: 'error',
+      message: 'Couldnt find the data',
     });
   });
 });

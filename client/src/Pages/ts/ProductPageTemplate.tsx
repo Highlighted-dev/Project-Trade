@@ -43,7 +43,6 @@ function ProductPageTemplate() {
     setPrices([]);
     setSales([]);
   };
-
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const getProductData = (url: string, setProductData: (value: never[]) => void) => {
     axios
@@ -177,7 +176,7 @@ function ProductPageTemplate() {
       <div id="productInformations">
         <div id="images">
           <ul>
-            {images.length > 2 ? (
+            {images.length > 0 ? (
               images.map((product, key) => (
                 <li key={product.product_thumb_image}>
                   <img
@@ -219,7 +218,15 @@ function ProductPageTemplate() {
             {highResImages.length > 0 ? (
               highResImages.map((product, key) => (
                 <li key={product.product_highres_image}>
-                  <a href={product.product_highres_image} target="_blank" rel="noreferrer">
+                  <a
+                    href={
+                      product.product_highres_image !== 'null'
+                        ? product.product_highres_image
+                        : 'https://www.drodd.com/images14/white7.jpg'
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <img
                       src={
                         product.product_highres_image !== 'null'
