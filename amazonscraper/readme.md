@@ -5,7 +5,9 @@ This project is a web scraper built using Scrapy that extracts data from a list 
 
 1. Clone the repository to your local machine.
 2. Install the required dependencies by running `pip install -r requirements.txt` in your terminal.
-3.
+3. Install docker if you don't have it
+4. Depending on the os, start splash on docker. This command will work for windows `docker run -d -p 8050:8050 --memory=2G --restart=always scrapinghub/splash:3.1 --maxrss 1600`. For other operating systems check https://splash.readthedocs.io/en/stable/install.html
+5. Everything should be working now. Run any of the commands below and test it out!
 
 # Usage
 Quick documentation
