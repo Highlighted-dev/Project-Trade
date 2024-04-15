@@ -7,7 +7,8 @@ import { IChartItem } from '../../@types/LineChart';
 
 ChartJS.register(...registerables);
 function LineChart({ data, variable_type, settings }: any) {
-  // Becouse this component will use more than 1 type of json object, we need to change keys of the objects to fit the chart.
+  //TODO change that crap below, why did I even do it like that, it makes this component unusable for other things than prices and sales.
+  // Because this component will use more than 1 type of json object, we need to change keys of the objects to fit the chart.
   const [chartData, setChartData] = useState(
     data.map(async (item: any) => {
       if (variable_type === 'prices') {
