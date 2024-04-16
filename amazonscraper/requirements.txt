@@ -1,7 +1,7 @@
 amazoncaptcha==0.5.6
 pymongo==4.0.1
 python-dotenv==0.20.0
-scrapy==2.7.1
+scrapy==2.11.1
 scrapy-fake-useragent==1.4.4
 scrapy-splash==0.8.0
 
