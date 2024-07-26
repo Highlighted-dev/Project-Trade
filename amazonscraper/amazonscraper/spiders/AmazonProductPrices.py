@@ -12,6 +12,9 @@ from scrapy_splash import SplashFormRequest, SplashRequest
 from .. import GlobalVariables
 from ..items import AmazonItemPrice
 from amazoncaptcha import AmazonCaptcha
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # TODO If you can buy used product instead of new, product prices will scrape the used one | Change to the new one price ex.https://www.amazon.de/dp/B09JQZ5DYM?th=1
@@ -24,7 +27,7 @@ class AmazonProductPrices(scrapy.Spider):
         self, prod_id=None, fetch_prod_ids_from_db=False, instance_id=1, max_instances=1
     ):
         self.start_urls = []
-        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
         self.db = self.client[GlobalVariables.mongo_db]
         # If we want to scrape only one product, we can this by passing the product id as an argument.
         if prod_id:

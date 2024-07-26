@@ -10,6 +10,9 @@ import pymongo
 import os
 import json
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class AmazonGetHighResImages(scrapy.Spider):
@@ -23,7 +26,7 @@ class AmazonGetHighResImages(scrapy.Spider):
         if testing:
             return
 
-        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
         self.db = self.client[GlobalVariables.mongo_db]
 
     def start_requests(self):

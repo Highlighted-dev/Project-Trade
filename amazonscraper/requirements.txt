@@ -1,7 +1,8 @@
-amazoncaptcha==0.5.6
+amazoncaptcha==0.5.11
+Pillow==9.5.0
 pymongo==4.0.1
 python-dotenv==0.20.0
 scrapy==2.7.1
 scrapy-fake-useragent==1.4.4
 scrapy-splash==0.8.0
-
+Twisted==22.10.0

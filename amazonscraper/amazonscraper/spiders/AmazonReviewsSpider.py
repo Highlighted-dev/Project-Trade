@@ -12,7 +12,9 @@ from scrapy_splash import SplashFormRequest, SplashRequest
 
 from .. import GlobalVariables
 from ..items import AmazonItemReviews
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class AmazonReviewsSpider(scrapy.Spider):
     name = "AmazonReviewsSpider"
@@ -33,21 +35,15 @@ class AmazonReviewsSpider(scrapy.Spider):
         if testing:
             return
 
-        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
         self.db = self.client[GlobalVariables.mongo_db]
 
         if prod_id:
             self.insert_one_product_to_db = True
             self.start_urls = [
                 f"https://www.amazon.com/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_viewopt_srt?sortBy=recent",
-                f"https://www.amazon.com/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_5?sortBy=recent&pageNumber=5",
+                f"https://www.amazon.com/-/en/product-reviews/{prod_id}/ref=cm_cr_arp_d_paging_btm_next_2?sortBy=recent&pageNumber=2",
             ]
-            self.db[GlobalVariables.mongo_column_reviews].delete_many(
-                {"product_id": prod_id}
-            )
-            logging.info(
-                f"Successfully removed old data for product with id: {prod_id}"
-            )
 
         elif fetch_prod_ids_from_db:
             mongo_product_column = self.db[GlobalVariables.mongo_column_products]
@@ -110,7 +106,7 @@ class AmazonReviewsSpider(scrapy.Spider):
                 '//div[@class="a-fixed-left-grid-col a-col-right"]//div[@class="a-fixed-left-grid-inner"]//a[@class="a-link-normal"]/@href'
             ).extract()
             if prod_id:
-                return prod_id[0].split("/dp/")[1]
+                return prod_id[0].split("/dp/")[1].split("/")[0]
             return "None"
 
     def calculate_start_index(self, product_ids, instance_id, max_instances):
@@ -205,13 +201,6 @@ class AmazonReviewsSpider(scrapy.Spider):
         try:
             with open(path_to_json) as f:
                 file_data = json.load(f)
-            if self.insert_one_product_to_db:
-                bulk_operations = [pymongo.InsertOne(item) for item in file_data]
-                self.db[GlobalVariables.mongo_column_reviews].bulk_write(
-                    bulk_operations
-                )
-                os.remove(path_to_json)
-                return
 
             logging.info("Finished scraping Amazon reviews")
             """

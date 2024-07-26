@@ -38,19 +38,19 @@ const runAProductScraper = async (req: Request, res: Response, command: string) 
 router.get('/id/:id', async (req: Request, res: Response) => {
   // Get the product id from the url
   const { id } = req.params;
-  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonOneProductSpider -a prod_id="${id}"`;
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonOneProductSpider -a prod_id=${id}`;
   runAProductScraper(req, res, command);
 });
 router.get('/highres/id/:id', async (req: Request, res: Response) => {
   // Get the product id from the url
   const { id } = req.params;
-  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonGetHighResImages -a prod_id="${id}" -o AmazonGetHighResImages.json`;
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonGetHighResImages -a prod_id=${id} -o AmazonGetHighResImages.json`;
   runAProductScraper(req, res, command);
 });
 router.get('/prices/id/:id', async (req: Request, res: Response) => {
   // Get the product id from the url
   const { id } = req.params;
-  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonProductPrices -a prod_id="${id}" -o AmazonPrices.json`;
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonProductPrices -a prod_id=${id} -o AmazonPrices.json`;
   runAProductScraper(req, res, command);
 });
 router.get('/prices/', jsonParser, async (req: Request, res: Response) => {
@@ -60,7 +60,7 @@ router.get('/prices/', jsonParser, async (req: Request, res: Response) => {
 router.get('/sales/id/:id', async (req: Request, res: Response) => {
   // Get the product id from the url
   const { id } = req.params;
-  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonReviewsSpider -a prod_id="${id}" -o AmazonReviews.json`;
+  const command = `cd ${getDirectoryBasedOnSystem()} scrapy crawl AmazonReviewsSpider -a prod_id=${id} -o AmazonReviews.json`;
   runAProductScraper(req, res, command);
 });
 

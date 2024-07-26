@@ -7,7 +7,9 @@ import json
 from .. import GlobalVariables
 from pathlib import Path
 from scrapy_splash import SplashFormRequest, SplashRequest
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class AmazonProductSpider(scrapy.Spider):
     # vm_id = Virtual machine id, max_vm = Max virtual machines working at the same time
@@ -85,7 +87,7 @@ class AmazonProductSpider(scrapy.Spider):
             str(Path(__file__).parents[2]) + "/amazon_product_data.json"
         ).replace(os.sep, "/")
         assert os.path.isfile(pathToJson)
-        myclient = pymongo.MongoClient(GlobalVariables.mongo_url)
+        myclient = pymongo.MongoClient(os.getenv("MONGODB_URI"))
         mydb = myclient[GlobalVariables.mongo_db]
         mycol = mydb[GlobalVariables.mongo_column_products]
         with open(pathToJson) as f:

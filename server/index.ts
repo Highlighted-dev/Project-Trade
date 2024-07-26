@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import app from './app';
 import schedulePriceUpdate from './ScheduledTasks';
 
-const url = 'mongodb+srv://root:root@project-trade.d28vx.mongodb.net/project-trade';
+dotenv.config();
+
+const url = process.env.MONGODB_URI || '';
 const port = 5000;
 
 mongoose

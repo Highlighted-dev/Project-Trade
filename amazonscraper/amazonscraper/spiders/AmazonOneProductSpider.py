@@ -14,7 +14,9 @@ from amazoncaptcha import AmazonCaptcha
 import logging
 from scrapy_splash import SplashFormRequest, SplashRequest
 import pymongo
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class AmazonOneProductSpider(scrapy.Spider):
     def __init__(self, prod_id):
@@ -22,7 +24,7 @@ class AmazonOneProductSpider(scrapy.Spider):
         product_id = prod_id
         self.start_urls = ["https://www.amazon.de/-/en/dp/" + product_id]
 
-        self.client = pymongo.MongoClient(GlobalVariables.mongo_url)
+        self.client = pymongo.MongoClient(os.getenv("MONGODB_URI"))
         self.db = self.client[GlobalVariables.mongo_db]
 
     # Change every request from ScrapyRequest to SplashRequest for javascript load

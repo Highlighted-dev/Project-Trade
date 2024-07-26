@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "ts-node-esm index.ts",
-    "dev": "nodemon index.ts"
+    "dev": "ts-node-dev index.ts"
   },
   "jest": {
     "transform": {
@@ -30,7 +30,8 @@
     "mongodb": "^5.1.0",
     "mongoose": "^6.1.5",
     "node-schedule": "^2.1.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.21.4",
