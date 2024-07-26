@@ -1,5 +1,5 @@
 amazoncaptcha==0.5.11
-Pillow==9.5.0
+Pillow==10.3.0
 pymongo==4.0.1
 python-dotenv==0.20.0
 scrapy==2.7.1
